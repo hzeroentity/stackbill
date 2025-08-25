@@ -1,4 +1,4 @@
-# StackBill - Freelancer Subscription Tracker
+# StackBill - Saas and indie hackers Subscription Tracker
 
 ## Project Overview
 
