@@ -61,7 +61,7 @@ export default function DashboardPage() {
       
       // Try to fetch user plan data via API
       try {
-        const response = await fetch('/api/user-subscription')
+        const response = await fetch(`/api/user-subscription?userId=${user.id}`)
         if (response.ok) {
           const { userSubscription: userSub } = await response.json()
           setUserSubscription(userSub)

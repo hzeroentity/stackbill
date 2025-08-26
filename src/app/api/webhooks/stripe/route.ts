@@ -6,6 +6,7 @@ import Stripe from 'stripe'
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(request: NextRequest) {
+  console.log('=== WEBHOOK RECEIVED ===')
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')!
@@ -14,6 +15,7 @@ export async function POST(request: NextRequest) {
 
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+      console.log('Webhook verified successfully, event type:', event.type)
     } catch (err) {
       console.error('Webhook signature verification failed:', err)
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
@@ -23,7 +25,13 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed':
         const session = event.data.object as Stripe.Checkout.Session
-        await handleCheckoutSessionCompleted(session)
+        console.log('Processing checkout.session.completed:', session.id)
+        try {
+          await handleCheckoutSessionCompleted(session)
+        } catch (error) {
+          console.error('Error handling checkout.session.completed:', error)
+          throw error
+        }
         break
 
       case 'customer.subscription.updated':
@@ -48,6 +56,10 @@ export async function POST(request: NextRequest) {
 
       default:
         console.log(`Unhandled event type: ${event.type}`)
+        if (event.type === 'checkout.session.completed') {
+          console.log('WARNING: checkout.session.completed reached default handler - this should not happen')
+          console.log('Event data:', JSON.stringify(event.data.object, null, 2))
+        }
     }
 
     return NextResponse.json({ received: true })
@@ -62,24 +74,54 @@ export async function POST(request: NextRequest) {
 }
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
+  console.log('Checkout session completed - Session metadata:', session.metadata)
+  console.log('Checkout session completed - Customer ID:', session.customer)
+  console.log('Checkout session completed - Subscription ID:', session.subscription)
+  
   const userId = session.metadata?.userId
   if (!userId || !session.subscription) {
-    console.error('Missing userId or subscription in session metadata')
+    console.error('Missing userId or subscription in session metadata', {
+      userId,
+      subscription: session.subscription,
+      metadata: session.metadata
+    })
     return
   }
 
-  // Retrieve the subscription to get period information
-  const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
-  
-  await userSubscriptionService.upgradeUserToPro(
-    userId,
-    session.customer as string,
-    subscription.id,
-    new Date(subscription.current_period_start * 1000).toISOString(),
-    new Date(subscription.current_period_end * 1000).toISOString()
-  )
+  console.log(`Processing upgrade for user ${userId}`)
 
-  console.log(`User ${userId} upgraded to Pro successfully`)
+  try {
+    // Retrieve the subscription to get period information
+    const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
+    console.log('Retrieved subscription:', subscription.id, 'status:', subscription.status)
+    console.log('Subscription period start:', subscription.current_period_start)
+    console.log('Subscription period end:', subscription.current_period_end)
+    
+    // Handle potential null/undefined values for subscription periods
+    const periodStart = subscription.current_period_start 
+      ? new Date(subscription.current_period_start * 1000).toISOString()
+      : new Date().toISOString()
+    
+    const periodEnd = subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000).toISOString()
+      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // Default to 30 days from now
+    
+    console.log('Processed period start:', periodStart)
+    console.log('Processed period end:', periodEnd)
+    
+    await userSubscriptionService.upgradeUserToPro(
+      userId,
+      session.customer as string,
+      subscription.id,
+      periodStart,
+      periodEnd
+    )
+
+    console.log(`User ${userId} upgraded to Pro successfully`)
+  } catch (error) {
+    console.error(`Error upgrading user ${userId} to Pro:`, error)
+    throw error
+  }
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {

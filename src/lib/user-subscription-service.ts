@@ -33,9 +33,12 @@ export class UserSubscriptionService {
   }
 
   async updateUserSubscription(userId: string, updates: UserSubscriptionUpdate): Promise<UserSubscription> {
+    // First ensure the user has a subscription record
+    await this.ensureUserSubscription(userId)
+    
     const { data, error } = await supabaseAdmin
       .from('user_subscriptions')
-      .update(updates)
+      .update({ ...updates, updated_at: new Date().toISOString() })
       .eq('user_id', userId)
       .select()
       .single()
@@ -81,14 +84,30 @@ export class UserSubscriptionService {
     currentPeriodStart: string,
     currentPeriodEnd: string
   ): Promise<UserSubscription> {
-    return await this.updateUserSubscription(userId, {
-      plan_type: 'pro',
-      status: 'active',
-      stripe_customer_id: stripeCustomerId,
-      stripe_subscription_id: stripeSubscriptionId,
-      current_period_start: currentPeriodStart,
-      current_period_end: currentPeriodEnd
-    })
+    
+    // Use upsert with onConflict to handle both existing and new user subscriptions
+    const { data, error } = await supabaseAdmin
+      .from('user_subscriptions')
+      .upsert({
+        user_id: userId,
+        plan_type: 'pro',
+        status: 'active',
+        stripe_customer_id: stripeCustomerId,
+        stripe_subscription_id: stripeSubscriptionId,
+        current_period_start: currentPeriodStart,
+        current_period_end: currentPeriodEnd,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'user_id'
+      })
+      .select()
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    return data
   }
 
   async cancelUserSubscription(userId: string): Promise<UserSubscription> {

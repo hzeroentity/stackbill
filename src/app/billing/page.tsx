@@ -7,6 +7,7 @@ import { Check } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -22,15 +23,17 @@ export default function BillingPage() {
   const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null)
   const [loading, setLoading] = useState(true)
   const [upgrading, setUpgrading] = useState(false)
+  const [downgrading, setDowngrading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const [isDowngradeModalOpen, setIsDowngradeModalOpen] = useState(false)
   const { user } = useAuth()
 
   useEffect(() => {
     const loadUserSubscription = async () => {
       try {
         if (user) {
-          const response = await fetch('/api/user-subscription')
+          const response = await fetch(`/api/user-subscription?userId=${user.id}`)
           if (response.ok) {
             const { userSubscription: userSub } = await response.json()
             setUserSubscription(userSub)
@@ -118,6 +121,41 @@ export default function BillingPage() {
       setIsErrorModalOpen(true)
     } finally {
       setUpgrading(false)
+    }
+  }
+
+  const handleDowngrade = async () => {
+    setDowngrading(true)
+    try {
+      const response = await fetch('/api/downgrade', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user?.id }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to downgrade')
+      }
+
+      // Refresh user subscription data
+      if (user) {
+        const refreshResponse = await fetch(`/api/user-subscription?userId=${user.id}`)
+        if (refreshResponse.ok) {
+          const { userSubscription: userSub } = await refreshResponse.json()
+          setUserSubscription(userSub)
+        }
+      }
+
+      setIsDowngradeModalOpen(false)
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to downgrade')
+      setIsErrorModalOpen(true)
+    } finally {
+      setDowngrading(false)
     }
   }
 
@@ -254,9 +292,19 @@ export default function BillingPage() {
                 </div>
               )}
               <div className="pt-4 border-t">
-                <p className="text-sm text-muted-foreground">
-                  To cancel your subscription or update payment methods, please contact support.
-                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button 
+                    variant="outline" 
+                    className="text-red-600 border-red-200 hover:bg-red-50"
+                    onClick={() => setIsDowngradeModalOpen(true)}
+                    disabled={downgrading}
+                  >
+                    {downgrading ? 'Processing...' : 'Downgrade to Free'}
+                  </Button>
+                  <p className="text-sm text-muted-foreground flex-1">
+                    Downgrade to the free plan anytime. You'll keep access until the end of your billing period.
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -317,6 +365,35 @@ export default function BillingPage() {
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => setIsErrorModalOpen(false)}>
               OK
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Downgrade Confirmation Dialog */}
+      <AlertDialog open={isDowngradeModalOpen} onOpenChange={setIsDowngradeModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Downgrade to Free Plan</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to downgrade to the free plan? You'll lose access to Pro features, including unlimited subscription tracking. 
+              <br /><br />
+              Your subscription will be canceled immediately, but you'll keep Pro access until your next billing date.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => setIsDowngradeModalOpen(false)}
+              disabled={downgrading}
+            >
+              Keep Pro
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDowngrade}
+              disabled={downgrading}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {downgrading ? 'Processing...' : 'Downgrade to Free'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
