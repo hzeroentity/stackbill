@@ -1,11 +1,11 @@
-import { supabase } from './supabase'
+import { supabaseAdmin } from './supabase-admin'
 import type { UserSubscription, UserSubscriptionInsert, UserSubscriptionUpdate, PlanType } from './database.types'
 import { getPlan } from './plans'
 
 export class UserSubscriptionService {
 
   async getUserSubscription(userId: string): Promise<UserSubscription | null> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('user_subscriptions')
       .select('*')
       .eq('user_id', userId)
@@ -19,7 +19,7 @@ export class UserSubscriptionService {
   }
 
   async createUserSubscription(subscription: UserSubscriptionInsert): Promise<UserSubscription> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('user_subscriptions')
       .insert(subscription)
       .select()
@@ -33,7 +33,7 @@ export class UserSubscriptionService {
   }
 
   async updateUserSubscription(userId: string, updates: UserSubscriptionUpdate): Promise<UserSubscription> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('user_subscriptions')
       .update(updates)
       .eq('user_id', userId)

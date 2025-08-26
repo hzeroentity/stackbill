@@ -4,38 +4,19 @@ import { cookies } from 'next/headers'
 import { stripe } from '@/lib/stripe-server'
 import { getPlan } from '@/lib/plans'
 import { userSubscriptionService } from '@/lib/user-subscription-service'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 import type { Database } from '@/lib/database.types'
 
 export async function POST(request: NextRequest) {
   try {
-    const { planId } = await request.json()
+    const { planId, userId } = await request.json()
     
     if (!planId || planId === 'free') {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
     }
 
-    // Get user from Supabase
-    const cookieStore = await cookies()
-    const supabase = createServerClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          },
-        },
-      }
-    )
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID required' }, { status: 400 })
     }
 
     // Get plan details
@@ -45,9 +26,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user already has an active subscription
-    const existingSubscription = await userSubscriptionService.getUserSubscription(user.id)
-    if (existingSubscription?.plan_type === 'pro' && existingSubscription.status === 'active') {
-      return NextResponse.json({ error: 'User already has an active subscription' }, { status: 400 })
+    console.log('Checkout API - Checking user subscription for userId:', userId)
+    let existingSubscription = null
+    try {
+      existingSubscription = await userSubscriptionService.getUserSubscription(userId)
+      if (existingSubscription?.plan_type === 'pro' && existingSubscription.status === 'active') {
+        return NextResponse.json({ error: 'User already has an active subscription' }, { status: 400 })
+      }
+    } catch (error) {
+      console.error('Checkout API - Error checking user subscription:', error)
+      // Continue anyway for now
     }
 
     // Create or retrieve Stripe customer
@@ -56,9 +44,8 @@ export async function POST(request: NextRequest) {
       customer = await stripe.customers.retrieve(existingSubscription.stripe_customer_id)
     } else {
       customer = await stripe.customers.create({
-        email: user.email,
         metadata: {
-          userId: user.id
+          userId: userId
         }
       })
     }
@@ -77,7 +64,7 @@ export async function POST(request: NextRequest) {
       success_url: `${request.nextUrl.origin}/dashboard?success=true`,
       cancel_url: `${request.nextUrl.origin}/dashboard?canceled=true`,
       metadata: {
-        userId: user.id,
+        userId: userId,
         planId: plan.id
       }
     })

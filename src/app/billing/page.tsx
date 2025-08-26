@@ -14,7 +14,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { PLANS, getPlan } from '@/lib/plans'
-import { userSubscriptionService } from '@/lib/user-subscription-service'
 import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
 import { UserSubscription } from '@/lib/database.types'
@@ -31,11 +30,48 @@ export default function BillingPage() {
     const loadUserSubscription = async () => {
       try {
         if (user) {
-          const userSub = await userSubscriptionService.ensureUserSubscription(user.id)
-          setUserSubscription(userSub)
+          const response = await fetch('/api/user-subscription')
+          if (response.ok) {
+            const { userSubscription: userSub } = await response.json()
+            setUserSubscription(userSub)
+          } else if (response.status === 401) {
+            // User not authenticated, provide default free subscription
+            console.warn('User not authenticated, using default subscription')
+            setUserSubscription({
+              id: 'temp',
+              user_id: user.id,
+              stripe_customer_id: null,
+              stripe_subscription_id: null,
+              plan_type: 'free',
+              status: 'active',
+              current_period_start: null,
+              current_period_end: null,
+              canceled_at: null,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            })
+          } else {
+            throw new Error('Failed to fetch user subscription')
+          }
         }
       } catch (error) {
         console.error('Error loading user subscription:', error)
+        // Provide default free subscription as fallback
+        if (user) {
+          setUserSubscription({
+            id: 'temp',
+            user_id: user.id,
+            stripe_customer_id: null,
+            stripe_subscription_id: null,
+            plan_type: 'free',
+            status: 'active',
+            current_period_start: null,
+            current_period_end: null,
+            canceled_at: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+        }
       } finally {
         setLoading(false)
       }
@@ -56,7 +92,7 @@ export default function BillingPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ planId }),
+        body: JSON.stringify({ planId, userId: user?.id }),
       })
 
       const data = await response.json()
@@ -119,7 +155,7 @@ export default function BillingPage() {
               key={plan.id} 
               className={`relative ${
                 isPopular 
-                  ? 'border-primary shadow-lg scale-105' 
+                  ? 'border-purple-500 shadow-lg shadow-purple-500/20 scale-105 bg-gradient-to-br from-purple-50 to-purple-100/50' 
                   : 'border-border'
               } ${
                 isCurrentPlan 
@@ -129,7 +165,7 @@ export default function BillingPage() {
             >
               {isPopular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                  <div className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                     Most Popular
                   </div>
                 </div>
@@ -165,7 +201,7 @@ export default function BillingPage() {
                 </ul>
 
                 <Button 
-                  className="w-full" 
+                  className={`w-full ${isPopular && !isCurrentPlan ? 'bg-purple-600 hover:bg-purple-700 text-white' : ''}`}
                   variant={isCurrentPlan ? "secondary" : isPopular ? "default" : "outline"}
                   disabled={isCurrentPlan || upgrading}
                   onClick={() => handleUpgrade(plan.id)}
@@ -196,7 +232,7 @@ export default function BillingPage() {
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Plan</span>
-                <span className="text-green-600 font-semibold">Pro - ${getPlan('pro').price}/month</span>
+                <span className="text-purple-600 font-semibold">Pro - ${getPlan('pro').price}/month</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Status</span>

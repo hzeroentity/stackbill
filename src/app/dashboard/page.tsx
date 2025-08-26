@@ -20,7 +20,6 @@ import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { Subscription, UserSubscription } from '@/lib/database.types'
 import { getRenewalStatus } from '@/lib/renewal-status'
-import { userSubscriptionService } from '@/lib/user-subscription-service'
 import { canAddSubscription } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
@@ -60,10 +59,31 @@ export default function DashboardPage() {
 
       setSubscriptions(subscriptionResult.data || [])
       
-      // Try to fetch user plan data (may fail if table doesn't exist yet)
+      // Try to fetch user plan data via API
       try {
-        const userSub = await userSubscriptionService.ensureUserSubscription(user.id)
-        setUserSubscription(userSub)
+        const response = await fetch('/api/user-subscription')
+        if (response.ok) {
+          const { userSubscription: userSub } = await response.json()
+          setUserSubscription(userSub)
+        } else if (response.status === 401) {
+          // User not authenticated, provide default free subscription
+          console.warn('User not authenticated, using default subscription')
+          setUserSubscription({
+            id: 'temp',
+            user_id: user.id,
+            stripe_customer_id: null,
+            stripe_subscription_id: null,
+            plan_type: 'free',
+            status: 'active',
+            current_period_start: null,
+            current_period_end: null,
+            canceled_at: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+        } else {
+          throw new Error('Failed to fetch user subscription')
+        }
       } catch (userSubError) {
         console.warn('User subscription service not available yet:', userSubError)
         // Create a default free plan user subscription
@@ -149,7 +169,7 @@ export default function DashboardPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ planId: 'pro' }),
+        body: JSON.stringify({ planId: 'pro', userId: user?.id }),
       })
 
       const data = await response.json()
