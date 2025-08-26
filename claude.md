@@ -26,11 +26,11 @@ StackBill is a subscription tracker designed for freelancers and indie developer
 - [x] Basic project structure and routing
 
 ### Phase 2 — Core Features
-- [ ] Implement user authentication (Supabase Auth)
-- [ ] Create dashboard layout and navigation
-- [ ] Build subscription CRUD functionality (add/edit/delete)
-- [ ] Design and implement Supabase database schema
-- [ ] Connect frontend to Supabase for data persistence
+- [x] Implement user authentication (Supabase Auth)
+- [x] Create dashboard layout and navigation
+- [x] Build subscription CRUD functionality (add/edit/delete)
+- [x] Design and implement Supabase database schema
+- [x] Connect frontend to Supabase for data persistence
 
 ### Phase 3 — Dashboard & UX
 - [ ] Calculate and display total monthly spend
@@ -107,5 +107,27 @@ After every code execution or major milestone:
 
 ---
 
-**Project Status:** 🚀 Phase 1 Complete - Ready for Phase 2
-**Next Step:** Implement user authentication with Supabase
+### Phase 2 Complete - Core Features ✅
+**Date:** 2025-08-26
+
+✅ **What was completed:**
+- Full user authentication system with Supabase Auth (login/signup/logout)
+- Protected routes with loading states and auto-redirects
+- Complete database schema for subscriptions with RLS policies
+- Subscription CRUD functionality (Create, Read, Update, Delete)
+- Subscription management service with helper methods for calculations
+- Dashboard with real-time subscription summaries (monthly/yearly totals)
+- Subscription list with renewal status indicators
+- Subscription forms with validation (add/edit subscriptions)
+- Dialog modals for seamless subscription management
+- Upcoming renewal alerts and notifications
+
+📌 **What's next:** Begin Phase 3 - Dashboard & UX Enhancements
+- Fine-tune responsive design for mobile/desktop
+- Optimize color-coded renewal status indicators
+- Enhance dashboard UX with better data visualization
+
+---
+
+**Project Status:** 🚀 Phase 2 Complete - Ready for Phase 3
+**Next Step:** Focus on UX improvements and responsive design

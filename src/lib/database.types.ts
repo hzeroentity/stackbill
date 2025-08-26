@@ -6,6 +6,8 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export type BillingPeriod = 'monthly' | 'yearly' | 'weekly' | 'quarterly'
+
 export interface Database {
   public: {
     Tables: {
@@ -15,8 +17,12 @@ export interface Database {
           user_id: string
           name: string
           amount: number
-          billing_period: 'monthly' | 'yearly'
-          next_billing_date: string
+          currency: string
+          billing_period: BillingPeriod
+          renewal_date: string
+          description: string | null
+          category: string | null
+          is_active: boolean
           created_at: string
           updated_at: string
         }
@@ -25,8 +31,12 @@ export interface Database {
           user_id: string
           name: string
           amount: number
-          billing_period: 'monthly' | 'yearly'
-          next_billing_date: string
+          currency?: string
+          billing_period: BillingPeriod
+          renewal_date: string
+          description?: string | null
+          category?: string | null
+          is_active?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -35,8 +45,12 @@ export interface Database {
           user_id?: string
           name?: string
           amount?: number
-          billing_period?: 'monthly' | 'yearly'
-          next_billing_date?: string
+          currency?: string
+          billing_period?: BillingPeriod
+          renewal_date?: string
+          description?: string | null
+          category?: string | null
+          is_active?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -53,3 +67,8 @@ export interface Database {
     }
   }
 }
+
+// Convenience types for subscriptions
+export type Subscription = Database['public']['Tables']['subscriptions']['Row']
+export type SubscriptionInsert = Database['public']['Tables']['subscriptions']['Insert']
+export type SubscriptionUpdate = Database['public']['Tables']['subscriptions']['Update']
