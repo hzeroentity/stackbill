@@ -34,12 +34,9 @@ export default function DashboardLayout({
                   Sign Out
                 </Button>
               </div>
-              <div className="flex space-x-2">
-                <Link href="/dashboard" className="flex-1">
+              <div className="flex justify-center">
+                <Link href="/dashboard" className="flex-1 max-w-32">
                   <Button variant="ghost" size="sm" className="w-full">Dashboard</Button>
-                </Link>
-                <Link href="/dashboard/subscriptions" className="flex-1">
-                  <Button variant="ghost" size="sm" className="w-full">Subscriptions</Button>
                 </Link>
               </div>
               <p className="text-xs text-muted-foreground truncate">
@@ -56,9 +53,6 @@ export default function DashboardLayout({
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard">
                   <Button variant="ghost">Dashboard</Button>
-                </Link>
-                <Link href="/dashboard/subscriptions">
-                  <Button variant="ghost">Subscriptions</Button>
                 </Link>
                 <span className="text-sm text-muted-foreground">
                   {user?.email}

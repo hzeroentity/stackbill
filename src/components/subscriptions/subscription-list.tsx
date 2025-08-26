@@ -2,7 +2,17 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Subscription } from '@/lib/database.types'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { getRenewalStatus } from '@/lib/renewal-status'
@@ -15,25 +25,37 @@ interface SubscriptionListProps {
 
 export function SubscriptionList({ subscriptions, onEdit, onDelete }: SubscriptionListProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [subscriptionToDelete, setSubscriptionToDelete] = useState<Subscription | null>(null)
 
-  const handleDelete = async (subscription: Subscription) => {
-    if (!confirm(`Are you sure you want to delete "${subscription.name}"?`)) {
-      return
-    }
+  const handleDeleteClick = (subscription: Subscription) => {
+    setSubscriptionToDelete(subscription)
+    setIsDeleteModalOpen(true)
+  }
 
-    setDeletingId(subscription.id)
+  const handleDeleteConfirm = async () => {
+    if (!subscriptionToDelete) return
+
+    setDeletingId(subscriptionToDelete.id)
     
     try {
-      const { error } = await SubscriptionsService.delete(subscription.id)
+      const { error } = await SubscriptionsService.delete(subscriptionToDelete.id)
       if (error) {
         throw new Error(error.message)
       }
       onDelete?.()
+      setIsDeleteModalOpen(false)
+      setSubscriptionToDelete(null)
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to delete subscription')
     } finally {
       setDeletingId(null)
     }
+  }
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false)
+    setSubscriptionToDelete(null)
   }
 
   const formatCurrency = (amount: number, currency: string) => {
@@ -112,26 +134,41 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleDelete(subscription)}
+                        onClick={() => handleDeleteClick(subscription)}
                         disabled={deletingId === subscription.id}
                         className="flex-1 sm:flex-none"
                       >
-                        {deletingId === subscription.id ? 'Deleting...' : 'Delete'}
+                        Delete
                       </Button>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              {subscription.description && (
-                <div className="mt-4 pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">{subscription.description}</p>
-                </div>
-              )}
             </CardContent>
           </Card>
         )
       })}
+
+      <AlertDialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Subscription</AlertDialogTitle>
+            <AlertDialogDescription>
+              {subscriptionToDelete ? `Are you sure you want to delete "${subscriptionToDelete.name}"? This action cannot be undone.` : ''}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleDeleteCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={subscriptionToDelete ? deletingId === subscriptionToDelete.id : false}
+            >
+              {subscriptionToDelete && deletingId === subscriptionToDelete.id ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

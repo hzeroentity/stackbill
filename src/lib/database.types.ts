@@ -8,6 +8,19 @@ export type Json =
 
 export type BillingPeriod = 'monthly' | 'yearly' | 'weekly' | 'quarterly'
 
+export type SubscriptionCategory = 
+  | 'Cloud & Hosting'
+  | 'Analytics & Tracking'
+  | 'Database & Storage'
+  | 'Developer Tools'
+  | 'Communication'
+  | 'Design & Creative'
+  | 'Marketing & SEO'
+  | 'Security'
+  | 'Entertainment'
+  | 'Productivity'
+  | 'Other'
+
 export interface Database {
   public: {
     Tables: {
@@ -20,8 +33,7 @@ export interface Database {
           currency: string
           billing_period: BillingPeriod
           renewal_date: string
-          description: string | null
-          category: string | null
+          category: SubscriptionCategory
           is_active: boolean
           created_at: string
           updated_at: string
@@ -34,8 +46,7 @@ export interface Database {
           currency?: string
           billing_period: BillingPeriod
           renewal_date: string
-          description?: string | null
-          category?: string | null
+          category: SubscriptionCategory
           is_active?: boolean
           created_at?: string
           updated_at?: string
@@ -48,8 +59,7 @@ export interface Database {
           currency?: string
           billing_period?: BillingPeriod
           renewal_date?: string
-          description?: string | null
-          category?: string | null
+          category?: SubscriptionCategory
           is_active?: boolean
           created_at?: string
           updated_at?: string

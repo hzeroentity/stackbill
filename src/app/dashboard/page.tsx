@@ -1,9 +1,21 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { Subscription } from '@/lib/database.types'
 import { getRenewalStatus } from '@/lib/renewal-status'
@@ -12,28 +24,87 @@ export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [subscriptionToDelete, setSubscriptionToDelete] = useState<Subscription | null>(null)
+
+  const fetchSubscriptions = async () => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const { data, error } = await SubscriptionsService.getAll()
+      if (error) {
+        throw new Error(error.message)
+      }
+      setSubscriptions(data || [])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load subscriptions')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const fetchSubscriptions = async () => {
-      try {
-        const { data, error } = await SubscriptionsService.getAll()
-        if (error) {
-          throw new Error(error.message)
-        }
-        setSubscriptions(data || [])
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load subscriptions')
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchSubscriptions()
   }, [])
 
+  const handleAddSuccess = () => {
+    setIsAddDialogOpen(false)
+    fetchSubscriptions()
+  }
+
+  const handleEditSuccess = () => {
+    setIsEditDialogOpen(false)
+    setEditingSubscription(null)
+    fetchSubscriptions()
+  }
+
+  const handleEdit = (subscription: Subscription) => {
+    setEditingSubscription(subscription)
+    setIsEditDialogOpen(true)
+  }
+
+  const handleDeleteClick = (subscription: Subscription) => {
+    setSubscriptionToDelete(subscription)
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!subscriptionToDelete) return
+
+    setDeletingId(subscriptionToDelete.id)
+    
+    try {
+      const { error } = await SubscriptionsService.delete(subscriptionToDelete.id)
+      if (error) {
+        throw new Error(error.message)
+      }
+      fetchSubscriptions()
+      setIsDeleteModalOpen(false)
+      setSubscriptionToDelete(null)
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to delete subscription')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false)
+    setSubscriptionToDelete(null)
+  }
+
   const monthlyTotal = subscriptions.length > 0 ? SubscriptionsService.calculateMonthlyTotal(subscriptions) : 0
   const yearlyTotal = subscriptions.length > 0 ? SubscriptionsService.calculateYearlyTotal(subscriptions) : 0
-  const upcomingRenewals = subscriptions.length > 0 ? SubscriptionsService.getUpcomingRenewals(subscriptions, 7) : []
+  
+  // Sort subscriptions by due date (most imminent first)
+  const sortedSubscriptions = [...subscriptions].sort((a, b) => {
+    return new Date(a.renewal_date).getTime() - new Date(b.renewal_date).getTime()
+  })
   
   // Calculate spending by category
   const spendingByCategory = subscriptions.reduce((acc, sub) => {
@@ -47,16 +118,23 @@ export default function DashboardPage() {
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number, currency?: string) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: currency || 'USD',
     }).format(amount)
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString()
+  const shouldShowRenewalStatus = (renewalDate: string) => {
+    const today = new Date()
+    const renewal = new Date(renewalDate)
+    const diffTime = renewal.getTime() - today.getTime()
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    
+    // Show status if overdue, due today, or within 7 days
+    return diffDays <= 7
   }
+
 
   if (loading) {
     return (
@@ -194,46 +272,23 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {upcomingRenewals.length > 0 && (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Upcoming Renewals (Next 7 Days)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {upcomingRenewals.slice(0, 3).map((subscription) => {
-                const renewalStatus = getRenewalStatus(subscription.renewal_date)
-                return (
-                  <div key={subscription.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 bg-card border rounded-lg space-y-2 sm:space-y-0">
-                    <div className="flex-1">
-                      <p className="font-medium">{subscription.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {formatCurrency(subscription.amount, subscription.currency)} • {formatDate(subscription.renewal_date)}
-                      </p>
-                    </div>
-                    <div className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold ${renewalStatus.color}`}>
-                      <span>{renewalStatus.icon}</span>
-                      <span>{renewalStatus.text}</span>
-                    </div>
-                  </div>
-                )
-              })}
-              {upcomingRenewals.length > 3 && (
-                <p className="text-sm text-muted-foreground text-center pt-2">
-                  +{upcomingRenewals.length - 3} more renewals
-                </p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-      
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Recent Subscriptions</CardTitle>
-          <Link href="/dashboard/subscriptions">
-            <Button variant="outline" size="sm">View All</Button>
-          </Link>
+          <CardTitle>Active Subscriptions</CardTitle>
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">Add Subscription</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New Subscription</DialogTitle>
+              </DialogHeader>
+              <SubscriptionForm 
+                onSuccess={handleAddSuccess}
+                onCancel={() => setIsAddDialogOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
           {error ? (
@@ -241,37 +296,173 @@ export default function DashboardPage() {
           ) : subscriptions.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No subscriptions yet. Add your first subscription to get started!</p>
-              <Link href="/dashboard/subscriptions">
-                <Button>Add Your First Subscription</Button>
-              </Link>
+              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button>Add Your First Subscription</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Subscription</DialogTitle>
+                  </DialogHeader>
+                  <SubscriptionForm 
+                    onSuccess={handleAddSuccess}
+                    onCancel={() => setIsAddDialogOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
             </div>
           ) : (
             <div className="space-y-3">
-              {subscriptions.slice(0, 5).map((subscription) => (
-                <div key={subscription.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 bg-muted/50 rounded-lg space-y-2 sm:space-y-0">
-                  <div>
-                    <p className="font-medium">{subscription.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Next renewal: {formatDate(subscription.renewal_date)}
-                    </p>
+              {sortedSubscriptions.map((subscription) => {
+                const renewalStatus = getRenewalStatus(subscription.renewal_date)
+                return (
+                  <div key={subscription.id} className="p-3 bg-muted/50 rounded-lg">
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex items-center justify-between">
+                      {/* Left side - Name, Category and Status */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium truncate">{subscription.name}</p>
+                              {shouldShowRenewalStatus(subscription.renewal_date) && (
+                                <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
+                                  <span>{renewalStatus.icon}</span>
+                                  <span>{renewalStatus.text}</span>
+                                </div>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Right side - Price, Due Date, and Menu */}
+                      <div className="flex items-center gap-4 ml-4">
+                        <div className="text-right">
+                          <p className="font-semibold">{formatCurrency(subscription.amount, subscription.currency)}</p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {subscription.billing_period}
+                          </p>
+                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 flex-shrink-0">
+                              <span className="sr-only">Open menu</span>
+                              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                              </svg>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleEdit(subscription)}>
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => handleDeleteClick(subscription)}
+                              className="text-red-600"
+                              disabled={deletingId === subscription.id}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
+
+                    {/* Mobile Layout */}
+                    <div className="sm:hidden">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="font-medium truncate">{subscription.name}</p>
+                            {shouldShowRenewalStatus(subscription.renewal_date) && (
+                              <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
+                                <span>{renewalStatus.icon}</span>
+                                <span>{renewalStatus.text}</span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 flex-shrink-0">
+                              <span className="sr-only">Open menu</span>
+                              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                              </svg>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleEdit(subscription)}>
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => handleDeleteClick(subscription)}
+                              className="text-red-600"
+                              disabled={deletingId === subscription.id}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <div>
+                          <span className="font-semibold">{formatCurrency(subscription.amount, subscription.currency)}</span>
+                          <span className="text-muted-foreground capitalize ml-1">
+                            {subscription.billing_period}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold">{formatCurrency(subscription.amount, subscription.currency)}</p>
-                    <p className="text-sm text-muted-foreground capitalize">
-                      {subscription.billing_period}
-                    </p>
-                  </div>
-                </div>
-              ))}
-              {subscriptions.length > 5 && (
-                <p className="text-sm text-muted-foreground text-center pt-2">
-                  +{subscriptions.length - 5} more subscriptions
-                </p>
-              )}
+                )
+              })}
             </div>
           )}
         </CardContent>
       </Card>
+      
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Subscription</DialogTitle>
+          </DialogHeader>
+          {editingSubscription && (
+            <SubscriptionForm 
+              subscription={editingSubscription}
+              onSuccess={handleEditSuccess}
+              onCancel={() => {
+                setIsEditDialogOpen(false)
+                setEditingSubscription(null)
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Subscription</AlertDialogTitle>
+            <AlertDialogDescription>
+              {subscriptionToDelete ? `Are you sure you want to delete "${subscriptionToDelete.name}"? This action cannot be undone.` : ''}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleDeleteCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={subscriptionToDelete ? deletingId === subscriptionToDelete.id : false}
+            >
+              {subscriptionToDelete && deletingId === subscriptionToDelete.id ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

@@ -5,10 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SubscriptionsService } from '@/lib/subscriptions'
-import { BillingPeriod, Subscription, SubscriptionInsert } from '@/lib/database.types'
+import { BillingPeriod, Subscription, SubscriptionInsert, SubscriptionCategory } from '@/lib/database.types'
 
 interface SubscriptionFormProps {
   subscription?: Subscription
@@ -20,14 +19,28 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
+  // Predefined categories for better organization
+  const categories: SubscriptionCategory[] = [
+    'Cloud & Hosting',
+    'Analytics & Tracking',
+    'Database & Storage', 
+    'Developer Tools',
+    'Communication',
+    'Design & Creative',
+    'Marketing & SEO',
+    'Security',
+    'Entertainment',
+    'Productivity',
+    'Other'
+  ]
+  
   const [formData, setFormData] = useState({
     name: subscription?.name || '',
     amount: subscription?.amount?.toString() || '',
     currency: subscription?.currency || 'USD',
     billing_period: subscription?.billing_period || 'monthly' as BillingPeriod,
     renewal_date: subscription?.renewal_date ? subscription.renewal_date.split('T')[0] : '',
-    description: subscription?.description || '',
-    category: subscription?.category || '',
+    category: subscription?.category || 'Other',
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,8 +64,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
         currency: formData.currency,
         billing_period: formData.billing_period,
         renewal_date: formData.renewal_date,
-        description: formData.description || null,
-        category: formData.category || null,
+        category: formData.category,
       }
 
       let result
@@ -157,25 +169,21 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category">Category (Optional)</Label>
-            <Input
-              id="category"
-              placeholder="e.g., Hosting, Analytics, Database, etc."
-              value={formData.category}
-              onChange={(e) => handleInputChange('category', e.target.value)}
-            />
+            <Label htmlFor="category">Category</Label>
+            <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description">Description (Optional)</Label>
-            <Textarea
-              id="description"
-              placeholder="Any additional notes about this subscription"
-              value={formData.description}
-              onChange={(e) => handleInputChange('description', e.target.value)}
-              rows={3}
-            />
-          </div>
 
           {error && (
             <div className="text-sm text-red-600 bg-red-50 p-3 rounded">
