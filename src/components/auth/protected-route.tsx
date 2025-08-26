@@ -5,14 +5,15 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth()
+  const { user: stableUser, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && !user) {
+    // Only redirect when we're certain there's no user (avoid flicker redirects)
+    if (!loading && !stableUser) {
       router.push('/login')
     }
-  }, [user, loading, router])
+  }, [stableUser, loading, router])
 
   if (loading) {
     return (
@@ -25,7 +26,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     )
   }
 
-  if (!user) {
+  if (!stableUser) {
     return null
   }
 
