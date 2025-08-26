@@ -7,6 +7,8 @@ export type Json =
   | Json[]
 
 export type BillingPeriod = 'monthly' | 'yearly' | 'weekly' | 'quarterly'
+export type PlanType = 'free' | 'pro'
+export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'incomplete'
 
 export type SubscriptionCategory = 
   | 'Cloud & Hosting'
@@ -65,6 +67,47 @@ export interface Database {
           updated_at?: string
         }
       }
+      user_subscriptions: {
+        Row: {
+          id: string
+          user_id: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          plan_type: PlanType
+          status: SubscriptionStatus
+          current_period_start: string | null
+          current_period_end: string | null
+          canceled_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          plan_type?: PlanType
+          status?: SubscriptionStatus
+          current_period_start?: string | null
+          current_period_end?: string | null
+          canceled_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          plan_type?: PlanType
+          status?: SubscriptionStatus
+          current_period_start?: string | null
+          current_period_end?: string | null
+          canceled_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -82,3 +125,8 @@ export interface Database {
 export type Subscription = Database['public']['Tables']['subscriptions']['Row']
 export type SubscriptionInsert = Database['public']['Tables']['subscriptions']['Insert']
 export type SubscriptionUpdate = Database['public']['Tables']['subscriptions']['Update']
+
+// Convenience types for user subscriptions
+export type UserSubscription = Database['public']['Tables']['user_subscriptions']['Row']
+export type UserSubscriptionInsert = Database['public']['Tables']['user_subscriptions']['Insert']
+export type UserSubscriptionUpdate = Database['public']['Tables']['user_subscriptions']['Update']

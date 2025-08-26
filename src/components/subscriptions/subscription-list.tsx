@@ -27,6 +27,8 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [subscriptionToDelete, setSubscriptionToDelete] = useState<Subscription | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
 
   const handleDeleteClick = (subscription: Subscription) => {
     setSubscriptionToDelete(subscription)
@@ -47,7 +49,8 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
       setIsDeleteModalOpen(false)
       setSubscriptionToDelete(null)
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete subscription')
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to delete subscription')
+      setIsErrorModalOpen(true)
     } finally {
       setDeletingId(null)
     }
@@ -165,6 +168,23 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
               disabled={subscriptionToDelete ? deletingId === subscriptionToDelete.id : false}
             >
               {subscriptionToDelete && deletingId === subscriptionToDelete.id ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Error Dialog */}
+      <AlertDialog open={isErrorModalOpen} onOpenChange={setIsErrorModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Error</AlertDialogTitle>
+            <AlertDialogDescription>
+              {errorMessage}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setIsErrorModalOpen(false)}>
+              OK
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

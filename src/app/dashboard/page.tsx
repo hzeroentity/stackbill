@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -15,13 +15,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge"
 import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
-import { Subscription } from '@/lib/database.types'
+import { Subscription, UserSubscription } from '@/lib/database.types'
 import { getRenewalStatus } from '@/lib/renewal-status'
+import { userSubscriptionService } from '@/lib/user-subscription-service'
+import { canAddSubscription } from '@/lib/plans'
+import { getStripe } from '@/lib/stripe'
+import { useAuth } from '@/contexts/auth-context'
 
 export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
+  const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
@@ -30,27 +36,63 @@ export default function DashboardPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [subscriptionToDelete, setSubscriptionToDelete] = useState<Subscription | null>(null)
+  const [upgrading, setUpgrading] = useState(false)
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const { user } = useAuth()
 
-  const fetchSubscriptions = async () => {
+  const fetchSubscriptions = useCallback(async () => {
     setLoading(true)
     setError(null)
     
     try {
-      const { data, error } = await SubscriptionsService.getAll()
-      if (error) {
-        throw new Error(error.message)
+      if (!user) {
+        throw new Error('User not authenticated')
       }
-      setSubscriptions(data || [])
+
+      // Fetch user subscriptions first
+      const subscriptionResult = await SubscriptionsService.getAll()
+      
+      if (subscriptionResult.error) {
+        throw new Error(subscriptionResult.error.message)
+      }
+
+      setSubscriptions(subscriptionResult.data || [])
+      
+      // Try to fetch user plan data (may fail if table doesn't exist yet)
+      try {
+        const userSub = await userSubscriptionService.ensureUserSubscription(user.id)
+        setUserSubscription(userSub)
+      } catch (userSubError) {
+        console.warn('User subscription service not available yet:', userSubError)
+        // Create a default free plan user subscription
+        setUserSubscription({
+          id: 'temp',
+          user_id: user.id,
+          stripe_customer_id: null,
+          stripe_subscription_id: null,
+          plan_type: 'free',
+          status: 'active',
+          current_period_start: null,
+          current_period_end: null,
+          canceled_at: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load subscriptions')
+      setError(err instanceof Error ? err.message : 'Failed to load data')
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   useEffect(() => {
-    fetchSubscriptions()
-  }, [])
+    if (user) {
+      fetchSubscriptions()
+    }
+  }, [user, fetchSubscriptions])
 
   const handleAddSuccess = () => {
     setIsAddDialogOpen(false)
@@ -87,7 +129,8 @@ export default function DashboardPage() {
       setIsDeleteModalOpen(false)
       setSubscriptionToDelete(null)
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete subscription')
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to delete subscription')
+      setIsErrorModalOpen(true)
     } finally {
       setDeletingId(null)
     }
@@ -96,6 +139,64 @@ export default function DashboardPage() {
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false)
     setSubscriptionToDelete(null)
+  }
+
+  const handleUpgradeToPro = async () => {
+    setUpgrading(true)
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ planId: 'pro' }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session')
+      }
+
+      const stripe = await getStripe()
+      if (!stripe) {
+        throw new Error('Failed to load Stripe')
+      }
+
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: data.sessionId,
+      })
+
+      if (error) {
+        throw new Error(error.message || 'Failed to redirect to checkout')
+      }
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to upgrade')
+      setIsErrorModalOpen(true)
+      setUpgrading(false)
+    }
+  }
+
+  const handleAddSubscription = () => {
+    const currentPlan = userSubscription?.plan_type || 'free'
+    const currentCount = subscriptions.length
+    
+    if (!canAddSubscription(currentCount, currentPlan)) {
+      // Show upgrade prompt instead of opening add dialog
+      setIsUpgradeModalOpen(true)
+      return
+    }
+    
+    setIsAddDialogOpen(true)
+  }
+
+  const handleUpgradeConfirm = () => {
+    setIsUpgradeModalOpen(false)
+    handleUpgradeToPro()
+  }
+
+  const handleUpgradeCancel = () => {
+    setIsUpgradeModalOpen(false)
   }
 
   const monthlyTotal = subscriptions.length > 0 ? SubscriptionsService.calculateMonthlyTotal(subscriptions) : 0
@@ -151,7 +252,21 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto p-4 sm:p-6">
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Dashboard</h1>
+      <div className="flex items-center gap-3 mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
+        {userSubscription && (
+          <Badge 
+            variant={userSubscription.plan_type === 'pro' ? 'default' : 'secondary'}
+            className={
+              userSubscription.plan_type === 'pro' 
+                ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }
+          >
+            {userSubscription.plan_type.toUpperCase()}
+          </Badge>
+        )}
+      </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
@@ -186,10 +301,33 @@ export default function DashboardPage() {
             <div className="text-purple-600">⚡</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-900">{subscriptions.length}</div>
+            <div className="text-2xl font-bold text-purple-900">
+              {subscriptions.length}
+              {userSubscription?.plan_type === 'free' && (
+                <span className="text-lg text-purple-600 ml-1">/ 3</span>
+              )}
+              {userSubscription?.plan_type === 'pro' && (
+                <span className="text-lg text-purple-600 ml-1">/ 100</span>
+              )}
+            </div>
             <p className="text-xs text-purple-600 mt-1">
-              Services tracked
+              {userSubscription?.plan_type === 'free' 
+                ? `${3 - subscriptions.length} remaining on free plan`
+                : userSubscription?.plan_type === 'pro'
+                  ? `${100 - subscriptions.length} remaining on pro plan`
+                  : 'Services tracked'
+              }
             </p>
+            {userSubscription?.plan_type === 'free' && subscriptions.length >= 2 && (
+              <Button
+                onClick={handleUpgradeToPro}
+                disabled={upgrading}
+                size="sm"
+                className="mt-2 w-full bg-purple-600 hover:bg-purple-700"
+              >
+                {upgrading ? 'Upgrading...' : 'Upgrade to Pro'}
+              </Button>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -275,20 +413,36 @@ export default function DashboardPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Active Subscriptions</CardTitle>
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">Add Subscription</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add New Subscription</DialogTitle>
-              </DialogHeader>
-              <SubscriptionForm 
-                onSuccess={handleAddSuccess}
-                onCancel={() => setIsAddDialogOpen(false)}
-              />
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-2">
+            {userSubscription?.plan_type === 'pro' && (
+              <div className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                PRO
+              </div>
+            )}
+            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleAddSubscription()
+                  }}
+                >
+                  Add Subscription
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Subscription</DialogTitle>
+                </DialogHeader>
+                <SubscriptionForm 
+                  onSuccess={handleAddSuccess}
+                  onCancel={() => setIsAddDialogOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
         </CardHeader>
         <CardContent>
           {error ? (
@@ -296,20 +450,9 @@ export default function DashboardPage() {
           ) : subscriptions.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No subscriptions yet. Add your first subscription to get started!</p>
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button>Add Your First Subscription</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add New Subscription</DialogTitle>
-                  </DialogHeader>
-                  <SubscriptionForm 
-                    onSuccess={handleAddSuccess}
-                    onCancel={() => setIsAddDialogOpen(false)}
-                  />
-                </DialogContent>
-              </Dialog>
+              <Button onClick={handleAddSubscription}>
+                Add Your First Subscription
+              </Button>
             </div>
           ) : (
             <div className="space-y-3">
@@ -459,6 +602,45 @@ export default function DashboardPage() {
               disabled={subscriptionToDelete ? deletingId === subscriptionToDelete.id : false}
             >
               {subscriptionToDelete && deletingId === subscriptionToDelete.id ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Upgrade Confirmation Dialog */}
+      <AlertDialog open={isUpgradeModalOpen} onOpenChange={setIsUpgradeModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Upgrade to Pro</AlertDialogTitle>
+            <AlertDialogDescription>
+              You&apos;ve reached your subscription limit (3 for free plan). Upgrade to Pro ($4/month) to track up to 100 subscriptions with email reminders?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleUpgradeCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleUpgradeConfirm} 
+              disabled={upgrading}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              {upgrading ? 'Processing...' : 'Upgrade to Pro'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Error Dialog */}
+      <AlertDialog open={isErrorModalOpen} onOpenChange={setIsErrorModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Error</AlertDialogTitle>
+            <AlertDialogDescription>
+              {errorMessage}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setIsErrorModalOpen(false)}>
+              OK
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
