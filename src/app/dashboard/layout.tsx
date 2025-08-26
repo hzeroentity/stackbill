@@ -23,24 +23,50 @@ export default function DashboardLayout({
     <ProtectedRoute>
       <div className="min-h-screen bg-background">
         <nav className="border-b">
-          <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-            <Link href="/dashboard" className="text-xl font-bold">
-              StackBill
-            </Link>
-            
-            <div className="flex items-center space-x-4">
-              <Link href="/dashboard">
-                <Button variant="ghost">Dashboard</Button>
-              </Link>
-              <Link href="/dashboard/subscriptions">
-                <Button variant="ghost">Subscriptions</Button>
-              </Link>
-              <span className="text-sm text-muted-foreground">
+          <div className="container mx-auto px-4 sm:px-6 py-4">
+            {/* Mobile Layout */}
+            <div className="flex flex-col space-y-4 sm:hidden">
+              <div className="flex justify-between items-center">
+                <Link href="/dashboard" className="text-xl font-bold">
+                  StackBill
+                </Link>
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                  Sign Out
+                </Button>
+              </div>
+              <div className="flex space-x-2">
+                <Link href="/dashboard" className="flex-1">
+                  <Button variant="ghost" size="sm" className="w-full">Dashboard</Button>
+                </Link>
+                <Link href="/dashboard/subscriptions" className="flex-1">
+                  <Button variant="ghost" size="sm" className="w-full">Subscriptions</Button>
+                </Link>
+              </div>
+              <p className="text-xs text-muted-foreground truncate">
                 {user?.email}
-              </span>
-              <Button variant="outline" onClick={handleSignOut}>
-                Sign Out
-              </Button>
+              </p>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden sm:flex justify-between items-center">
+              <Link href="/dashboard" className="text-xl font-bold">
+                StackBill
+              </Link>
+              
+              <div className="flex items-center space-x-4">
+                <Link href="/dashboard">
+                  <Button variant="ghost">Dashboard</Button>
+                </Link>
+                <Link href="/dashboard/subscriptions">
+                  <Button variant="ghost">Subscriptions</Button>
+                </Link>
+                <span className="text-sm text-muted-foreground">
+                  {user?.email}
+                </span>
+                <Button variant="outline" onClick={handleSignOut}>
+                  Sign Out
+                </Button>
+              </div>
             </div>
           </div>
         </nav>

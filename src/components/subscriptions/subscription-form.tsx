@@ -36,6 +36,15 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
     setError(null)
 
     try {
+      // Validate renewal date is today or in the future
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const renewalDate = new Date(formData.renewal_date)
+      
+      if (renewalDate < today) {
+        throw new Error('Renewal date must be today or in the future')
+      }
+
       const subscriptionData: Omit<SubscriptionInsert, 'user_id'> = {
         name: formData.name,
         amount: parseFloat(formData.amount),
@@ -70,26 +79,26 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle>
           {subscription ? 'Edit Subscription' : 'Add New Subscription'}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           <div className="space-y-2">
             <Label htmlFor="name">Service Name</Label>
             <Input
               id="name"
-              placeholder="e.g., Netflix, Spotify, etc."
+              placeholder="e.g., Vercel, Supabase, PostHog, etc."
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
               required
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="amount">Amount</Label>
               <Input
@@ -151,7 +160,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
             <Label htmlFor="category">Category (Optional)</Label>
             <Input
               id="category"
-              placeholder="e.g., Entertainment, Productivity, etc."
+              placeholder="e.g., Hosting, Analytics, Database, etc."
               value={formData.category}
               onChange={(e) => handleInputChange('category', e.target.value)}
             />
@@ -174,12 +183,12 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
             </div>
           )}
 
-          <div className="flex space-x-4">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <Button type="submit" disabled={isLoading} className="flex-1">
               {isLoading ? 'Saving...' : subscription ? 'Update' : 'Add'} Subscription
             </Button>
             {onCancel && (
-              <Button type="button" variant="outline" onClick={onCancel}>
+              <Button type="button" variant="outline" onClick={onCancel} className="sm:w-auto">
                 Cancel
               </Button>
             )}
