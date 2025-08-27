@@ -21,7 +21,7 @@ export class UserSubscriptionService {
   async createUserSubscription(subscription: UserSubscriptionInsert): Promise<UserSubscription> {
     const { data, error } = await supabaseAdmin
       .from('user_subscriptions')
-      .insert(subscription)
+      .insert(subscription as any) // Bypass TypeScript issue with Supabase types
       .select()
       .single()
 
@@ -38,7 +38,7 @@ export class UserSubscriptionService {
     
     const { data, error } = await supabaseAdmin
       .from('user_subscriptions')
-      .update({ ...updates, updated_at: new Date().toISOString() })
+      .update({ ...updates, updated_at: new Date().toISOString() } as any) // Bypass TypeScript issue
       .eq('user_id', userId)
       .select()
       .single()

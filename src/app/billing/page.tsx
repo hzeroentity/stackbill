@@ -302,7 +302,7 @@ export default function BillingPage() {
                     {downgrading ? 'Processing...' : 'Downgrade to Free'}
                   </Button>
                   <p className="text-sm text-muted-foreground flex-1">
-                    Downgrade to the free plan anytime. You'll keep access until the end of your billing period.
+                    Downgrade to the free plan anytime. You&apos;ll keep access until the end of your billing period.
                   </p>
                 </div>
               </div>
@@ -376,9 +376,9 @@ export default function BillingPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Downgrade to Free Plan</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to downgrade to the free plan? You'll lose access to Pro features, including unlimited subscription tracking. 
+              Are you sure you want to downgrade to the free plan? You&apos;ll lose access to Pro features, including unlimited subscription tracking. 
               <br /><br />
-              Your subscription will be canceled immediately, but you'll keep Pro access until your next billing date.
+              Your subscription will be canceled immediately, but you&apos;ll keep Pro access until your next billing date.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

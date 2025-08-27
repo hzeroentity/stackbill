@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 import { stripe } from '@/lib/stripe-server'
 import { getPlan } from '@/lib/plans'
 import { userSubscriptionService } from '@/lib/user-subscription-service'
-import { supabaseAdmin } from '@/lib/supabase-admin'
-import type { Database } from '@/lib/database.types'
 
 export async function POST(request: NextRequest) {
   try {
