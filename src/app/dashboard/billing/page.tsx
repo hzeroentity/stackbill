@@ -176,95 +176,19 @@ export default function BillingPage() {
 
   return (
     <div className="container mx-auto p-4 sm:p-6">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-4">Choose Your Plan</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Track your subscriptions with our simple pricing. Start free and upgrade when you need more.
+      <div className="pt-8 mb-12">
+        <h1 className="text-3xl font-bold mb-4">Billing & Plans</h1>
+        <p className="text-muted-foreground">
+          Manage your subscription and billing settings.
         </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        {PLANS.map((plan) => {
-          const isCurrentPlan = currentPlan === plan.id
-          const isPopular = plan.popular
-
-          return (
-            <Card 
-              key={plan.id} 
-              className={`relative ${
-                isPopular 
-                  ? 'border-purple-500 shadow-lg shadow-purple-500/20 scale-105 bg-gradient-to-br from-purple-50 to-purple-100/50' 
-                  : 'border-border'
-              } ${
-                isCurrentPlan 
-                  ? 'ring-2 ring-green-500 bg-green-50/50' 
-                  : ''
-              }`}
-            >
-              {isPopular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Most Popular
-                  </div>
-                </div>
-              )}
-
-              {isCurrentPlan && (
-                <div className="absolute -top-4 right-4">
-                  <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Current Plan
-                  </div>
-                </div>
-              )}
-
-              <CardHeader className="text-center pb-2">
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                <CardDescription>{plan.description}</CardDescription>
-                <div className="text-center py-4">
-                  <div className="text-4xl font-bold">
-                    ${plan.price}
-                    <span className="text-lg font-normal text-muted-foreground">/month</span>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="pt-0">
-                <ul className="space-y-3 mb-6">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button 
-                  className={`w-full ${isPopular && !isCurrentPlan ? 'bg-purple-600 hover:bg-purple-700 text-white' : ''}`}
-                  variant={isCurrentPlan ? "secondary" : isPopular ? "default" : "outline"}
-                  disabled={isCurrentPlan || upgrading}
-                  onClick={() => handleUpgrade(plan.id)}
-                >
-                  {isCurrentPlan 
-                    ? 'Current Plan' 
-                    : upgrading 
-                      ? 'Processing...' 
-                      : plan.id === 'free' 
-                        ? 'Get Started Free' 
-                        : 'Upgrade to Pro'
-                  }
-                </Button>
-              </CardContent>
-            </Card>
-          )
-        })}
       </div>
 
       {/* Current Subscription Details */}
       {userSubscription && userSubscription.plan_type === 'pro' && (
-        <div className="mt-12 max-w-2xl mx-auto">
+        <div className="mb-12">
           <Card>
             <CardHeader>
-              <CardTitle>Subscription Details</CardTitle>
+              <CardTitle>Current Subscription</CardTitle>
               <CardDescription>Manage your Pro subscription</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -311,8 +235,74 @@ export default function BillingPage() {
         </div>
       )}
 
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">Choose Your Plan</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {PLANS.map((plan) => {
+          const isCurrentPlan = currentPlan === plan.id
+
+          return (
+            <Card 
+              key={plan.id} 
+              className={`relative ${
+                isCurrentPlan 
+                  ? 'ring-2 ring-green-500 bg-green-50/50' 
+                  : 'border-border'
+              }`}
+            >
+              {isCurrentPlan && (
+                <div className="absolute -top-4 right-4">
+                  <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    Current Plan
+                  </div>
+                </div>
+              )}
+
+              <CardHeader className="text-center pb-2">
+                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <CardDescription>{plan.description}</CardDescription>
+                <div className="text-center py-4">
+                  <div className="text-4xl font-bold">
+                    ${plan.price}
+                    <span className="text-lg font-normal text-muted-foreground">/month</span>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardContent className="pt-0">
+                <ul className="space-y-3 mb-6">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="flex items-center">
+                      <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button 
+                  className="w-full"
+                  variant={isCurrentPlan ? "secondary" : "outline"}
+                  disabled={isCurrentPlan || upgrading}
+                  onClick={() => handleUpgrade(plan.id)}
+                >
+                  {isCurrentPlan 
+                    ? 'Current Plan' 
+                    : upgrading 
+                      ? 'Processing...' 
+                      : plan.id === 'free' 
+                        ? 'Get Started Free' 
+                        : 'Upgrade to Pro'
+                  }
+                </Button>
+              </CardContent>
+            </Card>
+          )
+        })}
+        </div>
+      </div>
+
       {/* FAQ Section */}
-      <div className="mt-16 max-w-3xl mx-auto">
+      <div className="mt-24">
         <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
         <div className="space-y-6">
           <Card>
