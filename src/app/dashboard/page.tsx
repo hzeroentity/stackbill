@@ -434,11 +434,6 @@ export default function DashboardPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Active Subscriptions</CardTitle>
           <div className="flex items-center gap-2">
-            {userSubscription?.plan_type === 'pro' && (
-              <div className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                PRO
-              </div>
-            )}
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button 
@@ -449,7 +444,7 @@ export default function DashboardPage() {
                     handleAddSubscription()
                   }}
                 >
-                  Add Subscription
+                  + Add Subscription
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -471,7 +466,7 @@ export default function DashboardPage() {
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">No subscriptions yet. Add your first subscription to get started!</p>
               <Button onClick={handleAddSubscription}>
-                Add Your First Subscription
+                + Add Your First Subscription
               </Button>
             </div>
           ) : (

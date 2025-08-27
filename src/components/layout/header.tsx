@@ -1,0 +1,140 @@
+'use client'
+
+import { Button } from "@/components/ui/button"
+import { useAuth } from "@/contexts/auth-context"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import Image from "next/image"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+
+export function Header() {
+  const { signOut, user } = useAuth()
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/')
+  }
+
+  const getUserInitials = (email: string) => {
+    return email.split('@')[0].slice(0, 2).toUpperCase()
+  }
+
+  return (
+    <nav className="border-b">
+      <div className="container mx-auto px-4 sm:px-6 py-4">
+        {/* Mobile Layout */}
+        <div className="flex flex-col space-y-4 sm:hidden">
+          <div className="flex justify-between items-center">
+            {/* Left: Logo + StackBill */}
+            <div className="flex items-center space-x-2">
+              <Image
+                src="/stackbill-logo.svg"
+                alt="StackBill"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+              <Link href="/dashboard" className="text-xl font-bold">
+                StackBill
+              </Link>
+            </div>
+            
+            {/* Right: User Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="relative h-8 w-8 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary/10 text-xs">
+                      {user?.email ? getUserInitials(user.email) : 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">Account</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user?.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut}>
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          
+          {/* Center: Navigation */}
+          <div className="flex justify-center space-x-2">
+            <Link href="/dashboard" className="flex-1 max-w-24">
+              <Button variant="ghost" size="sm" className="w-full">Dashboard</Button>
+            </Link>
+            <Link href="/dashboard/billing" className="flex-1 max-w-24">
+              <Button variant="ghost" size="sm" className="w-full">Billing</Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden sm:flex justify-between items-center">
+          {/* Left: Logo + StackBill */}
+          <div className="flex items-center space-x-3">
+            <Image
+              src="/stackbill-logo.svg"
+              alt="StackBill"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <Link href="/dashboard" className="text-xl font-bold">
+              StackBill
+            </Link>
+          </div>
+          
+          {/* Right: Navigation + User Dropdown */}
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Link href="/dashboard">
+                <Button variant="ghost">Dashboard</Button>
+              </Link>
+              <Link href="/dashboard/billing">
+                <Button variant="ghost">Billing</Button>
+              </Link>
+            </div>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Avatar className="h-10 w-10">
+                    <AvatarFallback className="bg-primary/10">
+                      {user?.email ? getUserInitials(user.email) : 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">Account</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user?.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut}>
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
+}
