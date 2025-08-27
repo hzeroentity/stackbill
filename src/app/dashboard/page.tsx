@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
+import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { Subscription, UserSubscription } from '@/lib/database.types'
@@ -295,7 +296,13 @@ export default function DashboardPage() {
             <div className="text-blue-600">💳</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-900">{formatCurrency(monthlyTotal)}</div>
+            <div className="text-2xl font-bold text-blue-900">
+              <AnimatedCounter 
+                value={monthlyTotal} 
+                duration={600}
+                formatValue={(value) => formatCurrency(value)}
+              />
+            </div>
             <p className="text-xs text-blue-600 mt-1">
               Per month average
             </p>
@@ -308,7 +315,13 @@ export default function DashboardPage() {
             <div className="text-green-600">📊</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-900">{formatCurrency(yearlyTotal)}</div>
+            <div className="text-2xl font-bold text-green-900">
+              <AnimatedCounter 
+                value={yearlyTotal} 
+                duration={700}
+                formatValue={(value) => formatCurrency(value)}
+              />
+            </div>
             <p className="text-xs text-green-600 mt-1">
               Total yearly cost
             </p>
@@ -322,7 +335,10 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-900">
-              {subscriptions.length}
+              <AnimatedCounter 
+                value={subscriptions.length} 
+                duration={500}
+              />
               {userSubscription?.plan_type === 'free' && (
                 <span className="text-lg text-purple-600 ml-1">/ 3</span>
               )}
@@ -400,28 +416,34 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
                   <span className="text-sm font-medium">Average per service</span>
                   <span className="font-semibold">
-                    {formatCurrency(subscriptions.length > 0 ? monthlyTotal / subscriptions.length : 0)}
+                    <AnimatedCounter 
+                      value={subscriptions.length > 0 ? monthlyTotal / subscriptions.length : 0} 
+                      duration={550}
+                      formatValue={(value) => formatCurrency(value)}
+                    />
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
                   <span className="text-sm font-medium">Most expensive</span>
                   <span className="font-semibold">
-                    {subscriptions.length > 0 
-                      ? formatCurrency(Math.max(...subscriptions.map(s => SubscriptionsService.calculateMonthlyTotal([s]))))
-                      : formatCurrency(0)
-                    }
+                    <AnimatedCounter 
+                      value={subscriptions.length > 0 ? Math.max(...subscriptions.map(s => SubscriptionsService.calculateMonthlyTotal([s]))) : 0}
+                      duration={600}
+                      formatValue={(value) => formatCurrency(value)}
+                    />
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
                   <span className="text-sm font-medium">Least expensive</span>
                   <span className="font-semibold">
-                    {subscriptions.length > 0 
-                      ? formatCurrency(Math.min(...subscriptions.map(s => SubscriptionsService.calculateMonthlyTotal([s]))))
-                      : formatCurrency(0)
-                    }
+                    <AnimatedCounter 
+                      value={subscriptions.length > 0 ? Math.min(...subscriptions.map(s => SubscriptionsService.calculateMonthlyTotal([s]))) : 0}
+                      duration={500}
+                      formatValue={(value) => formatCurrency(value)}
+                    />
                   </span>
                 </div>
               </div>

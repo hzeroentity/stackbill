@@ -38,7 +38,7 @@ export class UserSubscriptionService {
     
     const { data, error } = await supabaseAdmin
       .from('user_subscriptions')
-      .update({ ...updates, updated_at: new Date().toISOString() } as any) // Bypass TypeScript issue
+      .update({ ...updates, updated_at: new Date().toISOString() })
       .eq('user_id', userId)
       .select()
       .single()
