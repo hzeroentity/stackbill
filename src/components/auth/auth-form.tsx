@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,7 +17,6 @@ export function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [message, setMessage] = useState('')
   const [socialLoading, setSocialLoading] = useState(false)
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -42,9 +41,9 @@ export function AuthForm() {
       })
       if (error) throw error
       // OAuth will redirect, so we don't need to handle success here
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('GitHub auth error:', error)
-      setMessage(error?.message || 'Failed to sign in with GitHub. Please try again.')
+      setMessage(error instanceof Error ? error.message : 'Failed to sign in with GitHub. Please try again.')
       setSocialLoading(false)
     }
   }
@@ -135,9 +134,9 @@ export function AuthForm() {
           // Don't redirect manually, let the auth context handle it
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Auth error:', error)
-      setMessage(error?.message || 'An unexpected error occurred. Please try again.')
+      setMessage(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.')
     } finally {
       setIsLoading(false)
     }

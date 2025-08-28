@@ -4,7 +4,7 @@ import { ExchangeRateService } from './exchange-rates'
 import { Currency, getDefaultCurrency } from './currency-preferences'
 
 export class SubscriptionsService {
-  static async getAll(): Promise<{ data: Subscription[] | null; error: any }> {
+  static async getAll(): Promise<{ data: Subscription[] | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
         .from('subscriptions')
@@ -14,11 +14,11 @@ export class SubscriptionsService {
       
       return { data, error }
     } catch (error) {
-      return { data: null, error }
+      return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
     }
   }
 
-  static async getById(id: string): Promise<{ data: Subscription | null; error: any }> {
+  static async getById(id: string): Promise<{ data: Subscription | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
         .from('subscriptions')
@@ -28,11 +28,11 @@ export class SubscriptionsService {
       
       return { data, error }
     } catch (error) {
-      return { data: null, error }
+      return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
     }
   }
 
-  static async create(subscription: Omit<SubscriptionInsert, 'user_id'>): Promise<{ data: Subscription | null; error: any }> {
+  static async create(subscription: Omit<SubscriptionInsert, 'user_id'>): Promise<{ data: Subscription | null; error: Error | null }> {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       
@@ -51,11 +51,11 @@ export class SubscriptionsService {
       
       return { data, error }
     } catch (error) {
-      return { data: null, error }
+      return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
     }
   }
 
-  static async update(id: string, updates: SubscriptionUpdate): Promise<{ data: Subscription | null; error: any }> {
+  static async update(id: string, updates: SubscriptionUpdate): Promise<{ data: Subscription | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
         .from('subscriptions')
@@ -66,24 +66,24 @@ export class SubscriptionsService {
       
       return { data, error }
     } catch (error) {
-      return { data: null, error }
+      return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
     }
   }
 
-  static async delete(id: string): Promise<{ error: any }> {
+  static async delete(id: string): Promise<{ error: Error | null }> {
     try {
       const { error } = await supabase
         .from('subscriptions')
         .delete()
         .eq('id', id)
       
-      return { error }
+      return { error: error instanceof Error ? error : new Error('Unknown error occurred') }
     } catch (error) {
-      return { error }
+      return { error: error instanceof Error ? error : new Error('Unknown error occurred') }
     }
   }
 
-  static async softDelete(id: string): Promise<{ data: Subscription | null; error: any }> {
+  static async softDelete(id: string): Promise<{ data: Subscription | null; error: Error | null }> {
     return this.update(id, { is_active: false })
   }
 
@@ -235,7 +235,7 @@ export class SubscriptionsService {
       .filter(sub => sub.is_active)
       .reduce((groups, sub) => {
         const category = sub.category || 'Other'
-        if (!groups[category]) groups[category] = {}
+        if (!groups[category]) groups[category] = {} as Record<Currency, Subscription[]>
         
         const currency = sub.currency as Currency
         if (!groups[category][currency]) groups[category][currency] = []

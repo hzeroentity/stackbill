@@ -5,8 +5,9 @@ import { getPlan } from './plans'
 export class UserSubscriptionService {
 
   async getUserSubscription(userId: string): Promise<UserSubscription | null> {
-    const { data, error } = await supabaseAdmin
-      .from('user_subscriptions')
+    const { data, error } = await (supabaseAdmin
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from('user_subscriptions') as any)
       .select('*')
       .eq('user_id', userId)
       .single()
@@ -19,9 +20,10 @@ export class UserSubscriptionService {
   }
 
   async createUserSubscription(subscription: UserSubscriptionInsert): Promise<UserSubscription> {
-    const { data, error } = await supabaseAdmin
-      .from('user_subscriptions')
-      .insert(subscription as any) // Bypass TypeScript issue with Supabase types
+    const { data, error } = await (supabaseAdmin
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from('user_subscriptions') as any)
+      .insert(subscription)
       .select()
       .single()
 
@@ -36,9 +38,11 @@ export class UserSubscriptionService {
     // First ensure the user has a subscription record
     await this.ensureUserSubscription(userId)
     
-    const { data, error } = await supabaseAdmin
-      .from('user_subscriptions')
-      .update({ ...updates, updated_at: new Date().toISOString() })
+    const updateData = { ...updates, updated_at: new Date().toISOString() }
+    const { data, error } = await (supabaseAdmin
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from('user_subscriptions') as any)
+      .update(updateData)
       .eq('user_id', userId)
       .select()
       .single()
@@ -86,8 +90,9 @@ export class UserSubscriptionService {
   ): Promise<UserSubscription> {
     
     // Use upsert with onConflict to handle both existing and new user subscriptions
-    const { data, error } = await supabaseAdmin
-      .from('user_subscriptions')
+    const { data, error } = await (supabaseAdmin
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from('user_subscriptions') as any)
       .upsert({
         user_id: userId,
         plan_type: 'pro',

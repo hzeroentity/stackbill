@@ -52,7 +52,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
         currency: getDefaultCurrency() 
       }))
     }
-  }, [])
+  }, [subscription])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

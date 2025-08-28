@@ -27,7 +27,6 @@ export default function SettingsPage() {
   const [defaultCurrency, setDefaultCurrencyState] = useState<Currency>('USD')
   
   // Password change form
-  const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   
@@ -63,7 +62,6 @@ export default function SettingsPage() {
       if (error) throw error
       
       setMessage({ type: 'success', text: 'Password updated successfully!' })
-      setCurrentPassword('')
       setNewPassword('')
       setConfirmPassword('')
       setIsPasswordDialogOpen(false)

@@ -91,7 +91,8 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   try {
     // Retrieve the subscription to get period information
     const subscriptionResponse = await stripe.subscriptions.retrieve(session.subscription as string)
-    const subscription = subscriptionResponse as any // Use any to bypass TypeScript issues with Stripe types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const subscription = subscriptionResponse as any // Stripe types don't include period fields
     console.log('Retrieved subscription:', subscription.id, 'status:', subscription.status)
     console.log('Subscription period start:', subscription.current_period_start)
     console.log('Subscription period end:', subscription.current_period_end)
@@ -128,7 +129,8 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   
   if ('metadata' in customer && customer.metadata?.userId) {
     const userId = customer.metadata.userId
-    const sub = subscription as any // Bypass TypeScript issues with Stripe types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sub = subscription as any // Stripe types don't include all fields
     
     await userSubscriptionService.updateUserSubscription(userId, {
       status: sub.status === 'active' ? 'active' : 
@@ -155,9 +157,11 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   // Update subscription status to active
-  const inv = invoice as any // Bypass TypeScript issues with Stripe types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const inv = invoice as any // Stripe types don't include all fields
   if (inv.subscription) {
     const subscription = await stripe.subscriptions.retrieve(inv.subscription as string)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const customer = await stripe.customers.retrieve((subscription as any).customer as string)
     
     if ('metadata' in customer && customer.metadata?.userId) {
@@ -174,9 +178,11 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   // Update subscription status to past_due
-  const inv = invoice as any // Bypass TypeScript issues with Stripe types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const inv = invoice as any // Stripe types don't include all fields
   if (inv.subscription) {
     const subscription = await stripe.subscriptions.retrieve(inv.subscription as string)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const customer = await stripe.customers.retrieve((subscription as any).customer as string)
     
     if ('metadata' in customer && customer.metadata?.userId) {

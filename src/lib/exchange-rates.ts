@@ -2,26 +2,6 @@
 
 import { Currency } from './currency-preferences'
 
-interface ExchangeRateResponse {
-  base: string
-  date: string
-  rates: Record<string, number>
-}
-
-interface ConversionResponse {
-  result: string
-  documentation: string
-  terms_of_use: string
-  time_last_update_unix: number
-  time_last_update_utc: string
-  time_next_update_unix: number
-  time_next_update_utc: string
-  base_code: string
-  target_code: string
-  conversion_rate: number
-  conversion_result: number
-}
-
 // Cache for exchange rates (valid for 1 hour)
 const CACHE_DURATION = 60 * 60 * 1000 // 1 hour in milliseconds
 const rateCache: Record<string, { rate: number; timestamp: number }> = {}

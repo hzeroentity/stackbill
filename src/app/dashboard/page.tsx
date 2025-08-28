@@ -582,7 +582,7 @@ export default function DashboardPage() {
             <div className="text-center py-8">
               <div className="max-w-md mx-auto">
                 <h3 className="text-lg font-semibold text-foreground mb-2">Start tracking your SaaS costs</h3>
-                <p className="text-muted-foreground mb-1">Click the "+ Add Subscription" button above to add your first service. Track renewal dates, monthly costs, and keep your budget organized.</p>
+                <p className="text-muted-foreground mb-1">Click the &quot;+ Add Subscription&quot; button above to add your first service. Track renewal dates, monthly costs, and keep your budget organized.</p>
               </div>
             </div>
           ) : (

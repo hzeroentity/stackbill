@@ -150,7 +150,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600">
-                  Your financial data stays private. We don't connect to your bank accounts or track your spending automatically.
+                  Your financial data stays private. We don&apos;t connect to your bank accounts or track your spending automatically.
                 </p>
               </CardContent>
             </Card>
@@ -180,7 +180,7 @@ export default function Home() {
               Simple, transparent pricing
             </h2>
             <p className="text-xl text-slate-600">
-              Start free, upgrade when you're ready
+              Start free, upgrade when you&apos;re ready
             </p>
           </div>
 
@@ -266,7 +266,7 @@ export default function Home() {
             Ready to take control of your subscriptions?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join hundreds of SaaS founders and development teams who've already saved money with StackBill.
+            Join hundreds of SaaS founders and development teams who&apos;ve already saved money with StackBill.
           </p>
           <Link href="/login?mode=signup">
             <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
