@@ -26,7 +26,7 @@ export default function Home() {
               <Link href="/login">
                 <Button variant="ghost">Sign In</Button>
               </Link>
-              <Link href="/dashboard">
+              <Link href="/login?mode=signup">
                 <Button>Get Started Free</Button>
               </Link>
             </div>
@@ -37,17 +37,17 @@ export default function Home() {
       {/* Hero Section */}
       <section className="py-20 lg:py-32">
         <div className="container mx-auto px-6 text-center">
-          <Badge variant="secondary" className="mb-6">
-            Built for freelancers & indie developers
+          <Badge variant="outline" className="mb-6">
+            Built for SaaS founders & developers
           </Badge>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
             Control all your <span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">dev costs</span><br />in one place
           </h1>
           <p className="text-xl lg:text-2xl text-slate-600 mb-8 max-w-3xl mx-auto">
-            See exactly how much you spend on hosting, databases, APIs, and all your development tools. Get clear insights into your monthly costs.
+            Track your SaaS stack costs - hosting, databases, APIs, analytics, and all your essential tools. Get clear insights into your monthly burn rate.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="/dashboard">
+            <Link href="/login?mode=signup">
               <Button size="lg" className="text-lg px-8 py-4">
                 Start Free Today
               </Button>
@@ -58,9 +58,17 @@ export default function Home() {
               </Button>
             </Link>
           </div>
-          <p className="text-sm text-slate-500">
-            Free plan • No credit card required • 3 subscriptions included
-          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Badge variant="secondary" className="bg-green-100 text-green-700 hover:bg-green-100">
+              Free plan
+            </Badge>
+            <Badge variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-100">
+              No credit card required
+            </Badge>
+            <Badge variant="secondary" className="bg-purple-100 text-purple-700 hover:bg-purple-100">
+              3 subscriptions included
+            </Badge>
+          </div>
         </div>
       </section>
 
@@ -69,10 +77,10 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Everything you need to manage subscriptions
+              Everything you need to manage your SaaS costs
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Simple, powerful tools designed specifically for freelancers and indie developers
+              Simple, powerful tools designed for SaaS founders and development teams
             </p>
           </div>
           
@@ -110,11 +118,11 @@ export default function Home() {
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                   <Users className="w-6 h-6 text-purple-600" />
                 </div>
-                <CardTitle className="text-xl">Made for Indies</CardTitle>
+                <CardTitle className="text-xl">Made for SaaS</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600">
-                  Built specifically for freelancers and indie developers. Track your essential tools without the complexity of enterprise solutions.
+                  Built specifically for SaaS founders and development teams. Track your essential tools without the complexity of enterprise solutions.
                 </p>
               </CardContent>
             </Card>
@@ -202,7 +210,7 @@ export default function Home() {
                   <span>Category organization</span>
                 </div>
                 <div className="pt-6">
-                  <Link href="/dashboard" className="w-full block">
+                  <Link href="/login?mode=signup" className="w-full block">
                     <Button variant="outline" className="w-full">
                       Get Started Free
                     </Button>
@@ -239,9 +247,9 @@ export default function Home() {
                   <span>Priority support</span>
                 </div>
                 <div className="pt-6">
-                  <Link href="/dashboard" className="w-full block">
+                  <Link href="/login?mode=signup" className="w-full block">
                     <Button className="w-full">
-                      Start Pro Trial
+                      Start Strong with Pro
                     </Button>
                   </Link>
                 </div>
@@ -258,9 +266,9 @@ export default function Home() {
             Ready to take control of your subscriptions?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of freelancers and indie developers who've already saved money with StackBill.
+            Join hundreds of SaaS founders and development teams who've already saved money with StackBill.
           </p>
-          <Link href="/dashboard">
+          <Link href="/login?mode=signup">
             <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
               Get Started Free
             </Button>
@@ -282,7 +290,7 @@ export default function Home() {
               />
               <span className="text-xl font-bold text-white">StackBill</span>
             </div>
-            <p className="mb-6">Simple subscription tracking for freelancers and indie developers</p>
+            <p className="mb-6">Simple SaaS cost tracking for founders and development teams</p>
             <div className="flex justify-center space-x-6 text-sm">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>

@@ -10,7 +10,11 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login')
+      // Add a small delay to prevent redirect conflicts
+      const timer = setTimeout(() => {
+        router.replace('/login')
+      }, 100)
+      return () => clearTimeout(timer)
     }
   }, [user, loading, router])
 
@@ -26,7 +30,14 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    return null
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Redirecting...</p>
+        </div>
+      </div>
+    )
   }
 
   return <>{children}</>

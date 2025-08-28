@@ -34,11 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        // Ignore SIGNED_IN events to prevent tab switching redirects
-        // Manual login redirects are handled in auth-form.tsx
-        if (event === 'SIGNED_IN') {
-          return
-        }
+        console.log('Auth state change:', event, session?.user?.email)
         
         setUser(session?.user ?? null)
         setLoading(false)
