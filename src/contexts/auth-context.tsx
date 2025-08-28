@@ -25,9 +25,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   
   useEffect(() => {
     const getInitialSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setUser(session?.user ?? null)
-      setLoading(false)
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+        
+        // Handle refresh token errors
+        if (error && (error.message.includes('Invalid Refresh Token') || error.message.includes('Refresh Token Not Found'))) {
+          console.log('Invalid refresh token detected, clearing session and redirecting to login')
+          // Clear any stale tokens
+          await supabase.auth.signOut()
+          setUser(null)
+          setLoading(false)
+          router.push('/login')
+          return
+        }
+        
+        setUser(session?.user ?? null)
+        setLoading(false)
+      } catch (error: unknown) {
+        console.error('Error getting initial session:', error)
+        
+        // Handle any AuthApiError with refresh token issues
+        if (error instanceof Error && (error.message.includes('refresh') || error.message.includes('Refresh'))) {
+          console.log('Refresh token error caught in catch block, clearing session')
+          await supabase.auth.signOut()
+          router.push('/login')
+        }
+        
+        setUser(null)
+        setLoading(false)
+      }
     }
     
     getInitialSession()
@@ -35,6 +61,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state change:', event, session?.user?.email)
+        
+        // Handle token refresh errors
+        if (event === 'TOKEN_REFRESHED' && !session) {
+          console.log('Token refresh failed, redirecting to login')
+          router.push('/login')
+          return
+        }
         
         setUser(session?.user ?? null)
         setLoading(false)
