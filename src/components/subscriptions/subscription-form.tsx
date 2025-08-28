@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { BillingPeriod, Subscription, SubscriptionInsert, SubscriptionCategory } from '@/lib/database.types'
+import { SUPPORTED_CURRENCIES, getDefaultCurrency } from '@/lib/currency-preferences'
 
 interface SubscriptionFormProps {
   subscription?: Subscription
@@ -37,11 +38,21 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
   const [formData, setFormData] = useState({
     name: subscription?.name || '',
     amount: subscription?.amount?.toString() || '',
-    currency: subscription?.currency || 'USD',
+    currency: subscription?.currency || getDefaultCurrency(),
     billing_period: subscription?.billing_period || 'monthly' as BillingPeriod,
     renewal_date: subscription?.renewal_date ? subscription.renewal_date.split('T')[0] : '',
     category: subscription?.category || 'Other',
   })
+
+  // Update currency when not editing and default currency changes
+  useEffect(() => {
+    if (!subscription) {
+      setFormData(prev => ({ 
+        ...prev, 
+        currency: getDefaultCurrency() 
+      }))
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -130,10 +141,11 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="USD">USD</SelectItem>
-                  <SelectItem value="EUR">EUR</SelectItem>
-                  <SelectItem value="GBP">GBP</SelectItem>
-                  <SelectItem value="CAD">CAD</SelectItem>
+                  {SUPPORTED_CURRENCIES.map((currency) => (
+                    <SelectItem key={currency.value} value={currency.value}>
+                      {currency.symbol} {currency.value}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

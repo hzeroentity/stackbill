@@ -25,6 +25,7 @@ import { getRenewalStatus } from '@/lib/renewal-status'
 import { canAddSubscription } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
+import { getDefaultCurrency } from '@/lib/currency-preferences'
 
 export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -41,7 +42,71 @@ export default function DashboardPage() {
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  // Currency conversion state
+  const [monthlyTotal, setMonthlyTotal] = useState(0)
+  const [yearlyTotal, setYearlyTotal] = useState(0)
+  const [spendingByCategory, setSpendingByCategory] = useState<Record<string, number>>({})
+  const [averagePerService, setAveragePerService] = useState(0)
+  const [mostExpensive, setMostExpensive] = useState(0)
+  const [leastExpensive, setLeastExpensive] = useState(0)
+  const [conversionsLoading, setConversionsLoading] = useState(false)
   const { user } = useAuth()
+
+  const calculateConvertedTotals = useCallback(async (subs: Subscription[]) => {
+    setConversionsLoading(true)
+    try {
+      const [monthly, yearly, categorySpending] = await Promise.all([
+        SubscriptionsService.calculateMonthlyTotalWithConversion(subs),
+        SubscriptionsService.calculateYearlyTotalWithConversion(subs),
+        SubscriptionsService.calculateCategorySpendingWithConversion(subs)
+      ])
+      
+      // Calculate converted amounts for each subscription
+      const convertedAmounts = await Promise.all(
+        subs.map(sub => SubscriptionsService.convertSubscriptionMonthlyAmount(sub))
+      )
+      
+      setMonthlyTotal(monthly)
+      setYearlyTotal(yearly)
+      setSpendingByCategory(categorySpending)
+      
+      if (convertedAmounts.length > 0) {
+        setAveragePerService(monthly / subs.length)
+        setMostExpensive(Math.max(...convertedAmounts))
+        setLeastExpensive(Math.min(...convertedAmounts))
+      } else {
+        setAveragePerService(0)
+        setMostExpensive(0)
+        setLeastExpensive(0)
+      }
+    } catch (error) {
+      console.error('Error calculating converted totals:', error)
+      // Fallback to non-converted calculations
+      const monthly = SubscriptionsService.calculateMonthlyTotal(subs)
+      const yearly = SubscriptionsService.calculateYearlyTotal(subs)
+      
+      setMonthlyTotal(monthly)
+      setYearlyTotal(yearly)
+      
+      const fallbackSpending = subs.reduce((acc, sub) => {
+        const category = sub.category || 'Other'
+        const monthlyAmount = SubscriptionsService.calculateMonthlyTotal([sub])
+        acc[category] = (acc[category] || 0) + monthlyAmount
+        return acc
+      }, {} as Record<string, number>)
+      setSpendingByCategory(fallbackSpending)
+      
+      // Fallback min/max calculations
+      if (subs.length > 0) {
+        const amounts = subs.map(s => SubscriptionsService.calculateMonthlyTotal([s]))
+        setAveragePerService(monthly / subs.length)
+        setMostExpensive(Math.max(...amounts))
+        setLeastExpensive(Math.min(...amounts))
+      }
+    } finally {
+      setConversionsLoading(false)
+    }
+  }, [])
 
   const fetchSubscriptions = useCallback(async () => {
     setLoading(true)
@@ -59,7 +124,13 @@ export default function DashboardPage() {
         throw new Error(subscriptionResult.error.message)
       }
 
-      setSubscriptions(subscriptionResult.data || [])
+      const fetchedSubscriptions = subscriptionResult.data || []
+      setSubscriptions(fetchedSubscriptions)
+      
+      // Calculate converted totals
+      if (fetchedSubscriptions.length > 0) {
+        await calculateConvertedTotals(fetchedSubscriptions)
+      }
       
       // Try to fetch user plan data via API
       try {
@@ -108,7 +179,7 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }, [user])
+  }, [user, calculateConvertedTotals])
 
   useEffect(() => {
     if (user) {
@@ -220,22 +291,11 @@ export default function DashboardPage() {
   const handleUpgradeCancel = () => {
     setIsUpgradeModalOpen(false)
   }
-
-  const monthlyTotal = subscriptions.length > 0 ? SubscriptionsService.calculateMonthlyTotal(subscriptions) : 0
-  const yearlyTotal = subscriptions.length > 0 ? SubscriptionsService.calculateYearlyTotal(subscriptions) : 0
   
   // Sort subscriptions by due date (most imminent first)
   const sortedSubscriptions = [...subscriptions].sort((a, b) => {
     return new Date(a.renewal_date).getTime() - new Date(b.renewal_date).getTime()
   })
-  
-  // Calculate spending by category
-  const spendingByCategory = subscriptions.reduce((acc, sub) => {
-    const category = sub.category || 'Other'
-    const monthlyAmount = SubscriptionsService.calculateMonthlyTotal([sub])
-    acc[category] = (acc[category] || 0) + monthlyAmount
-    return acc
-  }, {} as Record<string, number>)
   
   const topCategories = Object.entries(spendingByCategory)
     .sort(([, a], [, b]) => b - a)
@@ -244,7 +304,14 @@ export default function DashboardPage() {
   const formatCurrency = (amount: number, currency?: string) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency || 'USD',
+      currency: currency || getDefaultCurrency(),
+    }).format(amount)
+  }
+
+  const formatCurrencyForDashboard = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: getDefaultCurrency(),
     }).format(amount)
   }
 
@@ -288,6 +355,15 @@ export default function DashboardPage() {
             {userSubscription.plan_type.toUpperCase()}
           </Badge>
         )}
+        <Badge variant="outline" className="text-xs">
+          {getDefaultCurrency()}
+        </Badge>
+        {conversionsLoading && (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="animate-spin rounded-full h-3 w-3 border-b border-current"></div>
+            Converting...
+          </div>
+        )}
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
@@ -307,7 +383,7 @@ export default function DashboardPage() {
               <AnimatedCounter 
                 value={monthlyTotal} 
                 duration={600}
-                formatValue={(value) => formatCurrency(value)}
+                formatValue={(value) => formatCurrencyForDashboard(value)}
               />
             </div>
             <p className="text-xs text-blue-600 mt-1">
@@ -332,7 +408,7 @@ export default function DashboardPage() {
               <AnimatedCounter 
                 value={yearlyTotal} 
                 duration={700}
-                formatValue={(value) => formatCurrency(value)}
+                formatValue={(value) => formatCurrencyForDashboard(value)}
               />
             </div>
             <p className="text-xs text-green-600 mt-1">
@@ -419,7 +495,7 @@ export default function DashboardPage() {
                           ></div>
                         </div>
                         <span className="text-sm font-medium min-w-16 text-right">
-                          {formatCurrency(amount)}
+                          {formatCurrencyForDashboard(amount)}
                         </span>
                       </div>
                     </div>
@@ -439,9 +515,9 @@ export default function DashboardPage() {
                   <span className="text-sm font-medium">Average per service</span>
                   <span className="font-semibold">
                     <AnimatedCounter 
-                      value={subscriptions.length > 0 ? monthlyTotal / subscriptions.length : 0} 
+                      value={averagePerService} 
                       duration={550}
-                      formatValue={(value) => formatCurrency(value)}
+                      formatValue={(value) => formatCurrencyForDashboard(value)}
                     />
                   </span>
                 </div>
@@ -449,9 +525,9 @@ export default function DashboardPage() {
                   <span className="text-sm font-medium">Most expensive</span>
                   <span className="font-semibold">
                     <AnimatedCounter 
-                      value={subscriptions.length > 0 ? Math.max(...subscriptions.map(s => SubscriptionsService.calculateMonthlyTotal([s]))) : 0}
+                      value={mostExpensive}
                       duration={600}
-                      formatValue={(value) => formatCurrency(value)}
+                      formatValue={(value) => formatCurrencyForDashboard(value)}
                     />
                   </span>
                 </div>
@@ -459,9 +535,9 @@ export default function DashboardPage() {
                   <span className="text-sm font-medium">Least expensive</span>
                   <span className="font-semibold">
                     <AnimatedCounter 
-                      value={subscriptions.length > 0 ? Math.min(...subscriptions.map(s => SubscriptionsService.calculateMonthlyTotal([s]))) : 0}
+                      value={leastExpensive}
                       duration={500}
-                      formatValue={(value) => formatCurrency(value)}
+                      formatValue={(value) => formatCurrencyForDashboard(value)}
                     />
                   </span>
                 </div>
@@ -478,7 +554,6 @@ export default function DashboardPage() {
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button 
-                  variant="outline" 
                   size="sm"
                   onClick={(e) => {
                     e.preventDefault()
@@ -505,10 +580,10 @@ export default function DashboardPage() {
             <p className="text-red-600">Error: {error}</p>
           ) : subscriptions.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-muted-foreground mb-4">No subscriptions yet. Add your first subscription to get started!</p>
-              <Button onClick={handleAddSubscription}>
-                + Add Your First Subscription
-              </Button>
+              <div className="max-w-md mx-auto">
+                <h3 className="text-lg font-semibold text-foreground mb-2">Start tracking your SaaS costs</h3>
+                <p className="text-muted-foreground mb-1">Click the "+ Add Subscription" button above to add your first service. Track renewal dates, monthly costs, and keep your budget organized.</p>
+              </div>
             </div>
           ) : (
             <div className="space-y-3">

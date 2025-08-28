@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 import { Subscription, SubscriptionInsert, SubscriptionUpdate } from './database.types'
+import { ExchangeRateService } from './exchange-rates'
+import { Currency, getDefaultCurrency } from './currency-preferences'
 
 export class SubscriptionsService {
   static async getAll(): Promise<{ data: Subscription[] | null; error: any }> {
@@ -134,5 +136,165 @@ export class SubscriptionsService {
       const renewalDate = new Date(sub.renewal_date)
       return renewalDate >= today && renewalDate <= futureDate
     }).sort((a, b) => new Date(a.renewal_date).getTime() - new Date(b.renewal_date).getTime())
+  }
+
+  // Currency-aware calculation methods
+  static async calculateMonthlyTotalWithConversion(
+    subscriptions: Subscription[], 
+    targetCurrency?: Currency
+  ): Promise<number> {
+    const target = targetCurrency || getDefaultCurrency()
+    let total = 0
+
+    // Group subscriptions by currency for efficient API calls
+    const byCurrency = subscriptions
+      .filter(sub => sub.is_active)
+      .reduce((groups, sub) => {
+        const currency = sub.currency as Currency
+        if (!groups[currency]) groups[currency] = []
+        groups[currency].push(sub)
+        return groups
+      }, {} as Record<Currency, Subscription[]>)
+
+    // Convert each currency group
+    for (const [currency, subs] of Object.entries(byCurrency)) {
+      const currencyTotal = this.calculateMonthlyTotal(subs)
+      
+      if (currency === target) {
+        total += currencyTotal
+      } else {
+        try {
+          const convertedAmount = await ExchangeRateService.convertAmount(
+            currencyTotal,
+            currency as Currency,
+            target
+          )
+          total += convertedAmount
+        } catch (error) {
+          console.error(`Failed to convert ${currency} to ${target}:`, error)
+          // Fallback: add unconverted amount
+          total += currencyTotal
+        }
+      }
+    }
+
+    return total
+  }
+
+  static async calculateYearlyTotalWithConversion(
+    subscriptions: Subscription[], 
+    targetCurrency?: Currency
+  ): Promise<number> {
+    const target = targetCurrency || getDefaultCurrency()
+    let total = 0
+
+    // Group subscriptions by currency for efficient API calls
+    const byCurrency = subscriptions
+      .filter(sub => sub.is_active)
+      .reduce((groups, sub) => {
+        const currency = sub.currency as Currency
+        if (!groups[currency]) groups[currency] = []
+        groups[currency].push(sub)
+        return groups
+      }, {} as Record<Currency, Subscription[]>)
+
+    // Convert each currency group
+    for (const [currency, subs] of Object.entries(byCurrency)) {
+      const currencyTotal = this.calculateYearlyTotal(subs)
+      
+      if (currency === target) {
+        total += currencyTotal
+      } else {
+        try {
+          const convertedAmount = await ExchangeRateService.convertAmount(
+            currencyTotal,
+            currency as Currency,
+            target
+          )
+          total += convertedAmount
+        } catch (error) {
+          console.error(`Failed to convert ${currency} to ${target}:`, error)
+          // Fallback: add unconverted amount
+          total += currencyTotal
+        }
+      }
+    }
+
+    return total
+  }
+
+  static async calculateCategorySpendingWithConversion(
+    subscriptions: Subscription[], 
+    targetCurrency?: Currency
+  ): Promise<Record<string, number>> {
+    const target = targetCurrency || getDefaultCurrency()
+    const spendingByCategory: Record<string, number> = {}
+
+    // Group by category first, then by currency within each category
+    const byCategory = subscriptions
+      .filter(sub => sub.is_active)
+      .reduce((groups, sub) => {
+        const category = sub.category || 'Other'
+        if (!groups[category]) groups[category] = {}
+        
+        const currency = sub.currency as Currency
+        if (!groups[category][currency]) groups[category][currency] = []
+        groups[category][currency].push(sub)
+        return groups
+      }, {} as Record<string, Record<Currency, Subscription[]>>)
+
+    // Convert each category's spending
+    for (const [category, currencyGroups] of Object.entries(byCategory)) {
+      let categoryTotal = 0
+
+      for (const [currency, subs] of Object.entries(currencyGroups)) {
+        const currencyTotal = this.calculateMonthlyTotal(subs)
+        
+        if (currency === target) {
+          categoryTotal += currencyTotal
+        } else {
+          try {
+            const convertedAmount = await ExchangeRateService.convertAmount(
+              currencyTotal,
+              currency as Currency,
+              target
+            )
+            categoryTotal += convertedAmount
+          } catch (error) {
+            console.error(`Failed to convert ${currency} to ${target} for category ${category}:`, error)
+            // Fallback: add unconverted amount
+            categoryTotal += currencyTotal
+          }
+        }
+      }
+
+      spendingByCategory[category] = categoryTotal
+    }
+
+    return spendingByCategory
+  }
+
+  // Helper to convert a single subscription's monthly cost
+  static async convertSubscriptionMonthlyAmount(
+    subscription: Subscription,
+    targetCurrency?: Currency
+  ): Promise<number> {
+    const target = targetCurrency || getDefaultCurrency()
+    const monthlyAmount = this.calculateMonthlyTotal([subscription])
+    
+    if (subscription.currency === target) {
+      return monthlyAmount
+    }
+
+    try {
+      return await ExchangeRateService.convertAmount(
+        monthlyAmount,
+        subscription.currency as Currency,
+        target
+      )
+    } catch (error) {
+      console.error(`Failed to convert subscription amount from ${subscription.currency} to ${target}:`, error)
+      return monthlyAmount // Fallback to original amount
+    }
   }
 }

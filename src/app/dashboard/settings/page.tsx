@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAuth } from '@/contexts/auth-context'
 import { createClient } from '@supabase/supabase-js'
+import { Currency, SUPPORTED_CURRENCIES, getDefaultCurrency, setDefaultCurrency } from '@/lib/currency-preferences'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,6 +24,7 @@ export default function SettingsPage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false)
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false)
+  const [defaultCurrency, setDefaultCurrencyState] = useState<Currency>('USD')
   
   // Password change form
   const [currentPassword, setCurrentPassword] = useState('')
@@ -30,6 +33,11 @@ export default function SettingsPage() {
   
   // Email change form
   const [newEmail, setNewEmail] = useState('')
+  
+  // Load currency preference on mount
+  useEffect(() => {
+    setDefaultCurrencyState(getDefaultCurrency())
+  }, [])
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -103,6 +111,15 @@ export default function SettingsPage() {
     }
   }
 
+  const handleCurrencyChange = (currency: Currency) => {
+    setDefaultCurrency(currency)
+    setDefaultCurrencyState(currency)
+    setMessage({ 
+      type: 'success', 
+      text: `Default currency updated to ${SUPPORTED_CURRENCIES.find(c => c.value === currency)?.label}` 
+    })
+  }
+
   return (
     <div className="container mx-auto p-4 sm:p-6">
       <div className="mb-6 sm:mb-8">
@@ -119,7 +136,7 @@ export default function SettingsPage() {
       )}
 
       {/* Account Settings Card */}
-      <Card>
+      <Card className="mb-6">
         <CardHeader>
           <CardTitle>Account Settings</CardTitle>
         </CardHeader>
@@ -238,6 +255,35 @@ export default function SettingsPage() {
                 </form>
               </DialogContent>
             </Dialog>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Currency Preferences Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Currency Preferences</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+            <div>
+              <Label className="text-sm font-medium text-muted-foreground">Default Currency</Label>
+              <p className="text-sm text-muted-foreground mb-2">
+                This will be used for dashboard totals and as the default when adding new subscriptions.
+              </p>
+              <Select value={defaultCurrency} onValueChange={handleCurrencyChange}>
+                <SelectTrigger className="w-full sm:w-auto">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {SUPPORTED_CURRENCIES.map((currency) => (
+                    <SelectItem key={currency.value} value={currency.value}>
+                      {currency.symbol} {currency.label} ({currency.value})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
