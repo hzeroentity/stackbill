@@ -62,6 +62,9 @@ export function Header() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/settings">Settings</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
                   Sign Out
                 </DropdownMenuItem>
@@ -70,12 +73,15 @@ export function Header() {
           </div>
           
           {/* Center: Navigation */}
-          <div className="flex justify-center space-x-2">
-            <Link href="/dashboard" className="flex-1 max-w-24">
-              <Button variant="ghost" size="sm" className="w-full">Dashboard</Button>
+          <div className="flex justify-center space-x-1">
+            <Link href="/dashboard" className="flex-1 max-w-20">
+              <Button variant="ghost" size="sm" className="w-full text-xs">Dashboard</Button>
             </Link>
-            <Link href="/dashboard/billing" className="flex-1 max-w-24">
-              <Button variant="ghost" size="sm" className="w-full">Billing</Button>
+            <Link href="/dashboard/billing" className="flex-1 max-w-20">
+              <Button variant="ghost" size="sm" className="w-full text-xs">Billing</Button>
+            </Link>
+            <Link href="/dashboard/settings" className="flex-1 max-w-20">
+              <Button variant="ghost" size="sm" className="w-full text-xs">Settings</Button>
             </Link>
           </div>
         </div>
@@ -105,6 +111,9 @@ export function Header() {
               <Link href="/dashboard/billing">
                 <Button variant="ghost">Billing</Button>
               </Link>
+              <Link href="/dashboard/settings">
+                <Button variant="ghost">Settings</Button>
+              </Link>
             </div>
             
             <DropdownMenu>
@@ -127,6 +136,9 @@ export function Header() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/settings">Settings</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
                   Sign Out
                 </DropdownMenuItem>

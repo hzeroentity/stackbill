@@ -32,10 +32,10 @@ export const PLANS: Plan[] = [
     description: 'Unlimited tracking for power users',
     price: 4,
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID || '',
-    subscriptionLimit: 100, // "unlimited" but with ceiling
+    subscriptionLimit: 30, // "unlimited" but with ceiling
     popular: true,
     features: [
-      'Track up to 100 subscriptions',
+      'Track up to 30 subscriptions',
       'Email reminders for expiring subscriptions',
       'Advanced analytics & insights',
       'Category-based spending breakdown',

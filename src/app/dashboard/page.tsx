@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -291,9 +292,15 @@ export default function DashboardPage() {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">Monthly Total</CardTitle>
-            <div className="text-blue-600">💳</div>
+            <Image 
+              src="/stackbill-creditcard.svg" 
+              alt="Credit Card" 
+              width={32} 
+              height={32} 
+              className="text-blue-600"
+            />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-900">
@@ -310,9 +317,15 @@ export default function DashboardPage() {
         </Card>
         
         <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">Annual Total</CardTitle>
-            <div className="text-green-600">📊</div>
+            <Image 
+              src="/stackbill-moneybag.svg" 
+              alt="Money Bag" 
+              width={32} 
+              height={32} 
+              className="text-green-600"
+            />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-900">
@@ -329,9 +342,15 @@ export default function DashboardPage() {
         </Card>
         
         <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">Active Services</CardTitle>
-            <div className="text-purple-600">⚡</div>
+            <Image 
+              src="/stackbill-lightning.svg" 
+              alt="Lightning" 
+              width={32} 
+              height={32} 
+              className="text-purple-600"
+            />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-900">
@@ -343,14 +362,14 @@ export default function DashboardPage() {
                 <span className="text-lg text-purple-600 ml-1">/ 3</span>
               )}
               {userSubscription?.plan_type === 'pro' && (
-                <span className="text-lg text-purple-600 ml-1">/ 100</span>
+                <span className="text-lg text-purple-600 ml-1">/ 30</span>
               )}
             </div>
             <p className="text-xs text-purple-600 mt-1">
               {userSubscription?.plan_type === 'free' 
                 ? `${3 - subscriptions.length} remaining on free plan`
                 : userSubscription?.plan_type === 'pro'
-                  ? `${100 - subscriptions.length} remaining on pro plan`
+                  ? `${30 - subscriptions.length} remaining on pro plan`
                   : 'Services tracked'
               }
             </p>
@@ -535,16 +554,25 @@ export default function DashboardPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEdit(subscription)}>
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => handleDeleteClick(subscription)}
-                              className="text-red-600"
-                              disabled={deletingId === subscription.id}
-                            >
-                              Delete
-                            </DropdownMenuItem>
+                            {subscription.id !== 'stackbill-pro' && (
+                              <>
+                                <DropdownMenuItem onClick={() => handleEdit(subscription)}>
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                  onClick={() => handleDeleteClick(subscription)}
+                                  className="text-red-600"
+                                  disabled={deletingId === subscription.id}
+                                >
+                                  Delete
+                                </DropdownMenuItem>
+                              </>
+                            )}
+                            {subscription.id === 'stackbill-pro' && (
+                              <DropdownMenuItem disabled className="text-gray-400">
+                                Pro Plan Service
+                              </DropdownMenuItem>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -575,16 +603,25 @@ export default function DashboardPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEdit(subscription)}>
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => handleDeleteClick(subscription)}
-                              className="text-red-600"
-                              disabled={deletingId === subscription.id}
-                            >
-                              Delete
-                            </DropdownMenuItem>
+                            {subscription.id !== 'stackbill-pro' && (
+                              <>
+                                <DropdownMenuItem onClick={() => handleEdit(subscription)}>
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                  onClick={() => handleDeleteClick(subscription)}
+                                  className="text-red-600"
+                                  disabled={deletingId === subscription.id}
+                                >
+                                  Delete
+                                </DropdownMenuItem>
+                              </>
+                            )}
+                            {subscription.id === 'stackbill-pro' && (
+                              <DropdownMenuItem disabled className="text-gray-400">
+                                Pro Plan Service
+                              </DropdownMenuItem>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -650,7 +687,7 @@ export default function DashboardPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Upgrade to Pro</AlertDialogTitle>
             <AlertDialogDescription>
-              You&apos;ve reached your subscription limit (3 for free plan). Upgrade to Pro ($4/month) to track up to 100 subscriptions with email reminders?
+              You&apos;ve reached your subscription limit (3 for free plan). Upgrade to Pro ($4/month) to track up to 30 subscriptions with email reminders?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
