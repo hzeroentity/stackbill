@@ -5,20 +5,18 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth()
+  const { isAuthenticated, isInitialized } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && !user) {
-      // Add a small delay to prevent redirect conflicts
-      const timer = setTimeout(() => {
-        router.replace('/login')
-      }, 100)
-      return () => clearTimeout(timer)
+    // Only redirect after initialization is complete and user is not authenticated
+    if (isInitialized && !isAuthenticated) {
+      router.replace('/login')
     }
-  }, [user, loading, router])
+  }, [isAuthenticated, isInitialized, router])
 
-  if (loading) {
+  // Show loading only during the initial authentication check (first app load)
+  if (!isInitialized) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
@@ -29,16 +27,11 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     )
   }
 
-  if (!user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Redirecting...</p>
-        </div>
-      </div>
-    )
+  // If authenticated, render immediately - zero delays for navigation
+  if (isAuthenticated) {
+    return <>{children}</>
   }
 
-  return <>{children}</>
+  // Not authenticated and initialized - redirect is happening, show nothing to avoid flash
+  return null
 }

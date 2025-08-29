@@ -6,17 +6,17 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function LoginPage() {
-  const { user, loading } = useAuth()
+  const { isAuthenticated, isInitialized } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && user) {
-      console.log('User authenticated, redirecting to dashboard')
+    if (isInitialized && isAuthenticated) {
       router.replace('/dashboard')
     }
-  }, [user, loading, router])
+  }, [isAuthenticated, isInitialized, router])
 
-  if (loading) {
+  // Show loading only during initial authentication check
+  if (!isInitialized) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-6">
         <div className="text-center">
@@ -27,15 +27,9 @@ export default function LoginPage() {
     )
   }
 
-  if (user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-6">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Redirecting to dashboard...</p>
-        </div>
-      </div>
-    )
+  // If authenticated, redirect is happening - show nothing to avoid flash
+  if (isAuthenticated) {
+    return null
   }
 
   return (

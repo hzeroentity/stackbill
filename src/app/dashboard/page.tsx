@@ -53,6 +53,9 @@ export default function DashboardPage() {
   const [conversionsLoading, setConversionsLoading] = useState(false)
   const { user } = useAuth()
   const { t } = useLanguage()
+  
+  // Use stable user ID to prevent unnecessary re-renders
+  const userId = user?.id
 
   const calculateConvertedTotals = useCallback(async (subs: Subscription[]) => {
     setConversionsLoading(true)
@@ -111,14 +114,14 @@ export default function DashboardPage() {
   }, [])
 
   const fetchSubscriptions = useCallback(async () => {
+    if (!userId) {
+      return
+    }
+    
     setLoading(true)
     setError(null)
     
     try {
-      if (!user) {
-        throw new Error('User not authenticated')
-      }
-
       // Fetch user subscriptions first
       const subscriptionResult = await SubscriptionsService.getAll()
       
@@ -136,7 +139,7 @@ export default function DashboardPage() {
       
       // Try to fetch user plan data via API
       try {
-        const response = await fetch(`/api/user-subscription?userId=${user.id}`)
+        const response = await fetch(`/api/user-subscription?userId=${userId}`)
         if (response.ok) {
           const { userSubscription: userSub } = await response.json()
           setUserSubscription(userSub)
@@ -145,7 +148,7 @@ export default function DashboardPage() {
           console.warn('User not authenticated, using default subscription')
           setUserSubscription({
             id: 'temp',
-            user_id: user.id,
+            user_id: userId,
             stripe_customer_id: null,
             stripe_subscription_id: null,
             plan_type: 'free',
@@ -164,7 +167,7 @@ export default function DashboardPage() {
         // Create a default free plan user subscription
         setUserSubscription({
           id: 'temp',
-          user_id: user.id,
+          user_id: userId,
           stripe_customer_id: null,
           stripe_subscription_id: null,
           plan_type: 'free',
@@ -181,13 +184,13 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }, [user, calculateConvertedTotals])
+  }, [userId, calculateConvertedTotals])
 
   useEffect(() => {
-    if (user) {
+    if (userId) {
       fetchSubscriptions()
     }
-  }, [user, fetchSubscriptions])
+  }, [userId, fetchSubscriptions])
 
   const handleAddSuccess = () => {
     setIsAddDialogOpen(false)
