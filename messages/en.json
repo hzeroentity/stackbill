@@ -87,6 +87,7 @@
   "categories": {
     "cloud": "Cloud & Hosting",
     "analytics": "Analytics & Tracking",
+    "ai": "AI & Machine Learning",
     "database": "Database & Storage",
     "developer": "Developer Tools", 
     "communication": "Communication",
@@ -162,53 +163,142 @@
   "landing": {
     "hero": {
       "badge": "Built for SaaS founders & developers",
-      "title": "Track your SaaS stack costs",
-      "subtitle": "Simple subscription tracking for teams who build. Monitor your monthly burn rate and keep dev costs under control.",
-      "cta": "Get Started Free",
-      "signIn": "Sign In"
+      "title": "Track your costs",
+      "subtitle": "Manual SaaS tracking with reminders and smart summaries — so you don't get surprise charges ever again.",
+      "cta": "Start Free",
+      "howItWorks": "How it works",
+      "signIn": "Sign In",
+      "dashboardPreview": "📊 Dashboard Screenshot Placeholder",
+      "dashboardSubtext": "(Spending summary + email preview)"
+    },
+    "problems": {
+      "title": "Spreadsheets don't send reminders.",
+      "subtitle": "StackBill gives you clarity, control, and reminders — in one clean dashboard.",
+      "withoutStackbill": "Without StackBill",
+      "withStackbill": "With StackBill",
+      "surpriseCharges": {
+        "title": "Surprise charges",
+        "description": "Forgot a $29 tool was still renewing and got hit with unexpected charges"
+      },
+      "doublePayments": {
+        "title": "Double payments", 
+        "description": "Paid twice for the same service because you lost track of subscriptions"
+      },
+      "noVisibility": {
+        "title": "No spending visibility",
+        "description": "No idea how much you're spending each month on your dev tools"
+      },
+      "neverMiss": {
+        "title": "Never miss a renewal",
+        "description": "Get email reminders before renewals so you can cancel or prepare for charges"
+      },
+      "completeOverview": {
+        "title": "Complete overview",
+        "description": "See all your subscriptions in one place, organized and easy to manage"
+      },
+      "clearInsights": {
+        "title": "Clear spending insights",
+        "description": "Know exactly how much you spend monthly and yearly with smart breakdowns"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Simple, visual tracking in 3 steps",
+      "step1": {
+        "title": "Add your subscriptions manually",
+        "description": "Quick form to add service name, cost, and renewal date",
+        "placeholder": "📝 Simple form UI placeholder"
+      },
+      "step2": {
+        "title": "Set renewal dates & currency", 
+        "description": "Choose from 10+ currencies with automatic conversion",
+        "placeholder": "💰 Currency selector screenshot"
+      },
+      "step3": {
+        "title": "Get notified before renewals",
+        "description": "Email reminders so you never get surprised again", 
+        "placeholder": "📧 Example email preview"
+      },
+      "optionalStep": "Optional 4th step: Upgrade to Pro to track more tools and get monthly summaries."
     },
     "features": {
-      "title": "Everything you need to track SaaS subscriptions",
-      "smartDashboard": {
-        "title": "Smart Dashboard", 
-        "description": "Get instant visibility into monthly and annual costs with beautiful analytics."
+      "title": "Everything you need. Nothing you don't.",
+      "monthlyYearly": {
+        "title": "Track monthly & yearly spend",
+        "description": "See your total costs at a glance with smart category breakdowns and spending insights."
       },
-      "renewalTracking": {
-        "title": "Renewal Tracking",
-        "description": "Never miss a renewal date with smart alerts and color-coded status indicators."
+      "currencyConversion": {
+        "title": "Auto currency conversion (10+ supported)",
+        "description": "Track subscriptions in multiple currencies with real-time conversion rates."
       },
-      "madeForSaas": {
-        "title": "Made for SaaS",
-        "description": "Purpose-built for SaaS founders and development teams tracking multiple subscriptions."
+      "emailReminders": {
+        "title": "Email renewal reminders",
+        "description": "Get notified before subscription renewals so you never get surprise charges again."
       },
-      "manualControl": {
-        "title": "Manual Control", 
-        "description": "Full control over your data - add, edit, and manage subscriptions exactly how you want."
+      "monthlyReports": {
+        "title": "Monthly spending reports",
+        "description": "Receive monthly spending summaries with insights and renewal forecasts."
       },
-      "privacyFirst": {
-        "title": "Privacy First",
-        "description": "Your subscription data stays private and secure. No third-party integrations required."
+      "categories": {
+        "title": "Group tools by category",
+        "description": "Organize subscriptions with predefined categories for better spending insights."
       },
-      "simplePricing": {
-        "title": "Simple Pricing",
-        "description": "Start free with 3 subscriptions. Upgrade to Pro for unlimited tracking at $4/month."
+      "darkMode": {
+        "title": "Dark mode + multi-language",
+        "description": "Beautiful dark theme and support for English, Spanish, and Italian."
       }
     },
     "pricing": {
       "title": "Simple, transparent pricing",
-      "subtitle": "Start free, upgrade when you need more subscriptions"
+      "subtitle": "Start free, upgrade when you're ready"
     },
-    "cta": {
-      "title": "Ready to take control of your SaaS costs?",
-      "subtitle": "Join SaaS founders and development teams who trust StackBill to track their subscription expenses.",
-      "button": "Start Free Today"
+    "testimonials": {
+      "title": "What developers are saying",
+      "subtitle": "Join early testers getting better control of their SaaS costs",
+      "reviews": [
+        {
+          "quote": "Way better than my janky Notion page. Love the reminders.",
+          "author": "@mikeDeveloper",
+          "role": "Full-stack Developer"
+        },
+        {
+          "quote": "Finally stopped getting surprise $99 charges from tools I forgot about.",
+          "author": "@sarahCodes", 
+          "role": "SaaS Founder"
+        },
+        {
+          "quote": "Simple, clean interface. Exactly what I needed to track my dev tools.",
+          "author": "@alexBuilds",
+          "role": "Indie Hacker"
+        },
+        {
+          "quote": "The currency conversion feature is perfect for my international subscriptions.",
+          "author": "@lucasDev",
+          "role": "Tech Lead"
+        },
+        {
+          "quote": "Saved me $200+ this month by catching unused subscriptions!",
+          "author": "@rachelTech",
+          "role": "Frontend Developer"
+        },
+        {
+          "quote": "Clean design, no bloat. Just tracks what I need to know.",
+          "author": "@jakeCode",
+          "role": "DevOps Engineer"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Stop paying for tools you forgot about.",
+      "subtitle": "Start tracking your stack in 60 seconds.",
+      "button": "Start Free"
     },
     "footer": {
-      "tagline": "Simple SaaS cost tracking for founders and development teams.",
-      "privacy": "Privacy",
-      "terms": "Terms",
+      "tagline": "Simple SaaS cost tracking for founders and development teams",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service", 
       "support": "Support",
-      "copyright": "© 2024 StackBill. All rights reserved."
+      "copyright": "© 2025 StackBill. All rights reserved."
     }
   },
   "theme": {

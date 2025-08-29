@@ -24,6 +24,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
   const categories: SubscriptionCategory[] = [
     'Cloud & Hosting',
     'Analytics & Tracking',
+    'AI & Machine Learning',
     'Database & Storage', 
     'Developer Tools',
     'Communication',

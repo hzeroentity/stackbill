@@ -360,9 +360,6 @@ export default function DashboardPage() {
             {userSubscription.plan_type.toUpperCase()}
           </Badge>
         )}
-        <Badge variant="outline" className="text-xs">
-          {getDefaultCurrency()}
-        </Badge>
         {conversionsLoading && (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <div className="animate-spin rounded-full h-3 w-3 border-b border-current"></div>

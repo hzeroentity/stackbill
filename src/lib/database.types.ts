@@ -13,6 +13,7 @@ export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'incomplet
 export type SubscriptionCategory = 
   | 'Cloud & Hosting'
   | 'Analytics & Tracking'
+  | 'AI & Machine Learning'
   | 'Database & Storage'
   | 'Developer Tools'
   | 'Communication'
