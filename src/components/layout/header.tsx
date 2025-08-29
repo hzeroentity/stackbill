@@ -7,10 +7,13 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ModeToggle } from "@/components/mode-toggle"
+import { useLanguage } from "@/contexts/language-context"
 
 export function Header() {
   const { signOut, user } = useAuth()
   const router = useRouter()
+  const { t } = useLanguage()
 
   const handleSignOut = async () => {
     await signOut()
@@ -41,47 +44,50 @@ export function Header() {
               </Link>
             </div>
             
-            {/* Right: User Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-primary/10 text-xs">
-                      {user?.email ? getUserInitials(user.email) : 'U'}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">Account</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {user?.email}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings">Settings</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSignOut}>
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Right: Theme Toggle + User Dropdown */}
+            <div className="flex items-center space-x-2">
+              <ModeToggle />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-primary/10 text-xs">
+                        {user?.email ? getUserInitials(user.email) : 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{t('navigation.account')}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user?.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings">{t('navigation.settings')}</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    {t('auth.signOut')}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
           
           {/* Center: Navigation */}
           <div className="flex justify-center space-x-1">
             <Link href="/dashboard" className="flex-1 max-w-20">
-              <Button variant="ghost" size="sm" className="w-full text-xs">Dashboard</Button>
+              <Button variant="ghost" size="sm" className="w-full text-xs">{t('navigation.dashboard')}</Button>
             </Link>
             <Link href="/dashboard/billing" className="flex-1 max-w-20">
-              <Button variant="ghost" size="sm" className="w-full text-xs">Billing</Button>
+              <Button variant="ghost" size="sm" className="w-full text-xs">{t('navigation.billing')}</Button>
             </Link>
             <Link href="/dashboard/settings" className="flex-1 max-w-20">
-              <Button variant="ghost" size="sm" className="w-full text-xs">Settings</Button>
+              <Button variant="ghost" size="sm" className="w-full text-xs">{t('navigation.settings')}</Button>
             </Link>
           </div>
         </div>
@@ -102,19 +108,21 @@ export function Header() {
             </Link>
           </div>
           
-          {/* Right: Navigation + User Dropdown */}
+          {/* Right: Navigation + Theme Toggle + User Dropdown */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Link href="/dashboard">
-                <Button variant="ghost">Dashboard</Button>
+                <Button variant="ghost">{t('navigation.dashboard')}</Button>
               </Link>
               <Link href="/dashboard/billing">
-                <Button variant="ghost">Billing</Button>
+                <Button variant="ghost">{t('navigation.billing')}</Button>
               </Link>
               <Link href="/dashboard/settings">
-                <Button variant="ghost">Settings</Button>
+                <Button variant="ghost">{t('navigation.settings')}</Button>
               </Link>
             </div>
+            
+            <ModeToggle />
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -129,7 +137,7 @@ export function Header() {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">Account</p>
+                    <p className="text-sm font-medium leading-none">{t('navigation.account')}</p>
                     <p className="text-xs leading-none text-muted-foreground">
                       {user?.email}
                     </p>
@@ -137,10 +145,10 @@ export function Header() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings">Settings</Link>
+                  <Link href="/dashboard/settings">{t('navigation.settings')}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
-                  Sign Out
+                  {t('auth.signOut')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

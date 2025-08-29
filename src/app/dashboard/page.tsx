@@ -26,6 +26,7 @@ import { canAddSubscription } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
 import { getDefaultCurrency } from '@/lib/currency-preferences'
+import { useLanguage } from '@/contexts/language-context'
 
 export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -51,6 +52,7 @@ export default function DashboardPage() {
   const [leastExpensive, setLeastExpensive] = useState(0)
   const [conversionsLoading, setConversionsLoading] = useState(false)
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   const calculateConvertedTotals = useCallback(async (subs: Subscription[]) => {
     setConversionsLoading(true)
@@ -342,14 +344,14 @@ export default function DashboardPage() {
   return (
     <div className="container mx-auto p-4 sm:p-6">
       <div className="flex items-center gap-3 mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('dashboard.title')}</h1>
         {userSubscription && (
           <Badge 
             variant={userSubscription.plan_type === 'pro' ? 'default' : 'secondary'}
             className={
               userSubscription.plan_type === 'pro' 
                 ? 'bg-purple-600 hover:bg-purple-700 text-white' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
             }
           >
             {userSubscription.plan_type.toUpperCase()}
@@ -367,85 +369,85 @@ export default function DashboardPage() {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 dark:from-blue-950/20 dark:to-blue-900/20 dark:border dark:border-blue-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
-            <CardTitle className="text-sm font-medium">Monthly Total</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('dashboard.monthlyTotal')}</CardTitle>
             <Image 
               src="/stackbill-creditcard.svg" 
               alt="Credit Card" 
               width={32} 
               height={32} 
-              className="text-blue-600"
+              className="text-blue-600 dark:text-white"
             />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-900">
+            <div className="text-2xl font-bold text-blue-900 dark:text-white">
               <AnimatedCounter 
                 value={monthlyTotal} 
-                duration={600}
+                duration={400}
                 formatValue={(value) => formatCurrencyForDashboard(value)}
               />
             </div>
-            <p className="text-xs text-blue-600 mt-1">
-              Per month average
+            <p className="text-xs text-blue-600 dark:text-white/80 mt-1">
+              {t('dashboard.perMonthAverage')}
             </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 dark:from-green-950/20 dark:to-green-900/20 dark:border dark:border-green-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
-            <CardTitle className="text-sm font-medium">Annual Total</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('dashboard.annualTotal')}</CardTitle>
             <Image 
               src="/stackbill-moneybag.svg" 
               alt="Money Bag" 
               width={32} 
               height={32} 
-              className="text-green-600"
+              className="text-green-600 dark:text-white"
             />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-900">
+            <div className="text-2xl font-bold text-green-900 dark:text-white">
               <AnimatedCounter 
                 value={yearlyTotal} 
-                duration={700}
+                duration={450}
                 formatValue={(value) => formatCurrencyForDashboard(value)}
               />
             </div>
-            <p className="text-xs text-green-600 mt-1">
-              Total yearly cost
+            <p className="text-xs text-green-600 dark:text-white/80 mt-1">
+              {t('dashboard.totalYearlyCost')}
             </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 dark:from-purple-950/20 dark:to-purple-900/20 dark:border dark:border-purple-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
-            <CardTitle className="text-sm font-medium">Active Services</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('dashboard.activeServices')}</CardTitle>
             <Image 
               src="/stackbill-lightning.svg" 
               alt="Lightning" 
               width={32} 
               height={32} 
-              className="text-purple-600"
+              className="text-purple-600 dark:text-white"
             />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-900">
+            <div className="text-2xl font-bold text-purple-900 dark:text-white">
               <AnimatedCounter 
                 value={subscriptions.length} 
-                duration={500}
+                duration={300}
               />
               {userSubscription?.plan_type === 'free' && (
-                <span className="text-lg text-purple-600 ml-1">/ 3</span>
+                <span className="text-lg text-purple-600 dark:text-white/80 ml-1">/ 3</span>
               )}
               {userSubscription?.plan_type === 'pro' && (
-                <span className="text-lg text-purple-600 ml-1">/ 30</span>
+                <span className="text-lg text-purple-600 dark:text-white/80 ml-1">/ 30</span>
               )}
             </div>
-            <p className="text-xs text-purple-600 mt-1">
+            <p className="text-xs text-purple-600 dark:text-white/80 mt-1">
               {userSubscription?.plan_type === 'free' 
-                ? `${3 - subscriptions.length} remaining on free plan`
+                ? `${3 - subscriptions.length} ${t('dashboard.remainingFree')}`
                 : userSubscription?.plan_type === 'pro'
-                  ? `${30 - subscriptions.length} remaining on pro plan`
+                  ? `${30 - subscriptions.length} ${t('dashboard.remainingFree')}`
                   : 'Services tracked'
               }
             </p>
@@ -454,9 +456,9 @@ export default function DashboardPage() {
                 onClick={handleUpgradeToPro}
                 disabled={upgrading}
                 size="sm"
-                className="mt-2 w-full bg-purple-600 hover:bg-purple-700"
+                className="mt-2 w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600"
               >
-                {upgrading ? 'Upgrading...' : 'Upgrade to Pro'}
+                {upgrading ? t('dashboard.upgrading') : t('dashboard.upgradeToPro')}
               </Button>
             )}
           </CardContent>
@@ -475,22 +477,22 @@ export default function DashboardPage() {
                 {topCategories.map(([category, amount], index) => {
                   const percentage = monthlyTotal > 0 ? (amount / monthlyTotal) * 100 : 0
                   const colors = [
-                    'bg-blue-500',
-                    'bg-green-500',
-                    'bg-purple-500',
-                    'bg-orange-500',
-                    'bg-pink-500'
+                    'bg-blue-500 dark:bg-blue-400',
+                    'bg-green-500 dark:bg-green-400',
+                    'bg-purple-500 dark:bg-purple-400',
+                    'bg-orange-500 dark:bg-orange-400',
+                    'bg-pink-500 dark:bg-pink-400'
                   ]
                   return (
                     <div key={category} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${colors[index] || 'bg-gray-500'}`}></div>
+                        <div className={`w-3 h-3 rounded-full ${colors[index] || 'bg-gray-500 dark:bg-gray-400'}`}></div>
                         <span className="font-medium">{category}</span>
                       </div>
                       <div className="flex items-center space-x-3">
-                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                        <div className="w-24 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
                           <div 
-                            className={`h-2 rounded-full ${colors[index] || 'bg-gray-500'}`}
+                            className={`h-2 rounded-full ${colors[index] || 'bg-gray-500 dark:bg-gray-400'}`}
                             style={{ width: `${percentage}%` }}
                           ></div>
                         </div>
@@ -507,36 +509,36 @@ export default function DashboardPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Spending Overview</CardTitle>
+              <CardTitle>{t('dashboard.spendingOverview')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
-                  <span className="text-sm font-medium">Average per service</span>
-                  <span className="font-semibold">
+                <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg dark:bg-orange-900/30 dark:border dark:border-orange-700/50">
+                  <span className="text-sm font-medium dark:text-white">{t('dashboard.averagePerService')}</span>
+                  <span className="font-semibold dark:text-white">
                     <AnimatedCounter 
                       value={averagePerService} 
-                      duration={550}
+                      duration={350}
                       formatValue={(value) => formatCurrencyForDashboard(value)}
                     />
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                  <span className="text-sm font-medium">Most expensive</span>
-                  <span className="font-semibold">
+                <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg dark:bg-red-900/30 dark:border dark:border-red-700/50">
+                  <span className="text-sm font-medium dark:text-white">{t('dashboard.mostExpensive')}</span>
+                  <span className="font-semibold dark:text-white">
                     <AnimatedCounter 
                       value={mostExpensive}
-                      duration={600}
+                      duration={400}
                       formatValue={(value) => formatCurrencyForDashboard(value)}
                     />
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
-                  <span className="text-sm font-medium">Least expensive</span>
-                  <span className="font-semibold">
+                <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg dark:bg-yellow-900/30 dark:border dark:border-yellow-700/50">
+                  <span className="text-sm font-medium dark:text-white">{t('dashboard.leastExpensive')}</span>
+                  <span className="font-semibold dark:text-white">
                     <AnimatedCounter 
                       value={leastExpensive}
-                      duration={500}
+                      duration={350}
                       formatValue={(value) => formatCurrencyForDashboard(value)}
                     />
                   </span>
@@ -549,7 +551,7 @@ export default function DashboardPage() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Active Subscriptions</CardTitle>
+          <CardTitle>{t('dashboard.activeSubscriptions')}</CardTitle>
           <div className="flex items-center gap-2">
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
@@ -560,7 +562,7 @@ export default function DashboardPage() {
                     handleAddSubscription()
                   }}
                 >
-                  + Add Subscription
+                  {t('dashboard.addSubscription')}
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -577,12 +579,12 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           {error ? (
-            <p className="text-red-600">Error: {error}</p>
+            <p className="text-red-600 dark:text-red-400">Error: {error}</p>
           ) : subscriptions.length === 0 ? (
             <div className="text-center py-8">
               <div className="max-w-md mx-auto">
-                <h3 className="text-lg font-semibold text-foreground mb-2">Start tracking your SaaS costs</h3>
-                <p className="text-muted-foreground mb-1">Click the &quot;+ Add Subscription&quot; button above to add your first service. Track renewal dates, monthly costs, and keep your budget organized.</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{t('dashboard.startTracking')}</h3>
+                <p className="text-muted-foreground mb-1">{t('dashboard.clickAddButton')}</p>
               </div>
             </div>
           ) : (
@@ -632,19 +634,19 @@ export default function DashboardPage() {
                             {subscription.id !== 'stackbill-pro' && (
                               <>
                                 <DropdownMenuItem onClick={() => handleEdit(subscription)}>
-                                  Edit
+                                  {t('dashboard.edit')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   onClick={() => handleDeleteClick(subscription)}
-                                  className="text-red-600"
+                                  className="text-red-600 dark:text-red-400"
                                   disabled={deletingId === subscription.id}
                                 >
-                                  Delete
+                                  {t('dashboard.delete')}
                                 </DropdownMenuItem>
                               </>
                             )}
                             {subscription.id === 'stackbill-pro' && (
-                              <DropdownMenuItem disabled className="text-gray-400">
+                              <DropdownMenuItem disabled className="text-gray-400 dark:text-gray-500">
                                 Pro Plan Service
                               </DropdownMenuItem>
                             )}
@@ -681,19 +683,19 @@ export default function DashboardPage() {
                             {subscription.id !== 'stackbill-pro' && (
                               <>
                                 <DropdownMenuItem onClick={() => handleEdit(subscription)}>
-                                  Edit
+                                  {t('dashboard.edit')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   onClick={() => handleDeleteClick(subscription)}
-                                  className="text-red-600"
+                                  className="text-red-600 dark:text-red-400"
                                   disabled={deletingId === subscription.id}
                                 >
-                                  Delete
+                                  {t('dashboard.delete')}
                                 </DropdownMenuItem>
                               </>
                             )}
                             {subscription.id === 'stackbill-pro' && (
-                              <DropdownMenuItem disabled className="text-gray-400">
+                              <DropdownMenuItem disabled className="text-gray-400 dark:text-gray-500">
                                 Pro Plan Service
                               </DropdownMenuItem>
                             )}
@@ -702,7 +704,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex justify-between items-center text-sm">
                         <div>
-                          <span className="font-semibold">{formatCurrency(subscription.amount, subscription.currency)}</span>
+                          <span className="font-semibold dark:text-white">{formatCurrency(subscription.amount, subscription.currency)}</span>
                           <span className="text-muted-foreground capitalize ml-1">
                             {subscription.billing_period}
                           </span>
@@ -770,7 +772,7 @@ export default function DashboardPage() {
             <AlertDialogAction 
               onClick={handleUpgradeConfirm} 
               disabled={upgrading}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600"
             >
               {upgrading ? 'Processing...' : 'Upgrade to Pro'}
             </AlertDialogAction>

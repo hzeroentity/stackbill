@@ -1,0 +1,226 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "confirm": "Confirm",
+    "email": "Email",
+    "password": "Password"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up", 
+    "signOut": "Sign Out",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "forgotPassword": "Forgot password?",
+    "withGithub": "Continue with GitHub",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "confirmPassword": "Confirm password",
+    "passwordsMatch": "Passwords match",
+    "passwordsDontMatch": "Passwords don't match",
+    "signingIn": "Signing in...",
+    "signingUp": "Signing up...",
+    "welcome": "Welcome to StackBill"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "billing": "Billing",
+    "settings": "Settings",
+    "account": "Account"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "monthlyTotal": "Monthly Total",
+    "annualTotal": "Annual Total", 
+    "activeServices": "Active Services",
+    "addSubscription": "+ Add Subscription",
+    "activeSubscriptions": "Active Subscriptions",
+    "spendingBreakdown": "Spending Breakdown",
+    "spendingOverview": "Spending Overview",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "average": "Average",
+    "noSubscriptions": "No subscriptions found",
+    "getStarted": "Add your first subscription to get started!",
+    "perMonthAverage": "Per month average",
+    "totalYearlyCost": "Total yearly cost",
+    "remainingFree": "remaining on free plan",
+    "activeOnPro": "active on pro plan",
+    "upgradeToProDue": "Upgrade to Pro (Due to hitting limit)",
+    "upgradeToPro": "Upgrade to Pro",
+    "upgrading": "Upgrading...",
+    "processing": "Processing...",
+    "startTracking": "Start tracking your SaaS costs",
+    "clickAddButton": "Click the \"+ Add Subscription\" button above to add your first service. Track renewal dates, monthly costs, and keep your budget organized.",
+    "error": "Error",
+    "averagePerService": "Average per service",
+    "mostExpensive": "Most expensive",
+    "leastExpensive": "Least expensive",
+    "edit": "Edit",
+    "delete": "Delete",
+    "proPlanService": "Pro Plan Service"
+  },
+  "subscriptions": {
+    "service": "Service",
+    "amount": "Amount",
+    "billingPeriod": "Billing Period",
+    "renewalDate": "Renewal Date",
+    "category": "Category",
+    "addNew": "Add New Subscription",
+    "editSubscription": "Edit Subscription",
+    "deleteSubscription": "Delete Subscription",
+    "confirmDelete": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "dueIn": "Due in {days} days",
+    "overdue": "Overdue by {days} days",
+    "currency": "Currency",
+    "deleting": "Deleting..."
+  },
+  "categories": {
+    "cloud": "Cloud & Hosting",
+    "analytics": "Analytics & Tracking",
+    "database": "Database & Storage",
+    "developer": "Developer Tools", 
+    "communication": "Communication",
+    "design": "Design & Creative",
+    "marketing": "Marketing & SEO",
+    "security": "Security",
+    "entertainment": "Entertainment",
+    "productivity": "Productivity",
+    "other": "Other"
+  },
+  "billing": {
+    "title": "Billing & Plans",
+    "currentSubscription": "Current Subscription",
+    "manageBilling": "Manage Billing",
+    "plan": "Plan",
+    "status": "Status",
+    "active": "Active",
+    "nextBilling": "Next billing date",
+    "ok": "OK",
+    "keepPro": "Keep Pro",
+    "getStartedFree": "Get Started Free",
+    "choosePlan": "Choose Your Plan",
+    "freeFeatures": [
+      "Up to 3 subscriptions",
+      "Basic dashboard",
+      "Manual tracking"
+    ],
+    "proFeatures": [
+      "Up to 30 subscriptions", 
+      "Advanced analytics",
+      "Email reminders",
+      "Priority support"
+    ],
+    "freePlan": "Free Plan",
+    "proPlan": "Pro Plan",
+    "currentPlan": "Current Plan",
+    "upgradeToProDue": "Upgrade to Pro (Due to hitting limit)",
+    "upgradeToPro": "Upgrade to Pro",
+    "perMonth": "/month",
+    "downgrade": "Downgrade to Free",
+    "confirmDowngrade": "Are you sure you want to downgrade to the Free plan? This will cancel your Pro subscription.",
+    "downgradingPlan": "Downgrading plan...",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "Can I upgrade or downgrade at any time?",
+      "a1": "Yes! You can upgrade from Free to Pro at any time. If you need to downgrade or cancel, please contact our support team and we'll help you manage your subscription.",
+      "q2": "What happens if I hit the free plan limit?",
+      "a2": "The free plan allows you to track up to 3 subscriptions. Once you reach this limit, you'll be prompted to upgrade to Pro for unlimited subscription tracking.",
+      "q3": "Is my payment information secure?",
+      "a3": "Absolutely! We use Stripe for payment processing, which is trusted by millions of businesses worldwide. We never store your payment information on our servers."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "accountSettings": "Account Settings", 
+    "currentEmail": "Current Email",
+    "registeredOn": "Registered on",
+    "changeEmail": "Change Email",
+    "changePassword": "Change Password",
+    "newEmail": "New Email",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "changingEmail": "Changing email...",
+    "changingPassword": "Changing password...",
+    "emailChanged": "Email changed successfully",
+    "passwordChanged": "Password changed successfully",
+    "currencyPreferences": "Currency Preferences",
+    "preferredCurrency": "Preferred Currency",
+    "currencyNote": "Your preferred currency will be used for dashboard totals and new subscriptions will default to this currency.",
+    "updatingCurrency": "Updating currency...",
+    "currencyUpdated": "Currency preference updated successfully"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Built for SaaS founders & developers",
+      "title": "Track your SaaS stack costs",
+      "subtitle": "Simple subscription tracking for teams who build. Monitor your monthly burn rate and keep dev costs under control.",
+      "cta": "Get Started Free",
+      "signIn": "Sign In"
+    },
+    "features": {
+      "title": "Everything you need to track SaaS subscriptions",
+      "smartDashboard": {
+        "title": "Smart Dashboard", 
+        "description": "Get instant visibility into monthly and annual costs with beautiful analytics."
+      },
+      "renewalTracking": {
+        "title": "Renewal Tracking",
+        "description": "Never miss a renewal date with smart alerts and color-coded status indicators."
+      },
+      "madeForSaas": {
+        "title": "Made for SaaS",
+        "description": "Purpose-built for SaaS founders and development teams tracking multiple subscriptions."
+      },
+      "manualControl": {
+        "title": "Manual Control", 
+        "description": "Full control over your data - add, edit, and manage subscriptions exactly how you want."
+      },
+      "privacyFirst": {
+        "title": "Privacy First",
+        "description": "Your subscription data stays private and secure. No third-party integrations required."
+      },
+      "simplePricing": {
+        "title": "Simple Pricing",
+        "description": "Start free with 3 subscriptions. Upgrade to Pro for unlimited tracking at $4/month."
+      }
+    },
+    "pricing": {
+      "title": "Simple, transparent pricing",
+      "subtitle": "Start free, upgrade when you need more subscriptions"
+    },
+    "cta": {
+      "title": "Ready to take control of your SaaS costs?",
+      "subtitle": "Join SaaS founders and development teams who trust StackBill to track their subscription expenses.",
+      "button": "Start Free Today"
+    },
+    "footer": {
+      "tagline": "Simple SaaS cost tracking for founders and development teams.",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "support": "Support",
+      "copyright": "© 2024 StackBill. All rights reserved."
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark", 
+    "system": "System",
+    "toggle": "Toggle theme"
+  },
+  "language": {
+    "english": "English",
+    "italian": "Italiano",
+    "spanish": "Español",
+    "switchLanguage": "Switch language"
+  }
+}

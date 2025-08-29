@@ -18,6 +18,7 @@ import { PLANS, getPlan } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
 import { UserSubscription } from '@/lib/database.types'
+import { useLanguage } from '@/contexts/language-context'
 
 export default function BillingPage() {
   const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null)
@@ -28,6 +29,7 @@ export default function BillingPage() {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isDowngradeModalOpen, setIsDowngradeModalOpen] = useState(false)
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   useEffect(() => {
     const loadUserSubscription = async () => {
@@ -177,9 +179,9 @@ export default function BillingPage() {
   return (
     <div className="container mx-auto p-4 sm:p-6">
       <div className="pt-8 mb-12">
-        <h1 className="text-3xl font-bold mb-4">Billing & Plans</h1>
+        <h1 className="text-3xl font-bold mb-4">{t('billing.title')}</h1>
         <p className="text-muted-foreground">
-          Manage your subscription and billing settings.
+          {t('billing.manageBilling')}
         </p>
       </div>
 
@@ -189,29 +191,29 @@ export default function BillingPage() {
           <Card>
             <CardHeader>
               <CardTitle>Current Subscription</CardTitle>
-              <CardDescription>Manage your Pro subscription</CardDescription>
+              <CardDescription>{t('billing.manageBilling')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="font-medium">Plan</span>
+                <span className="font-medium">{t('billing.plan')}</span>
                 <span className="text-purple-600 font-semibold">Pro - ${getPlan('pro').price}/month</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="font-medium">Status</span>
+                <span className="font-medium">{t('billing.status')}</span>
                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                   userSubscription.status === 'active' 
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
                     : userSubscription.status === 'past_due'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-red-100 text-red-800'
+                      ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                      : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
                 }`}>
-                  {userSubscription.status === 'active' ? 'Active' : 
+                  {userSubscription.status === 'active' ? t('billing.active') : 
                    userSubscription.status === 'past_due' ? 'Past Due' : 'Canceled'}
                 </span>
               </div>
               {userSubscription.current_period_end && (
                 <div className="flex justify-between items-center">
-                  <span className="font-medium">Next billing date</span>
+                  <span className="font-medium">{t('billing.nextBilling')}</span>
                   <span>{new Date(userSubscription.current_period_end).toLocaleDateString()}</span>
                 </div>
               )}
@@ -219,11 +221,11 @@ export default function BillingPage() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button 
                     variant="outline" 
-                    className="text-red-600 border-red-200 hover:bg-red-50"
+                    className="text-red-600 border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950/20"
                     onClick={() => setIsDowngradeModalOpen(true)}
                     disabled={downgrading}
                   >
-                    {downgrading ? 'Processing...' : 'Downgrade to Free'}
+                    {downgrading ? t('dashboard.processing') : t('billing.downgrade')}
                   </Button>
                   <p className="text-sm text-muted-foreground flex-1">
                     Downgrade to the free plan anytime. You&apos;ll keep access until the end of your billing period.
@@ -236,7 +238,7 @@ export default function BillingPage() {
       )}
 
       <div className="mb-12">
-        <h2 className="text-2xl font-bold text-center mb-8">Choose Your Plan</h2>
+        <h2 className="text-2xl font-bold text-center mb-8">{t('billing.choosePlan')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {PLANS.map((plan) => {
           const isCurrentPlan = currentPlan === plan.id
@@ -246,14 +248,14 @@ export default function BillingPage() {
               key={plan.id} 
               className={`relative ${
                 isCurrentPlan 
-                  ? 'ring-2 ring-green-500 bg-green-50/50' 
+                  ? 'ring-2 ring-green-500 bg-green-50/50 dark:ring-green-400 dark:bg-green-950/20' 
                   : 'border-border'
               }`}
             >
               {isCurrentPlan && (
                 <div className="absolute -top-4 right-4">
-                  <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Current Plan
+                  <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium dark:bg-green-600">
+                    {t('billing.currentPlan')}
                   </div>
                 </div>
               )}
@@ -286,12 +288,12 @@ export default function BillingPage() {
                   onClick={() => handleUpgrade(plan.id)}
                 >
                   {isCurrentPlan 
-                    ? 'Current Plan' 
+                    ? t('billing.currentPlan') 
                     : upgrading 
-                      ? 'Processing...' 
+                      ? t('dashboard.processing') 
                       : plan.id === 'free' 
-                        ? 'Get Started Free' 
-                        : 'Upgrade to Pro'
+                        ? t('billing.getStartedFree') 
+                        : t('billing.upgradeToPro')
                   }
                 </Button>
               </CardContent>
@@ -303,40 +305,37 @@ export default function BillingPage() {
 
       {/* FAQ Section */}
       <div className="mt-24">
-        <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+        <h2 className="text-2xl font-bold text-center mb-8">{t('billing.faq.title')}</h2>
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Can I upgrade or downgrade at any time?</CardTitle>
+              <CardTitle className="text-lg">{t('billing.faq.q1')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Yes! You can upgrade from Free to Pro at any time. If you need to downgrade or cancel, 
-                please contact our support team and we&apos;ll help you manage your subscription.
+                {t('billing.faq.a1')}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">What happens if I hit the free plan limit?</CardTitle>
+              <CardTitle className="text-lg">{t('billing.faq.q2')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                The free plan allows you to track up to 3 subscriptions. Once you reach this limit, 
-                you&apos;ll be prompted to upgrade to Pro for unlimited subscription tracking.
+                {t('billing.faq.a2')}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Is my payment information secure?</CardTitle>
+              <CardTitle className="text-lg">{t('billing.faq.q3')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Absolutely! We use Stripe for payment processing, which is trusted by millions of 
-                businesses worldwide. We never store your payment information on our servers.
+                {t('billing.faq.a3')}
               </p>
             </CardContent>
           </Card>
@@ -347,14 +346,14 @@ export default function BillingPage() {
       <AlertDialog open={isErrorModalOpen} onOpenChange={setIsErrorModalOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Error</AlertDialogTitle>
+            <AlertDialogTitle>{t('dashboard.error')}</AlertDialogTitle>
             <AlertDialogDescription>
               {errorMessage}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => setIsErrorModalOpen(false)}>
-              OK
+              {t('billing.ok')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -364,7 +363,7 @@ export default function BillingPage() {
       <AlertDialog open={isDowngradeModalOpen} onOpenChange={setIsDowngradeModalOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Downgrade to Free Plan</AlertDialogTitle>
+            <AlertDialogTitle>{t('billing.downgrade')} Plan</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to downgrade to the free plan? You&apos;ll lose access to Pro features, including unlimited subscription tracking. 
               <br /><br />
@@ -376,14 +375,14 @@ export default function BillingPage() {
               onClick={() => setIsDowngradeModalOpen(false)}
               disabled={downgrading}
             >
-              Keep Pro
+              {t('billing.keepPro')}
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDowngrade}
               disabled={downgrading}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
             >
-              {downgrading ? 'Processing...' : 'Downgrade to Free'}
+              {downgrading ? t('dashboard.processing') : t('billing.downgrade')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { useLanguage } from '@/contexts/language-context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,6 +11,7 @@ import { Eye, EyeOff, Github } from 'lucide-react'
 import Image from 'next/image'
 
 export function AuthForm() {
+  const { t } = useLanguage()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -156,7 +158,7 @@ export function AuthForm() {
           <span className="text-2xl font-bold">StackBill</span>
         </div>
         <CardTitle className="text-center text-2xl">
-          {isSignUp ? 'Create your account' : 'Welcome back'}
+          {isSignUp ? t('auth.createAccount') : t('auth.welcome')}
         </CardTitle>
         <p className="text-center text-sm text-muted-foreground">
           {isSignUp 
@@ -180,7 +182,7 @@ export function AuthForm() {
           ) : (
             <Github className="w-5 h-5" />
           )}
-          <span className="ml-2">Continue with GitHub</span>
+          <span className="ml-2">{t('auth.withGithub')}</span>
         </Button>
 
         <div className="relative">
@@ -197,7 +199,7 @@ export function AuthForm() {
           <div>
             <Input
               type="email"
-              placeholder="Enter your email"
+              placeholder={t('auth.enterEmail')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -207,7 +209,7 @@ export function AuthForm() {
           <div className="relative">
             <Input
               type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
+              placeholder={t('auth.enterPassword')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -233,7 +235,7 @@ export function AuthForm() {
                 <span>Please wait...</span>
               </div>
             ) : (
-              isSignUp ? 'Create account' : 'Sign in'
+              isSignUp ? t('auth.createAccount') : t('auth.signIn')
             )}
           </Button>
         </form>
@@ -257,7 +259,7 @@ export function AuthForm() {
             }}
             className="text-sm text-primary hover:underline"
           >
-            {isSignUp ? 'Already have an account? Sign in' : 'Need an account? Sign up'}
+            {isSignUp ? t('auth.alreadyHaveAccount') + ' ' + t('auth.signIn') : t('auth.noAccount') + ' ' + t('auth.signUp')}
           </button>
         </div>
       </CardContent>

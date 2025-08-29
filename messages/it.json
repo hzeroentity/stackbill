@@ -1,0 +1,225 @@
+{
+  "common": {
+    "loading": "Caricamento...",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "add": "Aggiungi",
+    "close": "Chiudi",
+    "confirm": "Conferma",
+    "email": "Email",
+    "password": "Password"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signUp": "Registrati", 
+    "signOut": "Disconnetti",
+    "createAccount": "Crea Account",
+    "alreadyHaveAccount": "Hai già un account?",
+    "noAccount": "Non hai un account?",
+    "forgotPassword": "Password dimenticata?",
+    "withGithub": "Continua con GitHub",
+    "enterEmail": "Inserisci la tua email",
+    "enterPassword": "Inserisci la tua password",
+    "confirmPassword": "Conferma password",
+    "passwordsMatch": "Le password corrispondono",
+    "passwordsDontMatch": "Le password non corrispondono",
+    "signingIn": "Accesso in corso...",
+    "signingUp": "Registrazione in corso...",
+    "welcome": "Benvenuto su StackBill"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "billing": "Fatturazione",
+    "settings": "Impostazioni",
+    "account": "Account"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "monthlyTotal": "Totale Mensile",
+    "annualTotal": "Totale Annuale", 
+    "activeServices": "Servizi Attivi",
+    "addSubscription": "+ Aggiungi Abbonamento",
+    "activeSubscriptions": "Abbonamenti Attivi",
+    "spendingBreakdown": "Ripartizione Spese",
+    "spendingOverview": "Panoramica Spese",
+    "minimum": "Minimo",
+    "maximum": "Massimo",
+    "average": "Media",
+    "noSubscriptions": "Nessun abbonamento trovato",
+    "getStarted": "Aggiungi il tuo primo abbonamento per iniziare!",
+    "perMonthAverage": "Media mensile",
+    "totalYearlyCost": "Costo annuale totale",
+    "remainingFree": "rimanenti sul piano gratuito",
+    "activeOnPro": "attivi sul piano pro",
+    "upgradeToProDue": "Aggiorna a Pro (Limite raggiunto)",
+    "upgradeToPro": "Aggiorna a Pro",
+    "upgrading": "Aggiornamento...",
+    "processing": "Elaborazione...",
+    "startTracking": "Inizia a tracciare i tuoi costi SaaS",
+    "clickAddButton": "Clicca il pulsante \"+ Aggiungi Abbonamento\" qui sopra per aggiungere il tuo primo servizio. Tieni traccia delle date di rinnovo, costi mensili e mantieni il tuo budget organizzato.",
+    "error": "Errore",
+    "averagePerService": "Media per servizio",
+    "mostExpensive": "Più costoso",
+    "leastExpensive": "Meno costoso",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "proPlanService": "Servizio Piano Pro"
+  },
+  "subscriptions": {
+    "service": "Servizio",
+    "amount": "Importo",
+    "billingPeriod": "Periodo di Fatturazione",
+    "renewalDate": "Data di Rinnovo",
+    "category": "Categoria",
+    "addNew": "Aggiungi Nuovo Abbonamento",
+    "editSubscription": "Modifica Abbonamento",
+    "deleteSubscription": "Elimina Abbonamento",
+    "confirmDelete": "Sei sicuro di voler eliminare questo abbonamento?",
+    "monthly": "Mensile",
+    "yearly": "Annuale",
+    "dueIn": "Scadenza tra {days} giorni",
+    "overdue": "In ritardo di {days} giorni",
+    "currency": "Valuta"
+  },
+  "categories": {
+    "cloud": "Cloud e Hosting",
+    "analytics": "Analytics e Tracking",
+    "database": "Database e Storage",
+    "developer": "Strumenti Sviluppatore", 
+    "communication": "Comunicazione",
+    "design": "Design e Creatività",
+    "marketing": "Marketing e SEO",
+    "security": "Sicurezza",
+    "entertainment": "Intrattenimento",
+    "productivity": "Produttività",
+    "other": "Altro"
+  },
+  "billing": {
+    "title": "Fatturazione e Piani",
+    "currentSubscription": "Abbonamento Attuale",
+    "manageBilling": "Gestisci Fatturazione",
+    "plan": "Piano",
+    "status": "Stato",
+    "active": "Attivo",
+    "nextBilling": "Prossima data di fatturazione",
+    "ok": "OK",
+    "keepPro": "Mantieni Pro",
+    "getStartedFree": "Inizia Gratis",
+    "choosePlan": "Scegli il Tuo Piano",
+    "freeFeatures": [
+      "Fino a 3 abbonamenti",
+      "Dashboard di base",
+      "Tracciamento manuale"
+    ],
+    "proFeatures": [
+      "Fino a 30 abbonamenti", 
+      "Analytics avanzate",
+      "Promemoria email",
+      "Supporto prioritario"
+    ],
+    "freePlan": "Piano Gratuito",
+    "proPlan": "Piano Pro",
+    "currentPlan": "Piano Attuale",
+    "upgradeToProDue": "Aggiorna a Pro (Limite raggiunto)",
+    "upgradeToPro": "Aggiorna a Pro",
+    "perMonth": "/mese",
+    "downgrade": "Downgrade a Gratuito",
+    "confirmDowngrade": "Sei sicuro di voler effettuare il downgrade al piano Gratuito? Questo cancellerà il tuo abbonamento Pro.",
+    "downgradingPlan": "Downgrade del piano in corso...",
+    "faq": {
+      "title": "Domande Frequenti",
+      "q1": "Posso fare l'upgrade o downgrade in qualsiasi momento?",
+      "a1": "Sì! Puoi fare l'upgrade da Gratuito a Pro in qualsiasi momento. Se hai bisogno di fare il downgrade o cancellare, per favore contatta il nostro team di supporto e ti aiuteremo a gestire il tuo abbonamento.",
+      "q2": "Cosa succede se raggiungo il limite del piano gratuito?",
+      "a2": "Il piano gratuito ti permette di tracciare fino a 3 abbonamenti. Una volta raggiunto questo limite, ti verrà chiesto di fare l'upgrade a Pro per il tracciamento illimitato degli abbonamenti.",
+      "q3": "Le mie informazioni di pagamento sono sicure?",
+      "a3": "Assolutamente! Usiamo Stripe per l'elaborazione dei pagamenti, che è fidato da milioni di aziende in tutto il mondo. Non conserviamo mai le tue informazioni di pagamento sui nostri server."
+    }
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "accountSettings": "Impostazioni Account", 
+    "currentEmail": "Email Attuale",
+    "registeredOn": "Registrato il",
+    "changeEmail": "Cambia Email",
+    "changePassword": "Cambia Password",
+    "newEmail": "Nuova Email",
+    "newPassword": "Nuova Password",
+    "confirmNewPassword": "Conferma Nuova Password",
+    "changingEmail": "Cambio email in corso...",
+    "changingPassword": "Cambio password in corso...",
+    "emailChanged": "Email cambiata con successo",
+    "passwordChanged": "Password cambiata con successo",
+    "currencyPreferences": "Preferenze Valuta",
+    "preferredCurrency": "Valuta Preferita",
+    "currencyNote": "La tua valuta preferita verrà utilizzata per i totali del dashboard e i nuovi abbonamenti utilizzeranno questa valuta per default.",
+    "updatingCurrency": "Aggiornamento valuta in corso...",
+    "currencyUpdated": "Preferenza valuta aggiornata con successo"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Creato per fondatori SaaS e sviluppatori",
+      "title": "Monitora i costi del tuo stack SaaS",
+      "subtitle": "Tracciamento semplice degli abbonamenti per team che costruiscono. Monitora il tuo burn rate mensile e mantieni sotto controllo i costi di sviluppo.",
+      "cta": "Inizia Gratis",
+      "signIn": "Accedi"
+    },
+    "features": {
+      "title": "Tutto quello che ti serve per tracciare gli abbonamenti SaaS",
+      "smartDashboard": {
+        "title": "Dashboard Intelligente", 
+        "description": "Ottieni visibilità immediata sui costi mensili e annuali con belle analytics."
+      },
+      "renewalTracking": {
+        "title": "Tracciamento Rinnovi",
+        "description": "Non perdere mai una data di rinnovo con avvisi intelligenti e indicatori di stato colorati."
+      },
+      "madeForSaas": {
+        "title": "Fatto per SaaS",
+        "description": "Progettato appositamente per fondatori SaaS e team di sviluppo che tracciano più abbonamenti."
+      },
+      "manualControl": {
+        "title": "Controllo Manuale", 
+        "description": "Controllo completo sui tuoi dati - aggiungi, modifica e gestisci gli abbonamenti esattamente come vuoi."
+      },
+      "privacyFirst": {
+        "title": "Privacy Prima di Tutto",
+        "description": "I tuoi dati degli abbonamenti rimangono privati e sicuri. Nessuna integrazione di terze parti richiesta."
+      },
+      "simplePricing": {
+        "title": "Prezzi Semplici",
+        "description": "Inizia gratis con 3 abbonamenti. Aggiorna a Pro per tracciamento illimitato a $4/mese."
+      }
+    },
+    "pricing": {
+      "title": "Prezzi semplici e trasparenti",
+      "subtitle": "Inizia gratis, aggiorna quando hai bisogno di più abbonamenti"
+    },
+    "cta": {
+      "title": "Pronto a prendere controllo dei tuoi costi SaaS?",
+      "subtitle": "Unisciti ai fondatori SaaS e team di sviluppo che si affidano a StackBill per tracciare le loro spese di abbonamento.",
+      "button": "Inizia Gratis Oggi"
+    },
+    "footer": {
+      "tagline": "Tracciamento semplice dei costi SaaS per fondatori e team di sviluppo.",
+      "privacy": "Privacy",
+      "terms": "Termini",
+      "support": "Supporto",
+      "copyright": "© 2024 StackBill. Tutti i diritti riservati."
+    }
+  },
+  "theme": {
+    "light": "Chiaro",
+    "dark": "Scuro", 
+    "system": "Sistema",
+    "toggle": "Cambia tema"
+  },
+  "language": {
+    "english": "English",
+    "italian": "Italiano",
+    "spanish": "Español",
+    "switchLanguage": "Cambia lingua"
+  }
+}

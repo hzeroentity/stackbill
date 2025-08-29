@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAuth } from '@/contexts/auth-context'
+import { useLanguage } from '@/contexts/language-context'
 import { createClient } from '@supabase/supabase-js'
 import { Currency, SUPPORTED_CURRENCIES, getDefaultCurrency, setDefaultCurrency } from '@/lib/currency-preferences'
 
@@ -19,6 +20,7 @@ const supabase = createClient(
 
 export default function SettingsPage() {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [emailLoading, setEmailLoading] = useState(false)
   const [passwordLoading, setPasswordLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
@@ -42,7 +44,7 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (newPassword !== confirmPassword) {
-      setMessage({ type: 'error', text: 'New passwords do not match' })
+      setMessage({ type: 'error', text: t('auth.passwordsDontMatch') })
       return
     }
     
@@ -61,7 +63,7 @@ export default function SettingsPage() {
       
       if (error) throw error
       
-      setMessage({ type: 'success', text: 'Password updated successfully!' })
+      setMessage({ type: 'success', text: t('settings.passwordChanged') })
       setNewPassword('')
       setConfirmPassword('')
       setIsPasswordDialogOpen(false)
@@ -95,7 +97,7 @@ export default function SettingsPage() {
       
       setMessage({ 
         type: 'success', 
-        text: 'Email update initiated! Check both your old and new email for confirmation links.' 
+        text: t('settings.emailChanged') 
       })
       setNewEmail('')
       setIsEmailDialogOpen(false)
@@ -114,15 +116,15 @@ export default function SettingsPage() {
     setDefaultCurrencyState(currency)
     setMessage({ 
       type: 'success', 
-      text: `Default currency updated to ${SUPPORTED_CURRENCIES.find(c => c.value === currency)?.label}` 
+      text: t('settings.currencyUpdated') 
     })
   }
 
   return (
     <div className="container mx-auto p-4 sm:p-6">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold">Settings</h1>
-        <p className="text-muted-foreground mt-2">Manage your account preferences and security settings</p>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('settings.title')}</h1>
+        <p className="text-muted-foreground mt-2">{t('settings.accountSettings')}</p>
       </div>
 
       {message && (
@@ -136,17 +138,17 @@ export default function SettingsPage() {
       {/* Account Settings Card */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Account Settings</CardTitle>
+          <CardTitle>{t('settings.accountSettings')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Account Information */}
           <div className="space-y-4">
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Email Address</Label>
+              <Label className="text-sm font-medium text-muted-foreground">{t('common.email')}</Label>
               <p className="text-base">{user?.email || 'Loading...'}</p>
             </div>
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Member Since</Label>
+              <Label className="text-sm font-medium text-muted-foreground">{t('settings.registeredOn')}</Label>
               <p className="text-base">
                 {user?.created_at 
                   ? new Date(user.created_at).toLocaleDateString('en-US', {
@@ -165,20 +167,20 @@ export default function SettingsPage() {
             <Dialog open={isEmailDialogOpen} onOpenChange={setIsEmailDialogOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="flex-1">
-                  Change Email
+                  {t('settings.changeEmail')}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Change Email Address</DialogTitle>
+                  <DialogTitle>{t('settings.changeEmail')}</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleEmailChange} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="new-email">New Email Address</Label>
+                    <Label htmlFor="new-email">{t('settings.newEmail')}</Label>
                     <Input
                       id="new-email"
                       type="email"
-                      placeholder="Enter new email address"
+                      placeholder={t('settings.newEmail')}
                       value={newEmail}
                       onChange={(e) => setNewEmail(e.target.value)}
                       disabled={emailLoading}
@@ -191,10 +193,10 @@ export default function SettingsPage() {
                       onClick={() => setIsEmailDialogOpen(false)}
                       disabled={emailLoading}
                     >
-                      Cancel
+                      {t('common.cancel')}
                     </Button>
                     <Button type="submit" disabled={emailLoading || !newEmail}>
-                      {emailLoading ? 'Updating...' : 'Update Email'}
+                      {emailLoading ? t('settings.changingEmail') : t('settings.changeEmail')}
                     </Button>
                   </div>
                 </form>
@@ -204,31 +206,31 @@ export default function SettingsPage() {
             <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="flex-1">
-                  Change Password
+                  {t('settings.changePassword')}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Change Password</DialogTitle>
+                  <DialogTitle>{t('settings.changePassword')}</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handlePasswordChange} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="new-password">New Password</Label>
+                    <Label htmlFor="new-password">{t('settings.newPassword')}</Label>
                     <Input
                       id="new-password"
                       type="password"
-                      placeholder="Enter new password"
+                      placeholder={t('settings.newPassword')}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       disabled={passwordLoading}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm New Password</Label>
+                    <Label htmlFor="confirm-password">{t('settings.confirmNewPassword')}</Label>
                     <Input
                       id="confirm-password"
                       type="password"
-                      placeholder="Confirm new password"
+                      placeholder={t('settings.confirmNewPassword')}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       disabled={passwordLoading}
@@ -241,13 +243,13 @@ export default function SettingsPage() {
                       onClick={() => setIsPasswordDialogOpen(false)}
                       disabled={passwordLoading}
                     >
-                      Cancel
+                      {t('common.cancel')}
                     </Button>
                     <Button 
                       type="submit" 
                       disabled={passwordLoading || !newPassword || !confirmPassword}
                     >
-                      {passwordLoading ? 'Updating...' : 'Update Password'}
+                      {passwordLoading ? t('settings.changingPassword') : t('settings.changePassword')}
                     </Button>
                   </div>
                 </form>
@@ -260,14 +262,14 @@ export default function SettingsPage() {
       {/* Currency Preferences Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Currency Preferences</CardTitle>
+          <CardTitle>{t('settings.currencyPreferences')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Default Currency</Label>
+              <Label className="text-sm font-medium text-muted-foreground">{t('settings.preferredCurrency')}</Label>
               <p className="text-sm text-muted-foreground mb-2">
-                This will be used for dashboard totals and as the default when adding new subscriptions.
+                {t('settings.currencyNote')}
               </p>
               <Select value={defaultCurrency} onValueChange={handleCurrencyChange}>
                 <SelectTrigger className="w-full sm:w-auto">

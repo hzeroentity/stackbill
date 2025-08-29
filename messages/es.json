@@ -1,0 +1,225 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Añadir",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "email": "Correo electrónico",
+    "password": "Contraseña"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse", 
+    "signOut": "Cerrar Sesión",
+    "createAccount": "Crear Cuenta",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "noAccount": "¿No tienes una cuenta?",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "withGithub": "Continuar con GitHub",
+    "enterEmail": "Ingresa tu correo electrónico",
+    "enterPassword": "Ingresa tu contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "passwordsMatch": "Las contraseñas coinciden",
+    "passwordsDontMatch": "Las contraseñas no coinciden",
+    "signingIn": "Iniciando sesión...",
+    "signingUp": "Registrándose...",
+    "welcome": "Bienvenido a StackBill"
+  },
+  "navigation": {
+    "dashboard": "Panel",
+    "billing": "Facturación",
+    "settings": "Configuración",
+    "account": "Cuenta"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "monthlyTotal": "Total Mensual",
+    "annualTotal": "Total Anual", 
+    "activeServices": "Servicios Activos",
+    "addSubscription": "+ Añadir Suscripción",
+    "activeSubscriptions": "Suscripciones Activas",
+    "spendingBreakdown": "Desglose de Gastos",
+    "spendingOverview": "Resumen de Gastos",
+    "minimum": "Mínimo",
+    "maximum": "Máximo",
+    "average": "Promedio",
+    "noSubscriptions": "No se encontraron suscripciones",
+    "getStarted": "¡Añade tu primera suscripción para comenzar!",
+    "perMonthAverage": "Promedio mensual",
+    "totalYearlyCost": "Costo anual total",
+    "remainingFree": "restantes en plan gratuito",
+    "activeOnPro": "activos en plan pro",
+    "upgradeToProDue": "Actualizar a Pro (Límite alcanzado)",
+    "upgradeToPro": "Actualizar a Pro",
+    "upgrading": "Actualizando...",
+    "processing": "Procesando...",
+    "startTracking": "Comienza a rastrear tus costos SaaS",
+    "clickAddButton": "Haz clic en el botón \"+ Añadir Suscripción\" arriba para agregar tu primer servicio. Rastrea fechas de renovación, costos mensuales y mantén tu presupuesto organizado.",
+    "error": "Error",
+    "averagePerService": "Promedio por servicio",
+    "mostExpensive": "Más costoso",
+    "leastExpensive": "Menos costoso",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "proPlanService": "Servicio Plan Pro"
+  },
+  "subscriptions": {
+    "service": "Servicio",
+    "amount": "Monto",
+    "billingPeriod": "Período de Facturación",
+    "renewalDate": "Fecha de Renovación",
+    "category": "Categoría",
+    "addNew": "Añadir Nueva Suscripción",
+    "editSubscription": "Editar Suscripción",
+    "deleteSubscription": "Eliminar Suscripción",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar esta suscripción?",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "dueIn": "Vence en {days} días",
+    "overdue": "Vencido hace {days} días",
+    "currency": "Moneda"
+  },
+  "categories": {
+    "cloud": "Cloud y Hosting",
+    "analytics": "Analytics y Seguimiento",
+    "database": "Base de Datos y Almacenamiento",
+    "developer": "Herramientas de Desarrollo", 
+    "communication": "Comunicación",
+    "design": "Diseño y Creatividad",
+    "marketing": "Marketing y SEO",
+    "security": "Seguridad",
+    "entertainment": "Entretenimiento",
+    "productivity": "Productividad",
+    "other": "Otro"
+  },
+  "billing": {
+    "title": "Facturación y Planes",
+    "currentSubscription": "Suscripción Actual",
+    "manageBilling": "Gestionar Facturación",
+    "plan": "Plan",
+    "status": "Estado",
+    "active": "Activo",
+    "nextBilling": "Próxima fecha de facturación",
+    "ok": "OK",
+    "keepPro": "Mantener Pro",
+    "getStartedFree": "Comenzar Gratis",
+    "choosePlan": "Elige Tu Plan",
+    "freeFeatures": [
+      "Hasta 3 suscripciones",
+      "Panel básico",
+      "Seguimiento manual"
+    ],
+    "proFeatures": [
+      "Hasta 30 suscripciones", 
+      "Analytics avanzadas",
+      "Recordatorios por email",
+      "Soporte prioritario"
+    ],
+    "freePlan": "Plan Gratuito",
+    "proPlan": "Plan Pro",
+    "currentPlan": "Plan Actual",
+    "upgradeToProDue": "Actualizar a Pro (Límite alcanzado)",
+    "upgradeToPro": "Actualizar a Pro",
+    "perMonth": "/mes",
+    "downgrade": "Degradar a Gratuito",
+    "confirmDowngrade": "¿Estás seguro de que quieres degradar al plan Gratuito? Esto cancelará tu suscripción Pro.",
+    "downgradingPlan": "Degradando plan...",
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": "¿Puedo actualizar o degradar en cualquier momento?",
+      "a1": "¡Sí! Puedes actualizar de Gratuito a Pro en cualquier momento. Si necesitas degradar o cancelar, por favor contacta nuestro equipo de soporte y te ayudaremos a gestionar tu suscripción.",
+      "q2": "¿Qué pasa si alcanzo el límite del plan gratuito?",
+      "a2": "El plan gratuito te permite rastrear hasta 3 suscripciones. Una vez que alcances este límite, se te pedirá actualizar a Pro para seguimiento ilimitado de suscripciones.",
+      "q3": "¿Está segura mi información de pago?",
+      "a3": "¡Absolutamente! Usamos Stripe para el procesamiento de pagos, el cual es confiado por millones de empresas en todo el mundo. Nunca almacenamos tu información de pago en nuestros servidores."
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "accountSettings": "Configuración de Cuenta", 
+    "currentEmail": "Correo Actual",
+    "registeredOn": "Registrado el",
+    "changeEmail": "Cambiar Correo",
+    "changePassword": "Cambiar Contraseña",
+    "newEmail": "Nuevo Correo",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "changingEmail": "Cambiando correo...",
+    "changingPassword": "Cambiando contraseña...",
+    "emailChanged": "Correo cambiado exitosamente",
+    "passwordChanged": "Contraseña cambiada exitosamente",
+    "currencyPreferences": "Preferencias de Moneda",
+    "preferredCurrency": "Moneda Preferida",
+    "currencyNote": "Tu moneda preferida se usará para los totales del panel y las nuevas suscripciones utilizarán esta moneda por defecto.",
+    "updatingCurrency": "Actualizando moneda...",
+    "currencyUpdated": "Preferencia de moneda actualizada exitosamente"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Construido para fundadores SaaS y desarrolladores",
+      "title": "Rastrea los costos de tu stack SaaS",
+      "subtitle": "Seguimiento simple de suscripciones para equipos que construyen. Monitorea tu tasa de quema mensual y mantén los costos de desarrollo bajo control.",
+      "cta": "Comenzar Gratis",
+      "signIn": "Iniciar Sesión"
+    },
+    "features": {
+      "title": "Todo lo que necesitas para rastrear suscripciones SaaS",
+      "smartDashboard": {
+        "title": "Panel Inteligente", 
+        "description": "Obtén visibilidad instantánea de costos mensuales y anuales con hermosas analíticas."
+      },
+      "renewalTracking": {
+        "title": "Seguimiento de Renovaciones",
+        "description": "Nunca pierdas una fecha de renovación con alertas inteligentes e indicadores de estado codificados por colores."
+      },
+      "madeForSaas": {
+        "title": "Hecho para SaaS",
+        "description": "Diseñado específicamente para fundadores SaaS y equipos de desarrollo que rastrean múltiples suscripciones."
+      },
+      "manualControl": {
+        "title": "Control Manual", 
+        "description": "Control total sobre tus datos - añade, edita y gestiona suscripciones exactamente como quieres."
+      },
+      "privacyFirst": {
+        "title": "Privacidad Primero",
+        "description": "Los datos de tus suscripciones se mantienen privados y seguros. No se requieren integraciones de terceros."
+      },
+      "simplePricing": {
+        "title": "Precios Simples",
+        "description": "Comienza gratis con 3 suscripciones. Actualiza a Pro para seguimiento ilimitado a $4/mes."
+      }
+    },
+    "pricing": {
+      "title": "Precios simples y transparentes",
+      "subtitle": "Comienza gratis, actualiza cuando necesites más suscripciones"
+    },
+    "cta": {
+      "title": "¿Listo para tomar control de tus costos SaaS?",
+      "subtitle": "Únete a fundadores SaaS y equipos de desarrollo que confían en StackBill para rastrear sus gastos de suscripción.",
+      "button": "Comenzar Gratis Hoy"
+    },
+    "footer": {
+      "tagline": "Seguimiento simple de costos SaaS para fundadores y equipos de desarrollo.",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "support": "Soporte",
+      "copyright": "© 2024 StackBill. Todos los derechos reservados."
+    }
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro", 
+    "system": "Sistema",
+    "toggle": "Cambiar tema"
+  },
+  "language": {
+    "english": "English",
+    "italian": "Italiano",
+    "spanish": "Español",
+    "switchLanguage": "Cambiar idioma"
+  }
+}
