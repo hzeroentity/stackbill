@@ -145,9 +145,9 @@ export function Header() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings">{t('navigation.settings')}</Link>
+                  <Link href="/dashboard/settings" className="cursor-pointer">{t('navigation.settings')}</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSignOut}>
+                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
                   {t('auth.signOut')}
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -50,6 +50,8 @@ export default function DashboardPage() {
   const [averagePerService, setAveragePerService] = useState(0)
   const [mostExpensive, setMostExpensive] = useState(0)
   const [leastExpensive, setLeastExpensive] = useState(0)
+  const [mostExpensiveId, setMostExpensiveId] = useState<string | null>(null)
+  const [leastExpensiveId, setLeastExpensiveId] = useState<string | null>(null)
   const [conversionsLoading, setConversionsLoading] = useState(false)
   const { user } = useAuth()
   const { t } = useLanguage()
@@ -77,12 +79,22 @@ export default function DashboardPage() {
       
       if (convertedAmounts.length > 0) {
         setAveragePerService(monthly / subs.length)
-        setMostExpensive(Math.max(...convertedAmounts))
-        setLeastExpensive(Math.min(...convertedAmounts))
+        const maxAmount = Math.max(...convertedAmounts)
+        const minAmount = Math.min(...convertedAmounts)
+        setMostExpensive(maxAmount)
+        setLeastExpensive(minAmount)
+        
+        // Find subscription IDs for most/least expensive
+        const maxIndex = convertedAmounts.indexOf(maxAmount)
+        const minIndex = convertedAmounts.indexOf(minAmount)
+        setMostExpensiveId(subs[maxIndex]?.id || null)
+        setLeastExpensiveId(subs[minIndex]?.id || null)
       } else {
         setAveragePerService(0)
         setMostExpensive(0)
         setLeastExpensive(0)
+        setMostExpensiveId(null)
+        setLeastExpensiveId(null)
       }
     } catch (error) {
       console.error('Error calculating converted totals:', error)
@@ -105,8 +117,16 @@ export default function DashboardPage() {
       if (subs.length > 0) {
         const amounts = subs.map(s => SubscriptionsService.calculateMonthlyTotal([s]))
         setAveragePerService(monthly / subs.length)
-        setMostExpensive(Math.max(...amounts))
-        setLeastExpensive(Math.min(...amounts))
+        const maxAmount = Math.max(...amounts)
+        const minAmount = Math.min(...amounts)
+        setMostExpensive(maxAmount)
+        setLeastExpensive(minAmount)
+        
+        // Find subscription IDs for most/least expensive (fallback)
+        const maxIndex = amounts.indexOf(maxAmount)
+        const minIndex = amounts.indexOf(minAmount)
+        setMostExpensiveId(subs[maxIndex]?.id || null)
+        setLeastExpensiveId(subs[minIndex]?.id || null)
       }
     } finally {
       setConversionsLoading(false)
@@ -122,8 +142,8 @@ export default function DashboardPage() {
     setError(null)
     
     try {
-      // Fetch user subscriptions first
-      const subscriptionResult = await SubscriptionsService.getAll()
+      // Fetch all subscriptions (including canceled ones)
+      const subscriptionResult = await SubscriptionsService.getAllIncludingInactive()
       
       if (subscriptionResult.error) {
         throw new Error(subscriptionResult.error.message)
@@ -132,9 +152,10 @@ export default function DashboardPage() {
       const fetchedSubscriptions = subscriptionResult.data || []
       setSubscriptions(fetchedSubscriptions)
       
-      // Calculate converted totals
-      if (fetchedSubscriptions.length > 0) {
-        await calculateConvertedTotals(fetchedSubscriptions)
+      // Calculate converted totals only for active subscriptions
+      const activeSubscriptions = fetchedSubscriptions.filter(sub => sub.is_active)
+      if (activeSubscriptions.length > 0) {
+        await calculateConvertedTotals(activeSubscriptions)
       }
       
       // Try to fetch user plan data via API
@@ -239,6 +260,32 @@ export default function DashboardPage() {
     setSubscriptionToDelete(null)
   }
 
+  const handleCancel = async (subscription: Subscription) => {
+    try {
+      const { error } = await SubscriptionsService.softDelete(subscription.id)
+      if (error) {
+        throw new Error(error.message)
+      }
+      fetchSubscriptions()
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to cancel subscription')
+      setIsErrorModalOpen(true)
+    }
+  }
+
+  const handleReactivate = async (subscription: Subscription) => {
+    try {
+      const { error } = await SubscriptionsService.reactivate(subscription.id)
+      if (error) {
+        throw new Error(error.message)
+      }
+      fetchSubscriptions()
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to reactivate subscription')
+      setIsErrorModalOpen(true)
+    }
+  }
+
   const handleUpgradeToPro = async () => {
     setUpgrading(true)
     try {
@@ -277,9 +324,9 @@ export default function DashboardPage() {
 
   const handleAddSubscription = () => {
     const currentPlan = userSubscription?.plan_type || 'free'
-    const currentCount = subscriptions.length
+    const activeCount = subscriptions.filter(sub => sub.is_active).length
     
-    if (!canAddSubscription(currentCount, currentPlan)) {
+    if (!canAddSubscription(activeCount, currentPlan)) {
       // Show upgrade prompt instead of opening add dialog
       setIsUpgradeModalOpen(true)
       return
@@ -296,10 +343,38 @@ export default function DashboardPage() {
   const handleUpgradeCancel = () => {
     setIsUpgradeModalOpen(false)
   }
+
+  const scrollToSubscription = (subscriptionId: string | null) => {
+    if (!subscriptionId) return
+    
+    const element = document.getElementById(`subscription-${subscriptionId}`)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      
+      // Add highlight animation
+      element.style.transform = 'scale(1.02)'
+      element.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)'
+      element.style.transition = 'all 0.3s ease'
+      
+      setTimeout(() => {
+        element.style.transform = 'scale(1)'
+        element.style.boxShadow = 'none'
+      }, 1000)
+    }
+  }
   
-  // Sort subscriptions by due date (most imminent first)
-  const sortedSubscriptions = [...subscriptions].sort((a, b) => {
+  // Separate active and inactive subscriptions
+  const activeSubscriptions = subscriptions.filter(sub => sub.is_active)
+  const inactiveSubscriptions = subscriptions.filter(sub => !sub.is_active)
+  
+  // Sort active subscriptions by due date (most imminent first)
+  const sortedActiveSubscriptions = [...activeSubscriptions].sort((a, b) => {
     return new Date(a.renewal_date).getTime() - new Date(b.renewal_date).getTime()
+  })
+  
+  // Sort inactive subscriptions by name
+  const sortedInactiveSubscriptions = [...inactiveSubscriptions].sort((a, b) => {
+    return a.name.localeCompare(b.name)
   })
   
   const topCategories = Object.entries(spendingByCategory)
@@ -320,14 +395,9 @@ export default function DashboardPage() {
     }).format(amount)
   }
 
-  const shouldShowRenewalStatus = (renewalDate: string) => {
-    const today = new Date()
-    const renewal = new Date(renewalDate)
-    const diffTime = renewal.getTime() - today.getTime()
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    
-    // Show status if overdue, due today, or within 7 days
-    return diffDays <= 7
+  const shouldShowRenewalStatus = (renewalStatus: any) => {
+    // Show status only if text is not empty
+    return renewalStatus.text !== ''
   }
 
 
@@ -433,7 +503,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold text-purple-900 dark:text-white">
               <AnimatedCounter 
-                value={subscriptions.length} 
+                value={activeSubscriptions.length} 
                 duration={300}
               />
               {userSubscription?.plan_type === 'free' && (
@@ -445,13 +515,13 @@ export default function DashboardPage() {
             </div>
             <p className="text-xs text-purple-600 dark:text-white/80 mt-1">
               {userSubscription?.plan_type === 'free' 
-                ? `${3 - subscriptions.length} ${t('dashboard.remainingFree')}`
+                ? `${3 - activeSubscriptions.length} ${t('dashboard.remainingFree')}`
                 : userSubscription?.plan_type === 'pro'
                   ? `${t('dashboard.onProPlan')}`
                   : 'Subscriptions tracked'
               }
             </p>
-            {userSubscription?.plan_type === 'free' && subscriptions.length >= 2 && (
+            {userSubscription?.plan_type === 'free' && activeSubscriptions.length >= 2 && (
               <Button
                 onClick={handleUpgradeToPro}
                 disabled={upgrading}
@@ -524,7 +594,21 @@ export default function DashboardPage() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg dark:bg-red-900/30 dark:border dark:border-red-700/50">
-                  <span className="text-sm font-medium dark:text-white">{t('dashboard.mostExpensive')}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium dark:text-white">{t('dashboard.mostExpensive')}</span>
+                    {mostExpensiveId && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => scrollToSubscription(mostExpensiveId)}
+                        className="h-6 w-6 p-0 hover:bg-red-200 dark:hover:bg-red-800 cursor-pointer"
+                      >
+                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                      </Button>
+                    )}
+                  </div>
                   <span className="font-semibold dark:text-white">
                     <AnimatedCounter 
                       value={mostExpensive}
@@ -534,7 +618,21 @@ export default function DashboardPage() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg dark:bg-yellow-900/30 dark:border dark:border-yellow-700/50">
-                  <span className="text-sm font-medium dark:text-white">{t('dashboard.leastExpensive')}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium dark:text-white">{t('dashboard.leastExpensive')}</span>
+                    {leastExpensiveId && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => scrollToSubscription(leastExpensiveId)}
+                        className="h-6 w-6 p-0 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer"
+                      >
+                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                      </Button>
+                    )}
+                  </div>
                   <span className="font-semibold dark:text-white">
                     <AnimatedCounter 
                       value={leastExpensive}
@@ -589,10 +687,11 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {sortedSubscriptions.map((subscription) => {
+              {/* Active Subscriptions */}
+              {sortedActiveSubscriptions.map((subscription) => {
                 const renewalStatus = getRenewalStatus(subscription.renewal_date)
                 return (
-                  <div key={subscription.id} className="p-3 bg-muted/50 rounded-lg">
+                  <div key={subscription.id} id={`subscription-${subscription.id}`} className="p-3 bg-muted/50 rounded-lg">
                     {/* Desktop Layout */}
                     <div className="hidden sm:flex items-center justify-between">
                       {/* Left side - Name, Category and Status */}
@@ -601,7 +700,7 @@ export default function DashboardPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <p className="font-medium truncate">{subscription.name}</p>
-                              {shouldShowRenewalStatus(subscription.renewal_date) && (
+                              {shouldShowRenewalStatus(renewalStatus) && (
                                 <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
                                   <span>{renewalStatus.icon}</span>
                                   <span>{renewalStatus.text}</span>
@@ -633,14 +732,29 @@ export default function DashboardPage() {
                           <DropdownMenuContent align="end">
                             {subscription.id !== 'stackbill-pro' && (
                               <>
-                                <DropdownMenuItem onClick={() => handleEdit(subscription)}>
+                                <DropdownMenuItem onClick={() => handleEdit(subscription)} className="cursor-pointer flex items-center gap-2">
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
                                   {t('dashboard.edit')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
+                                  onClick={() => handleCancel(subscription)}
+                                  className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
+                                >
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  Cancel
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
                                   onClick={() => handleDeleteClick(subscription)}
-                                  className="text-red-600 dark:text-red-400"
+                                  className="text-red-600 dark:text-red-400 cursor-pointer flex items-center gap-2"
                                   disabled={deletingId === subscription.id}
                                 >
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
                                   {t('dashboard.delete')}
                                 </DropdownMenuItem>
                               </>
@@ -661,7 +775,7 @@ export default function DashboardPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <p className="font-medium truncate">{subscription.name}</p>
-                            {shouldShowRenewalStatus(subscription.renewal_date) && (
+                            {shouldShowRenewalStatus(renewalStatus) && (
                               <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
                                 <span>{renewalStatus.icon}</span>
                                 <span>{renewalStatus.text}</span>
@@ -682,14 +796,29 @@ export default function DashboardPage() {
                           <DropdownMenuContent align="end">
                             {subscription.id !== 'stackbill-pro' && (
                               <>
-                                <DropdownMenuItem onClick={() => handleEdit(subscription)}>
+                                <DropdownMenuItem onClick={() => handleEdit(subscription)} className="cursor-pointer flex items-center gap-2">
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
                                   {t('dashboard.edit')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
+                                  onClick={() => handleCancel(subscription)}
+                                  className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
+                                >
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  Cancel
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
                                   onClick={() => handleDeleteClick(subscription)}
-                                  className="text-red-600 dark:text-red-400"
+                                  className="text-red-600 dark:text-red-400 cursor-pointer flex items-center gap-2"
                                   disabled={deletingId === subscription.id}
                                 >
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
                                   {t('dashboard.delete')}
                                 </DropdownMenuItem>
                               </>
@@ -714,6 +843,121 @@ export default function DashboardPage() {
                   </div>
                 )
               })}
+              
+              {/* Inactive (Canceled) Subscriptions */}
+              {sortedInactiveSubscriptions.length > 0 && (
+                <>
+                  <div className="border-t border-muted-foreground/20 my-6 pt-4">
+                    <h3 className="text-sm font-medium text-muted-foreground mb-3">Canceled Subscriptions</h3>
+                  </div>
+                  {sortedInactiveSubscriptions.map((subscription) => (
+                    <div key={subscription.id} id={`subscription-${subscription.id}`} className="p-3 bg-muted/30 rounded-lg opacity-60">
+                      {/* Desktop Layout */}
+                      <div className="hidden sm:flex items-center justify-between">
+                        {/* Left side - Name, Category with strikethrough */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="font-medium truncate line-through text-muted-foreground">{subscription.name}</p>
+                                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
+                                  <span>🚫</span>
+                                  <span>Canceled</span>
+                                </div>
+                              </div>
+                              <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Right side - Price, Menu */}
+                        <div className="flex items-center gap-4 ml-4">
+                          <div className="text-right opacity-75">
+                            <p className="font-semibold line-through text-muted-foreground">{formatCurrency(subscription.amount, subscription.currency)}</p>
+                            <p className="text-xs text-muted-foreground capitalize">
+                              {subscription.billing_period}
+                            </p>
+                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 flex-shrink-0">
+                                <span className="sr-only">Open menu</span>
+                                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                </svg>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem 
+                                onClick={() => handleReactivate(subscription)}
+                                className="text-green-600 dark:text-green-400 cursor-pointer"
+                              >
+                                Reactivate
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={() => handleDeleteClick(subscription)}
+                                className="text-red-600 dark:text-red-400 cursor-pointer"
+                                disabled={deletingId === subscription.id}
+                              >
+                                {t('dashboard.delete')}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </div>
+
+                      {/* Mobile Layout */}
+                      <div className="sm:hidden">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <p className="font-medium truncate line-through text-muted-foreground">{subscription.name}</p>
+                              <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
+                                <span>🚫</span>
+                                <span>Canceled</span>
+                              </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
+                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 flex-shrink-0">
+                                <span className="sr-only">Open menu</span>
+                                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                </svg>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem 
+                                onClick={() => handleReactivate(subscription)}
+                                className="text-green-600 dark:text-green-400 cursor-pointer"
+                              >
+                                Reactivate
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={() => handleDeleteClick(subscription)}
+                                className="text-red-600 dark:text-red-400 cursor-pointer"
+                                disabled={deletingId === subscription.id}
+                              >
+                                {t('dashboard.delete')}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                        <div className="flex justify-between items-center text-sm opacity-75">
+                          <div>
+                            <span className="font-semibold line-through text-muted-foreground">{formatCurrency(subscription.amount, subscription.currency)}</span>
+                            <span className="text-muted-foreground capitalize ml-1">
+                              {subscription.billing_period}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           )}
         </CardContent>

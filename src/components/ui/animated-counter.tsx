@@ -24,16 +24,22 @@ export function AnimatedCounter({
     const startValue = displayValue
     const difference = Math.abs(value - startValue)
     
-    // Adaptive duration based on value range
+    // Adaptive duration based on value range - more granular timing
     let adaptiveDuration = duration
-    if (difference <= 5) {
-      // For small numbers (0-5), use very short duration
-      adaptiveDuration = Math.max(200, duration * 0.3)
-    } else if (difference <= 20) {
-      // For medium small numbers (6-20), use shorter duration
-      adaptiveDuration = Math.max(300, duration * 0.5)
+    if (difference <= 1) {
+      // For tiny numbers (0-1), almost instant
+      adaptiveDuration = 150
+    } else if (difference <= 3) {
+      // For very small numbers (2-3), very quick
+      adaptiveDuration = 200
+    } else if (difference <= 10) {
+      // For small numbers (4-10), quick
+      adaptiveDuration = Math.max(250, duration * 0.4)
+    } else if (difference <= 30) {
+      // For medium small numbers (11-30), medium quick
+      adaptiveDuration = Math.max(350, duration * 0.6)
     } else if (difference <= 100) {
-      // For medium numbers (21-100), use normal duration
+      // For medium numbers (31-100), normal duration
       adaptiveDuration = duration * 0.8
     }
     // For large numbers (100+), use full duration

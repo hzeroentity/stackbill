@@ -18,6 +18,20 @@ export class SubscriptionsService {
     }
   }
 
+  static async getAllIncludingInactive(): Promise<{ data: Subscription[] | null; error: Error | null }> {
+    try {
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .order('is_active', { ascending: false })
+        .order('renewal_date', { ascending: true })
+      
+      return { data, error }
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
+    }
+  }
+
   static async getById(id: string): Promise<{ data: Subscription | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
@@ -85,6 +99,10 @@ export class SubscriptionsService {
 
   static async softDelete(id: string): Promise<{ data: Subscription | null; error: Error | null }> {
     return this.update(id, { is_active: false })
+  }
+
+  static async reactivate(id: string): Promise<{ data: Subscription | null; error: Error | null }> {
+    return this.update(id, { is_active: true })
   }
 
   // Helper methods for calculating totals
