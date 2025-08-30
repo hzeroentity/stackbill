@@ -114,7 +114,7 @@ export default function Home() {
                       Double payments
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Paid twice for the same service because you lost track of subscriptions
+                      Paid twice for the same subscription because you lost track of renewals
                     </p>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export default function Home() {
                 <p className="text-slate-500 dark:text-slate-400">📝 Simple form UI placeholder</p>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-                Quick form to add service name, cost, and renewal date
+                Quick form to add subscription name, cost, and renewal date
               </p>
             </div>
             

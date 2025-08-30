@@ -112,7 +112,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="name">Service Name</Label>
+            <Label htmlFor="name">{t('subscriptions.service')}</Label>
             <Input
               id="name"
               placeholder="e.g., Vercel, Supabase, PostHog, etc."

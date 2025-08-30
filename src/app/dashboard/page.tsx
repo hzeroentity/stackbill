@@ -447,8 +447,8 @@ export default function DashboardPage() {
               {userSubscription?.plan_type === 'free' 
                 ? `${3 - subscriptions.length} ${t('dashboard.remainingFree')}`
                 : userSubscription?.plan_type === 'pro'
-                  ? `${30 - subscriptions.length} ${t('dashboard.remainingFree')}`
-                  : 'Services tracked'
+                  ? `${t('dashboard.onProPlan')}`
+                  : 'Subscriptions tracked'
               }
             </p>
             {userSubscription?.plan_type === 'free' && subscriptions.length >= 2 && (

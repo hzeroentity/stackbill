@@ -39,7 +39,7 @@
     "title": "Dashboard",
     "monthlyTotal": "Monthly Total",
     "annualTotal": "Annual Total", 
-    "activeServices": "Active Services",
+    "activeServices": "Active Subscriptions",
     "addSubscription": "+ Add Subscription",
     "activeSubscriptions": "Active Subscriptions",
     "spendingBreakdown": "Spending Breakdown",
@@ -53,22 +53,23 @@
     "totalYearlyCost": "Total yearly cost",
     "remainingFree": "remaining on free plan",
     "activeOnPro": "active on pro plan",
+    "onProPlan": "On pro plan",
     "upgradeToProDue": "Upgrade to Pro (Due to hitting limit)",
     "upgradeToPro": "Upgrade to Pro",
     "upgrading": "Upgrading...",
     "processing": "Processing...",
     "startTracking": "Start tracking your SaaS costs",
-    "clickAddButton": "Click the \"+ Add Subscription\" button above to add your first service. Track renewal dates, monthly costs, and keep your budget organized.",
+    "clickAddButton": "Click the \"+ Add Subscription\" button above to add your first subscription. Track renewal dates, monthly costs, and keep your budget organized.",
     "error": "Error",
-    "averagePerService": "Average per service",
+    "averagePerService": "Average per subscription",
     "mostExpensive": "Most expensive",
     "leastExpensive": "Least expensive",
     "edit": "Edit",
     "delete": "Delete",
-    "proPlanService": "Pro Plan Service"
+    "proPlanService": "Pro Plan Subscription"
   },
   "subscriptions": {
-    "service": "Service",
+    "service": "Subscription Name",
     "amount": "Amount",
     "billingPeriod": "Billing Period",
     "renewalDate": "Renewal Date",
@@ -182,7 +183,7 @@
       },
       "doublePayments": {
         "title": "Double payments", 
-        "description": "Paid twice for the same service because you lost track of subscriptions"
+        "description": "Paid twice for the same subscription because you lost track of renewals"
       },
       "noVisibility": {
         "title": "No spending visibility",
@@ -206,7 +207,7 @@
       "subtitle": "Simple, visual tracking in 3 steps",
       "step1": {
         "title": "Add your subscriptions manually",
-        "description": "Quick form to add service name, cost, and renewal date",
+        "description": "Quick form to add subscription name, cost, and renewal date",
         "placeholder": "📝 Simple form UI placeholder"
       },
       "step2": {
