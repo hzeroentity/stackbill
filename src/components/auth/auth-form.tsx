@@ -23,8 +23,27 @@ export function AuthForm() {
 
   useEffect(() => {
     const mode = searchParams.get('mode')
+    const error = searchParams.get('error')
+    const message = searchParams.get('message')
+    
     if (mode === 'signup') {
       setIsSignUp(true)
+    }
+    
+    // Handle confirmation messages
+    if (message === 'confirmed') {
+      setMessage('Email confirmed successfully! You can now sign in.')
+    } else if (message === 'already_confirmed') {
+      setMessage('Email already confirmed. You can sign in.')
+    }
+    
+    // Handle confirmation errors
+    if (error === 'invalid_link') {
+      setMessage('Invalid or expired confirmation link. Please request a new one.')
+    } else if (error === 'confirmation_failed') {
+      setMessage('Email confirmation failed. Please try again or contact support.')
+    } else if (error === 'server_error') {
+      setMessage('Server error. Please try again later.')
     }
   }, [searchParams])
 
@@ -79,45 +98,27 @@ export function AuthForm() {
       if (isSignUp) {
         const processedEmail = email.trim().toLowerCase()
         console.log('Attempting signup with email:', email)
-        console.log('Email after processing:', processedEmail)
-        console.log('Password length:', password.length)
-        console.log('Domain:', processedEmail.split('@')[1])
         
-        // Try signup with minimal options first
-        const { data, error } = await supabase.auth.signUp({
-          email: processedEmail,
-          password
+        // Use our custom signup API with Resend
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: processedEmail,
+            password
+          })
         })
         
-        console.log('Full Signup response:', JSON.stringify({ data, error }, null, 2))
+        const result = await response.json()
         
-        if (error) {
-          console.log('Error name:', error.name)
-          console.log('Error message:', error.message)
-          console.log('Error status:', error.status)
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to create account')
         }
         
-        if (error) {
-          console.error('Signup error details:', error)
-          // Handle specific Supabase errors
-          if (error.message.includes('already registered') || error.message.includes('User already registered')) {
-            throw new Error('An account with this email already exists. Please sign in instead.')
-          }
-          if (error.message.includes('invalid') || error.message.includes('Invalid')) {
-            throw new Error('This email address appears to be blocked or invalid. Please try a different email address or contact support.')
-          }
-          if (error.message.includes('Email address')) {
-            const domain = processedEmail.split('@')[1]
-            throw new Error(`Supabase is rejecting the domain "${domain}". This may be due to Supabase's email validation settings. Please check your Supabase Dashboard → Authentication → Settings for any domain restrictions, or try with a different email domain. Original error: ${error.message}`)
-          }
-          throw error
-        }
-        
-        if (data?.user && !data?.session) {
+        if (result.success) {
           setMessage('Please check your email for the confirmation link to complete your account setup!')
-        } else if (data?.session) {
-          // User was auto-confirmed, redirect will happen automatically
-          console.log('Signup successful with session')
         }
       } else {
         console.log('Attempting signin with email:', email)
@@ -242,7 +243,10 @@ export function AuthForm() {
         
         {message && (
           <div className={`text-sm text-center p-3 rounded-md ${
-            message.includes('Check your email') || message.includes('Please check your email')
+            message.includes('Check your email') || 
+            message.includes('Please check your email') ||
+            message.includes('Email confirmed successfully') ||
+            message.includes('Email already confirmed')
               ? 'bg-green-50 text-green-700 border border-green-200' 
               : 'bg-red-50 text-red-700 border border-red-200'
           }`}>

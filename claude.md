@@ -60,6 +60,16 @@ StackBill is a subscription tracker designed for freelancers and indie developer
 - [ ] Production deployment setup
 - [ ] MVP completion verification
 
+### Phase 7 — Multi-Project Management (Pro Feature Enhancement)
+- [ ] Implement project tagging system for subscriptions
+- [ ] Add "General" and project-specific subscription categorization
+- [ ] Create project selector dropdown in subscription forms
+- [ ] Build project-based dashboard filtering system
+- [ ] Add project management interface (create/edit/delete projects)
+- [ ] Implement project-based subscription views and analytics
+- [ ] Update database schema for project relationships
+- [ ] Enhance Pro plan value proposition with multi-project features
+
 ## Collaboration Rules & Workflow
 
 ### Development Principles
