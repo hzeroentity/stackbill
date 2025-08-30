@@ -60,14 +60,18 @@ export default function Home() {
             </Link>
           </div>
           
-          {/* Dashboard Preview Placeholder */}
-          <div className="max-w-4xl mx-auto mt-16 bg-white dark:bg-slate-800 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 p-8">
-            <p className="text-slate-500 dark:text-slate-400 text-lg">
-              📊 Dashboard Screenshot Placeholder
-            </p>
-            <p className="text-sm text-slate-400 dark:text-slate-500 mt-2">
-              (Spending summary + email preview)
-            </p>
+          {/* Dashboard Preview Video */}
+          <div className="max-w-4xl mx-auto mt-16 bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className="w-full h-auto"
+            >
+              <source src="/hero-preview.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       </section>
