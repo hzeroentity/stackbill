@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { redirect } from 'next/navigation'
 
 // Server-side Supabase client with service role key for admin operations
 const supabaseAdmin = createClient(
