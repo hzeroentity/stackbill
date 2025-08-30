@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import Image from "next/image"
-import { Check, CreditCard, TrendingUp, Bell, Users, Shield, X, Calendar, Mail, BarChart3, Globe, Moon, Folder } from "lucide-react"
+import { Check, CreditCard, X, Calendar, Mail, BarChart3, Moon, Folder } from "lucide-react"
 import { LandingHeaderButtons } from "@/components/landing-header-buttons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
@@ -77,7 +77,7 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
-              Spreadsheets don't send reminders.
+              Spreadsheets don&apos;t send reminders.
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
               StackBill gives you clarity, control, and reminders — in one clean dashboard.
@@ -128,7 +128,7 @@ export default function Home() {
                       No spending visibility
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      No idea how much you're spending each month on your dev tools
+                      No idea how much you&apos;re spending each month on your dev tools
                     </p>
                   </div>
                 </div>
@@ -257,7 +257,7 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              Everything you need. Nothing you don't.
+              Everything you need. Nothing you don&apos;t.
             </h2>
           </div>
           
@@ -359,7 +359,7 @@ export default function Home() {
               Simple, transparent pricing
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
-              Start free, upgrade when you're ready
+              Start free, upgrade when you&apos;re ready
             </p>
           </div>
 
@@ -480,7 +480,7 @@ export default function Home() {
               {/* Testimonial 1 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "Way better than my janky Notion page. Love the reminders."
+                  &ldquo;Way better than my janky Notion page. Love the reminders.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -496,7 +496,7 @@ export default function Home() {
               {/* Testimonial 2 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "Finally stopped getting surprise $99 charges from tools I forgot about."
+                  &ldquo;Finally stopped getting surprise $99 charges from tools I forgot about.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -512,7 +512,7 @@ export default function Home() {
               {/* Testimonial 3 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "Simple, clean interface. Exactly what I needed to track my dev tools."
+                  &ldquo;Simple, clean interface. Exactly what I needed to track my dev tools.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -528,7 +528,7 @@ export default function Home() {
               {/* Testimonial 4 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "The currency conversion feature is perfect for my international subscriptions."
+                  &ldquo;The currency conversion feature is perfect for my international subscriptions.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -544,7 +544,7 @@ export default function Home() {
               {/* Testimonial 5 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "Saved me $200+ this month by catching unused subscriptions!"
+                  &ldquo;Saved me $200+ this month by catching unused subscriptions!&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -560,7 +560,7 @@ export default function Home() {
               {/* Testimonial 6 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "Clean design, no bloat. Just tracks what I need to know."
+                  &ldquo;Clean design, no bloat. Just tracks what I need to know.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -576,7 +576,7 @@ export default function Home() {
               {/* Duplicate first few for seamless loop */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "Way better than my janky Notion page. Love the reminders."
+                  &ldquo;Way better than my janky Notion page. Love the reminders.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -591,7 +591,7 @@ export default function Home() {
 
               <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  "Finally stopped getting surprise $99 charges from tools I forgot about."
+                  &ldquo;Finally stopped getting surprise $99 charges from tools I forgot about.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
