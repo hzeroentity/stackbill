@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { BillingPeriod, Subscription, SubscriptionInsert, SubscriptionCategory } from '@/lib/database.types'
 import { SUPPORTED_CURRENCIES, getDefaultCurrency } from '@/lib/currency-preferences'
+import { useLanguage } from '@/contexts/language-context'
 
 interface SubscriptionFormProps {
   subscription?: Subscription
@@ -17,6 +18,7 @@ interface SubscriptionFormProps {
 }
 
 export function SubscriptionForm({ subscription, onSuccess, onCancel }: SubscriptionFormProps) {
+  const { t } = useLanguage()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
