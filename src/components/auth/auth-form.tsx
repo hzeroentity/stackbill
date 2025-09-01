@@ -7,18 +7,21 @@ import { useLanguage } from '@/contexts/language-context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Eye, EyeOff, Github } from 'lucide-react'
+import { Eye, EyeOff, Github, Check, X, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
+import { Progress } from '@/components/ui/progress'
 
 export function AuthForm() {
   const { t } = useLanguage()
   const [email, setEmail] = useState('')
+  const [confirmEmail, setConfirmEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
   const [message, setMessage] = useState('')
   const [socialLoading, setSocialLoading] = useState(false)
+  const [showSuccessState, setShowSuccessState] = useState(false)
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -75,6 +78,29 @@ export function AuthForm() {
     return emailRegex.test(email)
   }
 
+  // Password strength validation
+  const validatePassword = (password: string) => {
+    const hasLower = /[a-z]/.test(password)
+    const hasUpper = /[A-Z]/.test(password)
+    const hasNumber = /\d/.test(password)
+    const hasSymbol = /[^a-zA-Z0-9]/.test(password)
+    const hasMinLength = password.length >= 8
+    
+    const checks = [
+      { label: 'At least 8 characters', valid: hasMinLength },
+      { label: 'One uppercase letter', valid: hasUpper },
+      { label: 'One number', valid: hasNumber },
+      { label: 'One symbol', valid: hasSymbol }
+    ]
+    
+    const validCount = checks.filter(check => check.valid).length
+    const strength = (validCount / checks.length) * 100
+    
+    return { checks, strength, isValid: validCount === checks.length }
+  }
+
+  const passwordValidation = validatePassword(password)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -86,7 +112,17 @@ export function AuthForm() {
       return
     }
     
-    if (password.length < 6) {
+    if (isSignUp && email !== confirmEmail) {
+      setMessage('Email addresses do not match.')
+      return
+    }
+    
+    if (isSignUp && !passwordValidation.isValid) {
+      setMessage('Please meet all password requirements.')
+      return
+    }
+    
+    if (!isSignUp && password.length < 6) {
       setMessage('Password must be at least 6 characters long.')
       return
     }
@@ -118,6 +154,7 @@ export function AuthForm() {
         }
         
         if (result.success) {
+          setShowSuccessState(true)
           setMessage('Please check your email for the confirmation link to complete your account setup!')
         }
       } else {
@@ -170,6 +207,42 @@ export function AuthForm() {
       </CardHeader>
       
       <CardContent className="space-y-6">
+        {showSuccessState ? (
+          /* Success State */
+          <div className="text-center space-y-4 py-8">
+            <div className="flex justify-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-green-600" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold text-gray-900">Check Your Email!</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                We've sent a confirmation link to <strong>{email}</strong>.
+                <br />Click the link in your email to complete your account setup.
+              </p>
+            </div>
+            <div className="pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowSuccessState(false)
+                  setEmail('')
+                  setConfirmEmail('')
+                  setPassword('')
+                  setMessage('')
+                  setIsSignUp(false)
+                }}
+                className="w-full"
+              >
+                Back to Sign In
+              </Button>
+            </div>
+          </div>
+        ) : (
+          /* Normal Auth Flow */
+          <>
         {/* GitHub Authentication */}
         <Button
           type="button"
@@ -207,29 +280,83 @@ export function AuthForm() {
               className="h-11"
             />
           </div>
-          <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder={t('auth.enterPassword')}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="h-11 pr-10"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              {showPassword ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
+          
+          {isSignUp && (
+            <div>
+              <Input
+                type="email"
+                placeholder="Confirm email address"
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+                required
+                className={`h-11 ${email && confirmEmail && email !== confirmEmail ? 'border-red-500' : ''}`}
+              />
+              {email && confirmEmail && email !== confirmEmail && (
+                <p className="text-red-500 text-sm mt-1">Email addresses do not match</p>
               )}
-            </button>
+            </div>
+          )}
+          
+          <div className="space-y-2">
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder={t('auth.enterPassword')}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={isSignUp ? 8 : 6}
+                className="h-11 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+              </button>
+            </div>
+            
+            {isSignUp && password && (
+              <div className="space-y-2 p-3 bg-gray-50 rounded-md">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Password strength</span>
+                  <span className="text-xs text-gray-500">
+                    {passwordValidation.strength === 100 ? 'Strong' : 
+                     passwordValidation.strength >= 75 ? 'Good' :
+                     passwordValidation.strength >= 50 ? 'Fair' : 'Weak'}
+                  </span>
+                </div>
+                <Progress 
+                  value={passwordValidation.strength} 
+                  className="h-2"
+                />
+                <div className="space-y-1">
+                  {passwordValidation.checks.map((check, index) => (
+                    <div key={index} className="flex items-center space-x-2 text-xs">
+                      {check.valid ? (
+                        <Check className="w-3 h-3 text-green-500" />
+                      ) : (
+                        <X className="w-3 h-3 text-red-500" />
+                      )}
+                      <span className={check.valid ? 'text-green-600' : 'text-red-600'}>
+                        {check.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <Button type="submit" className="w-full h-11" disabled={isLoading || socialLoading}>
+          <Button 
+            type="submit" 
+            className="w-full h-11" 
+            disabled={isLoading || socialLoading || (isSignUp && (!passwordValidation.isValid || email !== confirmEmail))}
+          >
             {isLoading ? (
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -266,6 +393,8 @@ export function AuthForm() {
             {isSignUp ? t('auth.alreadyHaveAccount') + ' ' + t('auth.signIn') : t('auth.noAccount') + ' ' + t('auth.signUp')}
           </button>
         </div>
+          </>
+        )}
       </CardContent>
     </Card>
   )
