@@ -63,7 +63,7 @@ export function AnimatedCounter({
     }
 
     requestAnimationFrame(animateValue)
-  }, [value, duration])
+  }, [value, duration, displayValue])
 
   const formattedValue = formatValue ? formatValue(displayValue) : Math.floor(displayValue).toString()
 

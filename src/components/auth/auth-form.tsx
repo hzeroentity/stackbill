@@ -80,7 +80,6 @@ export function AuthForm() {
 
   // Password strength validation
   const validatePassword = (password: string) => {
-    const hasLower = /[a-z]/.test(password)
     const hasUpper = /[A-Z]/.test(password)
     const hasNumber = /\d/.test(password)
     const hasSymbol = /[^a-zA-Z0-9]/.test(password)
@@ -218,7 +217,7 @@ export function AuthForm() {
             <div className="space-y-2">
               <h3 className="text-xl font-semibold text-gray-900">Check Your Email!</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                We've sent a confirmation link to <strong>{email}</strong>.
+                We&apos;ve sent a confirmation link to <strong>{email}</strong>.
                 <br />Click the link in your email to complete your account setup.
               </p>
             </div>

@@ -126,9 +126,9 @@ export async function GET(request: NextRequest) {
 
     // Build comprehensive user data
     const users = authUsers.users.map(authUser => {
-      const userSub = userSubscriptions?.find((us: any) => us.user_id === authUser.id) ?? null
-      const userSubscriptionsList = allSubscriptions?.filter((s: any) => s.user_id === authUser.id) ?? []
-      const userProjects = allProjects?.filter((p: any) => p.user_id === authUser.id) ?? []
+      const userSub = userSubscriptions?.find((us: unknown) => (us as { user_id: string }).user_id === authUser.id) ?? null as { plan_type: string; is_active: boolean; stripe_customer_id: string } | null
+      const userSubscriptionsList = allSubscriptions?.filter((s: unknown) => (s as { user_id: string }).user_id === authUser.id) ?? [] as Array<{ is_active: boolean; amount: number; billing_period: string; user_id: string; id: string }>
+      const userProjects = allProjects?.filter((p: unknown) => (p as { user_id: string }).user_id === authUser.id) ?? [] as Array<{ user_id: string; id: string }>
 
       // Calculate monthly spending by converting all subscriptions to monthly amounts
       const monthlySpending = userSubscriptionsList
@@ -157,14 +157,14 @@ export async function GET(request: NextRequest) {
       const projectsWithCounts = userProjects.map(project => ({
         ...project,
         subscription_count: userSubscriptionsList.filter(sub => 
-          subscriptionProjects?.some(sp => sp.project_id === project.id && sp.subscription_id === sub.id)
+          (subscriptionProjects as Array<{ project_id: string; subscription_id: string }> | undefined)?.some(sp => sp.project_id === project.id && sp.subscription_id === sub.id)
         ).length
       }))
 
       // Format subscriptions with project info
       const subscriptionsWithProjects = userSubscriptionsList.map(sub => ({
         ...sub,
-        projects: subscriptionProjects
+        projects: (subscriptionProjects as Array<{ subscription_id: string; projects?: { id: string; name: string; color: string } }> | undefined)
           ?.filter(sp => sp.subscription_id === sub.id)
           .map(sp => ({
             name: sp.projects?.name || 'Unknown',

@@ -22,7 +22,7 @@ interface SubscriptionFormProps {
   preSelectedProjectId?: string // Pre-select a project when adding new subscription
 }
 
-export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = false, preSelectedProjectId }: SubscriptionFormProps) {
+export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelectedProjectId }: SubscriptionFormProps) {
   const { t } = useLanguage()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)

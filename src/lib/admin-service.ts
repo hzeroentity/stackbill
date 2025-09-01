@@ -1,5 +1,5 @@
 import { supabaseAdmin } from './supabase-admin'
-import { createHash, randomBytes } from 'crypto'
+import { randomBytes } from 'crypto'
 import * as speakeasy from 'speakeasy'
 import * as QRCode from 'qrcode'
 
@@ -20,7 +20,7 @@ export interface SecurityLog {
   id: string
   user_id: string
   action: string
-  details: Record<string, any>
+  details: Record<string, unknown>
   ip_address?: string
   user_agent?: string
   success: boolean
@@ -43,21 +43,23 @@ export class AdminService {
         return null
       }
 
+      const typedAdminUser = adminUser as AdminUser
+
       // Check if account is locked
-      if (adminUser.locked_until && new Date(adminUser.locked_until) > new Date()) {
+      if (typedAdminUser.locked_until && new Date(typedAdminUser.locked_until) > new Date()) {
         return null
       }
 
       // Check session expiry
-      if (adminUser.session_expires_at && new Date(adminUser.session_expires_at) < new Date()) {
+      if (typedAdminUser.session_expires_at && new Date(typedAdminUser.session_expires_at) < new Date()) {
         return null
       }
 
       // Get user email
-      const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(userId)
+      const { data: userData } = await supabaseAdmin.auth.admin.getUserById(userId)
       
       return {
-        ...adminUser,
+        ...typedAdminUser,
         email: userData?.user?.email
       }
     } catch (error) {
@@ -74,7 +76,7 @@ export class AdminService {
       ip_address?: string
       user_agent?: string
       success?: boolean
-      metadata?: Record<string, any>
+      metadata?: Record<string, unknown>
     } = {}
   ): Promise<void> {
     try {
@@ -87,7 +89,7 @@ export class AdminService {
           ip_address: details.ip_address,
           user_agent: details.user_agent,
           success: details.success ?? true
-        })
+        } as unknown)
     } catch (error) {
       console.error('Failed to log security event:', error)
     }
@@ -323,7 +325,7 @@ export class AdminService {
       const failedAttempts = (admin?.failed_attempts || 0) + 1
       const shouldLock = failedAttempts >= 5
       
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         failed_attempts: failedAttempts
       }
 

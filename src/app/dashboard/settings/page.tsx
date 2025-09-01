@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,7 +24,6 @@ const PREDEFINED_COLORS = [
   { value: '#6B7280', name: 'Gray' }
 ]
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Badge } from "@/components/ui/badge"
 import { MoreHorizontal, Plus, Edit, Trash2, Lock } from 'lucide-react'
 import { useAuth } from '@/contexts/auth-context'
 import { useLanguage } from '@/contexts/language-context'
@@ -77,9 +76,9 @@ export default function SettingsPage() {
     if (user?.id) {
       loadUserData()
     }
-  }, [user?.id]) // Removed loadUserData dependency to prevent loop
+  }, [user?.id, loadUserData])
 
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     try {
       // Check if user has pro subscription
       const response = await fetch(`/api/user-subscription?userId=${user?.id}`)
@@ -97,7 +96,7 @@ export default function SettingsPage() {
     } finally {
       setProjectsLoading(false)
     }
-  }
+  }, [user])
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault()

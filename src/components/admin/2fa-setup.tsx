@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Shield, Copy, Check, AlertTriangle } from "lucide-react"
@@ -49,7 +49,7 @@ export function TwoFASetup({ isEnabled, onSetupComplete }: TwoFASetupProps) {
       } else {
         setError(data.error || 'Failed to setup 2FA')
       }
-    } catch (err) {
+    } catch {
       setError('Network error occurred')
     } finally {
       setLoading(false)
@@ -82,7 +82,7 @@ export function TwoFASetup({ isEnabled, onSetupComplete }: TwoFASetupProps) {
       } else {
         setError(data.error || 'Invalid verification code')
       }
-    } catch (err) {
+    } catch {
       setError('Network error occurred')
     } finally {
       setLoading(false)
@@ -166,7 +166,7 @@ export function TwoFASetup({ isEnabled, onSetupComplete }: TwoFASetupProps) {
                 </p>
                 {qrCode && (
                   <div className="bg-white p-4 rounded-lg inline-block">
-                    <img src={qrCode} alt="2FA QR Code" className="max-w-48" />
+                    <Image src={qrCode} alt="2FA QR Code" width={192} height={192} className="max-w-48" />
                   </div>
                 )}
               </div>

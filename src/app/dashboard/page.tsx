@@ -232,7 +232,7 @@ export default function DashboardPage() {
     if (userId) {
       fetchSubscriptions()
     }
-  }, [userId]) // Removed fetchSubscriptions dependency to prevent loop
+  }, [userId, fetchSubscriptions])
 
   // Separate effect for filtering subscriptions when allSubscriptions or selectedProject changes
   useEffect(() => {

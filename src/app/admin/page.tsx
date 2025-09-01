@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/contexts/auth-context'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -55,13 +55,7 @@ export default function AdminDashboard() {
   const [expandedUsers, setExpandedUsers] = useState<Set<string>>(new Set())
   const [twoFAEnabled, setTwoFAEnabled] = useState(false)
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchAdminData()
-    }
-  }, [user?.id])
-
-  const fetchAdminData = async () => {
+  const fetchAdminData = useCallback(async () => {
     if (!user?.id) {
       setError('User not authenticated')
       setLoading(false)
@@ -106,7 +100,13 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user?.id])
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchAdminData()
+    }
+  }, [user?.id, fetchAdminData])
 
   const toggleUserExpansion = (userId: string) => {
     const newExpanded = new Set(expandedUsers)
