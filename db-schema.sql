@@ -100,6 +100,48 @@ CREATE TRIGGER update_user_subscriptions_updated_at BEFORE UPDATE ON public.user
 CREATE TRIGGER update_subscriptions_updated_at BEFORE UPDATE ON public.subscriptions
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- RLS Policies for projects table
+CREATE POLICY "Users can view their own projects" ON public.projects
+    FOR SELECT USING (user_id = auth.uid());
+
+CREATE POLICY "Users can insert their own projects" ON public.projects
+    FOR INSERT WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can update their own projects" ON public.projects
+    FOR UPDATE USING (user_id = auth.uid())
+    WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can delete their own projects" ON public.projects
+    FOR DELETE USING (user_id = auth.uid());
+
+-- RLS Policies for user_subscriptions table
+CREATE POLICY "Users can view their own user subscriptions" ON public.user_subscriptions
+    FOR SELECT USING (user_id = auth.uid());
+
+CREATE POLICY "Users can insert their own user subscriptions" ON public.user_subscriptions
+    FOR INSERT WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can update their own user subscriptions" ON public.user_subscriptions
+    FOR UPDATE USING (user_id = auth.uid())
+    WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can delete their own user subscriptions" ON public.user_subscriptions
+    FOR DELETE USING (user_id = auth.uid());
+
+-- RLS Policies for subscriptions table
+CREATE POLICY "Users can view their own subscriptions" ON public.subscriptions
+    FOR SELECT USING (user_id = auth.uid());
+
+CREATE POLICY "Users can insert their own subscriptions" ON public.subscriptions
+    FOR INSERT WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can update their own subscriptions" ON public.subscriptions
+    FOR UPDATE USING (user_id = auth.uid())
+    WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can delete their own subscriptions" ON public.subscriptions
+    FOR DELETE USING (user_id = auth.uid());
+
 -- RLS Policies for subscription_projects table
 CREATE POLICY "Users can view their own subscription-project relationships" ON public.subscription_projects
     FOR SELECT USING (
