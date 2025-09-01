@@ -150,7 +150,7 @@ export class SubscriptionsService {
         .delete()
         .eq('id', id)
       
-      return { error: error instanceof Error ? error : new Error('Unknown error occurred') }
+      return { error: error ? new Error(error.message || 'Failed to delete subscription') : null }
     } catch (error) {
       return { error: error instanceof Error ? error : new Error('Unknown error occurred') }
     }
