@@ -3,6 +3,9 @@ import { randomBytes } from 'crypto'
 import * as speakeasy from 'speakeasy'
 import * as QRCode from 'qrcode'
 
+// Type for Supabase table operations when TypeScript inference fails
+type SupabaseTableOp = any
+
 export interface AdminUser {
   id: string
   user_id: string
@@ -89,9 +92,7 @@ export class AdminService {
         success: details.success ?? true
       }
       
-      await supabaseAdmin
-        .from('admin_security_log')
-        .insert(logEntry)
+      await (supabaseAdmin.from('admin_security_log') as SupabaseTableOp).insert(logEntry)
     } catch (error) {
       console.error('Failed to log security event:', error)
     }
@@ -100,8 +101,8 @@ export class AdminService {
   // Update admin session (extend session, update last login)
   async updateAdminSession(userId: string, ipAddress?: string): Promise<boolean> {
     try {
-      const { error } = await supabaseAdmin
-        .from('admin_user')
+      const { error } = await (supabaseAdmin
+        .from('admin_user') as SupabaseTableOp)
         .update({
           last_login_at: new Date().toISOString(),
           session_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
@@ -144,8 +145,8 @@ export class AdminService {
       const qrCode = await QRCode.toDataURL(secret.otpauth_url!)
 
       // Save secret to database (but don't enable 2FA yet)
-      await supabaseAdmin
-        .from('admin_user')
+      await (supabaseAdmin
+        .from('admin_user') as SupabaseTableOp)
         .update({
           totp_secret: secret.base32,
           backup_codes: JSON.stringify(backupCodes)
@@ -193,8 +194,8 @@ export class AdminService {
 
       if (isValid) {
         // Enable 2FA
-        await supabaseAdmin
-          .from('admin_user')
+        await (supabaseAdmin
+          .from('admin_user') as SupabaseTableOp)
           .update({
             totp_enabled: true,
             last_2fa_at: new Date().toISOString()
@@ -241,8 +242,8 @@ export class AdminService {
         // Remove used backup code
         const remainingCodes = backupCodes.filter((code: string) => code !== token.toUpperCase())
         
-        await supabaseAdmin
-          .from('admin_user')
+        await (supabaseAdmin
+          .from('admin_user') as SupabaseTableOp)
           .update({
             backup_codes: JSON.stringify(remainingCodes),
             last_2fa_at: new Date().toISOString()
@@ -264,8 +265,8 @@ export class AdminService {
       })
 
       if (isValid) {
-        await supabaseAdmin
-          .from('admin_user')
+        await (supabaseAdmin
+          .from('admin_user') as SupabaseTableOp)
           .update({
             last_2fa_at: new Date().toISOString()
           })
@@ -294,8 +295,8 @@ export class AdminService {
   // Disable 2FA (emergency)
   async disable2FA(userId: string): Promise<boolean> {
     try {
-      await supabaseAdmin
-        .from('admin_user')
+      await (supabaseAdmin
+        .from('admin_user') as SupabaseTableOp)
         .update({
           totp_enabled: false,
           totp_secret: null,
@@ -336,8 +337,8 @@ export class AdminService {
         updateData.locked_until = new Date(Date.now() + 30 * 60 * 1000).toISOString()
       }
 
-      await supabaseAdmin
-        .from('admin_user')
+      await (supabaseAdmin
+        .from('admin_user') as SupabaseTableOp)
         .update(updateData)
         .eq('user_id', userId)
 
