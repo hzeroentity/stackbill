@@ -3,8 +3,8 @@ import { randomBytes } from 'crypto'
 import * as speakeasy from 'speakeasy'
 import * as QRCode from 'qrcode'
 
-// Type for Supabase table operations when TypeScript inference fails
-type SupabaseTableOp = any
+// Supabase table operations - need any for proper typing
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export interface AdminUser {
   id: string
@@ -92,7 +92,7 @@ export class AdminService {
         success: details.success ?? true
       }
       
-      await (supabaseAdmin.from('admin_security_log') as SupabaseTableOp).insert(logEntry)
+      await (supabaseAdmin.from('admin_security_log') as any).insert(logEntry)
     } catch (error) {
       console.error('Failed to log security event:', error)
     }
@@ -102,7 +102,7 @@ export class AdminService {
   async updateAdminSession(userId: string, ipAddress?: string): Promise<boolean> {
     try {
       const { error } = await (supabaseAdmin
-        .from('admin_user') as SupabaseTableOp)
+        .from('admin_user') as any)
         .update({
           last_login_at: new Date().toISOString(),
           session_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
@@ -146,7 +146,7 @@ export class AdminService {
 
       // Save secret to database (but don't enable 2FA yet)
       await (supabaseAdmin
-        .from('admin_user') as SupabaseTableOp)
+        .from('admin_user') as any)
         .update({
           totp_secret: secret.base32,
           backup_codes: JSON.stringify(backupCodes)
@@ -175,7 +175,7 @@ export class AdminService {
         .from('admin_user')
         .select('totp_secret')
         .eq('user_id', userId)
-        .single()
+        .single() as { data: { totp_secret: string } | null; error: any }
 
       if (error || !admin?.totp_secret) {
         return false
@@ -195,7 +195,7 @@ export class AdminService {
       if (isValid) {
         // Enable 2FA
         await (supabaseAdmin
-          .from('admin_user') as SupabaseTableOp)
+          .from('admin_user') as any)
           .update({
             totp_enabled: true,
             last_2fa_at: new Date().toISOString()
@@ -228,7 +228,7 @@ export class AdminService {
         .from('admin_user')
         .select('totp_secret, totp_enabled, backup_codes')
         .eq('user_id', userId)
-        .single()
+        .single() as { data: { totp_secret: string; totp_enabled: boolean; backup_codes: string } | null; error: any }
 
       if (error || !admin?.totp_enabled || !admin?.totp_secret) {
         return false
@@ -243,7 +243,7 @@ export class AdminService {
         const remainingCodes = backupCodes.filter((code: string) => code !== token.toUpperCase())
         
         await (supabaseAdmin
-          .from('admin_user') as SupabaseTableOp)
+          .from('admin_user') as any)
           .update({
             backup_codes: JSON.stringify(remainingCodes),
             last_2fa_at: new Date().toISOString()
@@ -266,7 +266,7 @@ export class AdminService {
 
       if (isValid) {
         await (supabaseAdmin
-          .from('admin_user') as SupabaseTableOp)
+          .from('admin_user') as any)
           .update({
             last_2fa_at: new Date().toISOString()
           })
@@ -296,7 +296,7 @@ export class AdminService {
   async disable2FA(userId: string): Promise<boolean> {
     try {
       await (supabaseAdmin
-        .from('admin_user') as SupabaseTableOp)
+        .from('admin_user') as any)
         .update({
           totp_enabled: false,
           totp_secret: null,
@@ -323,7 +323,7 @@ export class AdminService {
         .from('admin_user')
         .select('failed_attempts')
         .eq('user_id', userId)
-        .single()
+        .single() as { data: { failed_attempts: number } | null; error: any }
 
       const failedAttempts = (admin?.failed_attempts || 0) + 1
       const shouldLock = failedAttempts >= 5
@@ -338,7 +338,7 @@ export class AdminService {
       }
 
       await (supabaseAdmin
-        .from('admin_user') as SupabaseTableOp)
+        .from('admin_user') as any)
         .update(updateData)
         .eq('user_id', userId)
 
