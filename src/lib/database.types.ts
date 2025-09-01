@@ -59,6 +59,23 @@ export interface Database {
           updated_at?: string
         }
       }
+      subscription_projects: {
+        Row: {
+          subscription_id: string
+          project_id: string
+          created_at: string
+        }
+        Insert: {
+          subscription_id: string
+          project_id: string
+          created_at?: string
+        }
+        Update: {
+          subscription_id?: string
+          project_id?: string
+          created_at?: string
+        }
+      }
       subscriptions: {
         Row: {
           id: string
@@ -69,7 +86,6 @@ export interface Database {
           billing_period: BillingPeriod
           renewal_date: string
           category: SubscriptionCategory
-          project_id: string | null
           is_active: boolean
           created_at: string
           updated_at: string
@@ -83,7 +99,6 @@ export interface Database {
           billing_period: BillingPeriod
           renewal_date: string
           category: SubscriptionCategory
-          project_id?: string | null
           is_active?: boolean
           created_at?: string
           updated_at?: string
@@ -97,7 +112,6 @@ export interface Database {
           billing_period?: BillingPeriod
           renewal_date?: string
           category?: SubscriptionCategory
-          project_id?: string | null
           is_active?: boolean
           created_at?: string
           updated_at?: string
@@ -167,7 +181,17 @@ export type Project = Database['public']['Tables']['projects']['Row']
 export type ProjectInsert = Database['public']['Tables']['projects']['Insert']
 export type ProjectUpdate = Database['public']['Tables']['projects']['Update']
 
+// Convenience types for subscription-project relationships
+export type SubscriptionProject = Database['public']['Tables']['subscription_projects']['Row']
+export type SubscriptionProjectInsert = Database['public']['Tables']['subscription_projects']['Insert']
+export type SubscriptionProjectUpdate = Database['public']['Tables']['subscription_projects']['Update']
+
 // Convenience types for user subscriptions
 export type UserSubscription = Database['public']['Tables']['user_subscriptions']['Row']
 export type UserSubscriptionInsert = Database['public']['Tables']['user_subscriptions']['Insert']
 export type UserSubscriptionUpdate = Database['public']['Tables']['user_subscriptions']['Update']
+
+// Extended types for subscriptions with projects
+export type SubscriptionWithProjects = Subscription & {
+  projects: Project[]
+}

@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
-import { Subscription, UserSubscription } from '@/lib/database.types'
+import { SubscriptionWithProjects, UserSubscription, Project } from '@/lib/database.types'
 import { getRenewalStatus } from '@/lib/renewal-status'
 import { canAddSubscription } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
@@ -28,27 +28,30 @@ import { useAuth } from '@/contexts/auth-context'
 import { getDefaultCurrency } from '@/lib/currency-preferences'
 import { useLanguage } from '@/contexts/language-context'
 import { ProjectSwitcher } from '@/components/projects/project-switcher'
-import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID } from '@/lib/projects'
+import { ProjectsService, ALL_PROJECTS_ID } from '@/lib/projects'
+import { ProjectCreateDialog } from '@/components/projects/project-create-dialog'
 
 export default function DashboardPage() {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
-  const [allSubscriptions, setAllSubscriptions] = useState<Subscription[]>([]) // Store all subscriptions for filtering
+  const [subscriptions, setSubscriptions] = useState<SubscriptionWithProjects[]>([])
+  const [allSubscriptions, setAllSubscriptions] = useState<SubscriptionWithProjects[]>([]) // Store all subscriptions for filtering
   const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   // Project state
   const [selectedProject, setSelectedProject] = useState(ALL_PROJECTS_ID)
+  const [projects, setProjects] = useState<Project[]>([])
   const [subscriptionCounts, setSubscriptionCounts] = useState<Record<string, number>>({})
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
+  const [editingSubscription, setEditingSubscription] = useState<SubscriptionWithProjects | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [subscriptionToDelete, setSubscriptionToDelete] = useState<Subscription | null>(null)
+  const [subscriptionToDelete, setSubscriptionToDelete] = useState<SubscriptionWithProjects | null>(null)
   const [upgrading, setUpgrading] = useState(false)
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const [isCreateProjectDialogOpen, setIsCreateProjectDialogOpen] = useState(false)
   // Currency conversion state
   const [monthlyTotal, setMonthlyTotal] = useState(0)
   const [yearlyTotal, setYearlyTotal] = useState(0)
@@ -65,19 +68,6 @@ export default function DashboardPage() {
   // Use stable user ID to prevent unnecessary re-renders
   const userId = user?.id
 
-  // Filter subscriptions based on selected project
-  const filterSubscriptionsByProject = useCallback((subs: Subscription[], projectId: string): Subscription[] => {
-    if (projectId === ALL_PROJECTS_ID) {
-      return subs // Show all subscriptions
-    }
-    
-    if (projectId === GENERAL_PROJECT_ID) {
-      return subs.filter(sub => sub.project_id === null) // Show only general subscriptions
-    }
-    
-    // Show subscriptions for specific project + general ones
-    return subs.filter(sub => sub.project_id === projectId || sub.project_id === null)
-  }, [])
 
   // Handle project selection change
   const handleProjectChange = useCallback((projectId: string) => {
@@ -85,7 +75,7 @@ export default function DashboardPage() {
     // The useEffect will handle filtering automatically
   }, [])
 
-  const calculateConvertedTotals = useCallback(async (subs: Subscription[]) => {
+  const calculateConvertedTotals = useCallback(async (subs: SubscriptionWithProjects[]) => {
     setConversionsLoading(true)
     try {
       const [monthly, yearly, categorySpending] = await Promise.all([
@@ -168,8 +158,8 @@ export default function DashboardPage() {
     setError(null)
     
     try {
-      // Fetch all subscriptions (including canceled ones)
-      const subscriptionResult = await SubscriptionsService.getAllIncludingInactive()
+      // Fetch all subscriptions with project relationships (including canceled ones)
+      const subscriptionResult = await SubscriptionsService.getAllWithProjectsIncludingInactive()
       
       if (subscriptionResult.error) {
         throw new Error(subscriptionResult.error.message)
@@ -178,21 +168,16 @@ export default function DashboardPage() {
       // Store all subscriptions for filtering
       setAllSubscriptions(subscriptionResult.data || [])
 
-      // Get subscription counts for project switcher
-      if (userSubscription?.plan_type === 'pro') {
-        const counts = await ProjectsService.getProjectSubscriptionCounts(userId)
-        setSubscriptionCounts(counts)
-      }
+      // Get projects for user
+      const userProjects = await ProjectsService.getProjects(userId)
+      setProjects(userProjects)
 
-      const fetchedSubscriptions = subscriptionResult.data || []
-      // Don't filter here - let the separate useEffect handle filtering
-      setSubscriptions(fetchedSubscriptions)
-      
-      // Calculate converted totals only for active subscriptions
-      const activeSubscriptions = fetchedSubscriptions.filter(sub => sub.is_active)
-      if (activeSubscriptions.length > 0) {
-        await calculateConvertedTotals(activeSubscriptions)
-      }
+      // Get subscription counts for project switcher (always fetch, we'll filter in component)
+      const counts = await ProjectsService.getProjectSubscriptionCounts(userId)
+      setSubscriptionCounts(counts)
+
+      // Don't set subscriptions here - let the filtering effect handle it
+      // This prevents triggering the totals calculation prematurely
       
       // Try to fetch user plan data via API
       try {
@@ -241,7 +226,7 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }, [userId, calculateConvertedTotals, userSubscription])
+  }, [userId])
 
   useEffect(() => {
     if (userId) {
@@ -255,15 +240,36 @@ export default function DashboardPage() {
       let filteredSubs
       if (selectedProject === ALL_PROJECTS_ID) {
         filteredSubs = allSubscriptions // Show all subscriptions
-      } else if (selectedProject === GENERAL_PROJECT_ID) {
-        filteredSubs = allSubscriptions.filter(sub => sub.project_id === null) // Show only general subscriptions
       } else {
-        // Show ONLY subscriptions for specific project (NOT general ones)
-        filteredSubs = allSubscriptions.filter(sub => sub.project_id === selectedProject)
+        // Show subscriptions that are assigned to the selected project
+        filteredSubs = allSubscriptions.filter(sub => {
+          // For many-to-many: check if any of the subscription's projects match the selected project
+          return sub.projects && sub.projects.some(project => project.id === selectedProject)
+        })
       }
       setSubscriptions(filteredSubs)
+    } else {
+      setSubscriptions([])
     }
   }, [allSubscriptions, selectedProject])
+
+  // Recalculate totals when displayed subscriptions change
+  useEffect(() => {
+    const activeSubscriptions = subscriptions.filter(sub => sub.is_active)
+    if (activeSubscriptions.length > 0) {
+      calculateConvertedTotals(activeSubscriptions)
+    } else {
+      // Reset totals to 0 when no active subscriptions
+      setMonthlyTotal(0)
+      setYearlyTotal(0)
+      setSpendingByCategory({})
+      setAveragePerService(0)
+      setMostExpensive(0)
+      setLeastExpensive(0)
+      setMostExpensiveId(null)
+      setLeastExpensiveId(null)
+    }
+  }, [subscriptions, calculateConvertedTotals])
 
   const handleAddSuccess = () => {
     setIsAddDialogOpen(false)
@@ -276,12 +282,12 @@ export default function DashboardPage() {
     fetchSubscriptions()
   }
 
-  const handleEdit = (subscription: Subscription) => {
+  const handleEdit = (subscription: SubscriptionWithProjects) => {
     setEditingSubscription(subscription)
     setIsEditDialogOpen(true)
   }
 
-  const handleDeleteClick = (subscription: Subscription) => {
+  const handleDeleteClick = (subscription: SubscriptionWithProjects) => {
     setSubscriptionToDelete(subscription)
     setIsDeleteModalOpen(true)
   }
@@ -312,7 +318,7 @@ export default function DashboardPage() {
     setSubscriptionToDelete(null)
   }
 
-  const handleCancel = async (subscription: Subscription) => {
+  const handleCancel = async (subscription: SubscriptionWithProjects) => {
     try {
       const { error } = await SubscriptionsService.softDelete(subscription.id)
       if (error) {
@@ -325,7 +331,7 @@ export default function DashboardPage() {
     }
   }
 
-  const handleReactivate = async (subscription: Subscription) => {
+  const handleReactivate = async (subscription: SubscriptionWithProjects) => {
     try {
       const { error } = await SubscriptionsService.reactivate(subscription.id)
       if (error) {
@@ -377,6 +383,12 @@ export default function DashboardPage() {
   const handleAddSubscription = () => {
     const currentPlan = userSubscription?.plan_type || 'free'
     const activeCount = subscriptions.filter(sub => sub.is_active).length
+    
+    // Check if user has any projects first
+    if (projects.length === 0) {
+      setIsCreateProjectDialogOpen(true)
+      return
+    }
     
     if (!canAddSubscription(activeCount, currentPlan)) {
       // Show upgrade prompt instead of opening add dialog
@@ -497,6 +509,7 @@ export default function DashboardPage() {
           onProjectChange={handleProjectChange}
           isPro={userSubscription?.plan_type === 'pro'}
           subscriptionCounts={subscriptionCounts}
+          userPlan={userSubscription?.plan_type || 'free'}
         />
       </div>
       
@@ -1104,6 +1117,27 @@ export default function DashboardPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Create Project Dialog for "projects first" flow */}
+      <ProjectCreateDialog
+        open={isCreateProjectDialogOpen}
+        onOpenChange={setIsCreateProjectDialogOpen}
+        onProjectCreated={async (projectId) => {
+          // Refresh projects and open subscription form
+          if (user?.id) {
+            const userProjects = await ProjectsService.getProjects(user.id)
+            setProjects(userProjects)
+            
+            // Update subscription counts
+            const counts = await ProjectsService.getProjectSubscriptionCounts(user.id)
+            setSubscriptionCounts(counts)
+          }
+          setSelectedProject(projectId)
+          setIsAddDialogOpen(true)
+        }}
+        existingProjectCount={projects.length}
+        userPlan={userSubscription?.plan_type || 'free'}
+      />
     </div>
   )
 }

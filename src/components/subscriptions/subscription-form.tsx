@@ -7,10 +7,11 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SubscriptionsService } from '@/lib/subscriptions'
-import { BillingPeriod, Subscription, SubscriptionInsert, SubscriptionCategory } from '@/lib/database.types'
+import { BillingPeriod, Subscription, SubscriptionInsert, SubscriptionCategory, Project } from '@/lib/database.types'
 import { SUPPORTED_CURRENCIES, getDefaultCurrency } from '@/lib/currency-preferences'
 import { useLanguage } from '@/contexts/language-context'
-import { ProjectSelector } from '@/components/projects/project-selector'
+import { ProjectMultiSelector } from '@/components/projects/project-multi-selector'
+import { ProjectsService } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 
 interface SubscriptionFormProps {
@@ -25,6 +26,9 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [selectedProjects, setSelectedProjects] = useState<string[]>([])
+  const [loadingProjects, setLoadingProjects] = useState(true)
   
   // Predefined categories for better organization
   const categories: SubscriptionCategory[] = [
@@ -49,8 +53,35 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
     billing_period: subscription?.billing_period || 'monthly' as BillingPeriod,
     renewal_date: subscription?.renewal_date ? subscription.renewal_date.split('T')[0] : '',
     category: subscription?.category || 'Other',
-    project_id: subscription?.project_id || null,
+    // project_id removed - will implement many-to-many selection later
   })
+
+  // Fetch projects and existing project assignments
+  useEffect(() => {
+    if (!user?.id) return
+
+    const fetchProjectsAndAssignments = async () => {
+      try {
+        setLoadingProjects(true)
+        
+        // Fetch user's projects
+        const userProjects = await ProjectsService.getProjects(user.id)
+        setProjects(userProjects)
+        
+        // If editing subscription, fetch its current project assignments
+        if (subscription) {
+          const assignedProjects = await ProjectsService.getSubscriptionProjects(subscription.id)
+          setSelectedProjects(assignedProjects.map(p => p.id))
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error)
+      } finally {
+        setLoadingProjects(false)
+      }
+    }
+
+    fetchProjectsAndAssignments()
+  }, [user?.id, subscription])
 
   // Update currency when not editing and default currency changes
   useEffect(() => {
@@ -70,6 +101,16 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
     setError(null)
 
     try {
+      // Validate that user has projects before creating subscription
+      if (projects.length === 0) {
+        throw new Error('You must create at least one project before adding subscriptions')
+      }
+
+      // Validate that at least one project is selected
+      if (selectedProjects.length === 0) {
+        throw new Error('Please assign this subscription to at least one project')
+      }
+
       // Validate renewal date is today or in the future
       const today = new Date()
       today.setHours(0, 0, 0, 0)
@@ -86,7 +127,6 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
         billing_period: formData.billing_period,
         renewal_date: formData.renewal_date,
         category: formData.category,
-        project_id: isPro ? formData.project_id : null, // Only set project_id for Pro users
       }
 
       let result
@@ -98,6 +138,11 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
 
       if (result.error) {
         throw new Error(result.error.message)
+      }
+
+      // Assign subscription to selected projects
+      if (result.data) {
+        await ProjectsService.assignSubscriptionToProjects(result.data.id, selectedProjects)
       }
 
       onSuccess?.()
@@ -207,12 +252,11 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
             </Select>
           </div>
 
-          {/* Project Selector */}
-          <ProjectSelector
-            value={formData.project_id}
-            onChange={(projectId) => handleInputChange('project_id', projectId)}
-            disabled={isLoading}
-            isPro={isPro}
+          {/* Project Assignment */}
+          <ProjectMultiSelector
+            value={selectedProjects}
+            onChange={setSelectedProjects}
+            disabled={isLoading || loadingProjects}
           />
 
 

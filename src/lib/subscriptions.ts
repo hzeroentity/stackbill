@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import { Subscription, SubscriptionInsert, SubscriptionUpdate } from './database.types'
+import { Subscription, SubscriptionInsert, SubscriptionUpdate, SubscriptionWithProjects, Project } from './database.types'
 import { ExchangeRateService } from './exchange-rates'
 import { Currency, getDefaultCurrency } from './currency-preferences'
 
@@ -27,6 +27,65 @@ export class SubscriptionsService {
         .order('renewal_date', { ascending: true })
       
       return { data, error }
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
+    }
+  }
+
+  // Get all subscriptions with their project relationships
+  static async getAllWithProjects(): Promise<{ data: SubscriptionWithProjects[] | null; error: Error | null }> {
+    try {
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select(`
+          *,
+          subscription_projects (
+            projects (*)
+          )
+        `)
+        .eq('is_active', true)
+        .order('renewal_date', { ascending: true })
+      
+      if (error) {
+        return { data: null, error }
+      }
+
+      // Transform the data to match SubscriptionWithProjects type
+      const subscriptionsWithProjects: SubscriptionWithProjects[] = (data || []).map(sub => ({
+        ...sub,
+        projects: sub.subscription_projects?.map((sp: { projects: Project }) => sp.projects).filter(Boolean) || []
+      }))
+      
+      return { data: subscriptionsWithProjects, error: null }
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
+    }
+  }
+
+  static async getAllWithProjectsIncludingInactive(): Promise<{ data: SubscriptionWithProjects[] | null; error: Error | null }> {
+    try {
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select(`
+          *,
+          subscription_projects (
+            projects (*)
+          )
+        `)
+        .order('is_active', { ascending: false })
+        .order('renewal_date', { ascending: true })
+      
+      if (error) {
+        return { data: null, error }
+      }
+
+      // Transform the data to match SubscriptionWithProjects type
+      const subscriptionsWithProjects: SubscriptionWithProjects[] = (data || []).map(sub => ({
+        ...sub,
+        projects: sub.subscription_projects?.map((sp: { projects: Project }) => sp.projects).filter(Boolean) || []
+      }))
+      
+      return { data: subscriptionsWithProjects, error: null }
     } catch (error) {
       return { data: null, error: error instanceof Error ? error : new Error('Unknown error occurred') }
     }

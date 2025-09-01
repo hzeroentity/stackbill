@@ -2,24 +2,20 @@
 
 import { useState, useEffect } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Lock } from "lucide-react"
 import { Project } from '@/lib/database.types'
-import { ProjectsService, GENERAL_PROJECT_ID } from '@/lib/projects'
+import { ProjectsService } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
-import { useRouter } from 'next/navigation'
 
 interface ProjectSelectorProps {
   value: string | null
   onChange: (projectId: string | null) => void
   disabled?: boolean
-  isPro: boolean
 }
 
-export function ProjectSelector({ value, onChange, disabled, isPro }: ProjectSelectorProps) {
+export function ProjectSelector({ value, onChange, disabled }: ProjectSelectorProps) {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
-  const router = useRouter()
 
   useEffect(() => {
     if (!user?.id) return
@@ -38,46 +34,22 @@ export function ProjectSelector({ value, onChange, disabled, isPro }: ProjectSel
     fetchProjects()
   }, [user?.id])
 
-  const handleUpgradeClick = () => {
-    router.push('/dashboard/billing')
-  }
-
-  // Show lock overlay for free plan users
-  if (!isPro) {
-    return (
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Project</label>
-        <div className="relative">
-          <Select disabled>
-            <SelectTrigger className="relative">
-              <SelectValue placeholder="General" />
-            </SelectTrigger>
-          </Select>
-          <div className="absolute inset-0 bg-muted/50 rounded-md flex items-center justify-center cursor-pointer" onClick={handleUpgradeClick}>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Lock className="w-4 h-4" />
-              <span className="text-sm">Pro Feature</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // Free users can now use projects up to their limit
 
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium">Project</label>
       
       <Select
-        value={value || GENERAL_PROJECT_ID}
-        onValueChange={(val) => onChange(val === GENERAL_PROJECT_ID ? null : val)}
+        value={value || 'general'}
+        onValueChange={(val) => onChange(val === 'general' ? null : val)}
         disabled={disabled || loading}
       >
         <SelectTrigger>
           <SelectValue placeholder="Select project..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={GENERAL_PROJECT_ID}>
+          <SelectItem value='general'>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-gray-400" />
               General

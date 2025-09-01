@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProjectsService } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
+import { canAddProject, getProjectLimit } from '@/lib/plans'
+import { PlanType } from '@/lib/database.types'
 
 // Predefined color options
 const PREDEFINED_COLORS = [
@@ -28,9 +30,10 @@ interface ProjectCreateDialogProps {
   onOpenChange: (open: boolean) => void
   onProjectCreated?: (projectId: string) => void
   existingProjectCount?: number
+  userPlan?: PlanType
 }
 
-export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, existingProjectCount = 0 }: ProjectCreateDialogProps) {
+export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, existingProjectCount = 0, userPlan = 'free' }: ProjectCreateDialogProps) {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -55,8 +58,9 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
       return
     }
 
-    if (existingProjectCount >= 10) {
-      setError('Maximum of 10 projects allowed')
+    if (!canAddProject(existingProjectCount, userPlan)) {
+      const limit = getProjectLimit(userPlan)
+      setError(`Maximum of ${limit} projects allowed for ${userPlan} plan`)
       return
     }
 
