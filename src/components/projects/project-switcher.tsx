@@ -8,6 +8,7 @@ import { Project } from '@/lib/database.types'
 import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID, getProjectDisplayName } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
+import { ProjectCreateDialog } from './project-create-dialog'
 
 interface ProjectSwitcherProps {
   selectedProject: string
@@ -19,6 +20,7 @@ interface ProjectSwitcherProps {
 export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subscriptionCounts }: ProjectSwitcherProps) {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const { user } = useAuth()
   const router = useRouter()
 
@@ -41,6 +43,19 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
 
   const handleUpgradeClick = () => {
     router.push('/dashboard/billing')
+  }
+
+  const handleProjectCreated = (projectId: string) => {
+    // Refresh the projects list
+    if (user?.id) {
+      ProjectsService.getProjects(user.id)
+        .then(userProjects => {
+          setProjects(userProjects)
+          // Automatically switch to the newly created project
+          onProjectChange(projectId)
+        })
+        .catch(error => console.error('Error refreshing projects:', error))
+    }
   }
 
   const getProjectCount = (projectId: string): number => {
@@ -141,15 +156,19 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
       <Button
         variant="outline"
         size="sm"
-        onClick={() => {
-          // TODO: Open project creation dialog
-          console.log('Open project creation dialog')
-        }}
+        onClick={() => setIsCreateDialogOpen(true)}
         className="h-8 px-2"
       >
         <Plus className="w-3 h-3 mr-1" />
         <span className="hidden sm:inline">Project</span>
       </Button>
+      
+      <ProjectCreateDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        onProjectCreated={handleProjectCreated}
+        existingProjectCount={projects.length}
+      />
     </div>
   )
 }

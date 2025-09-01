@@ -29,7 +29,6 @@ import { getDefaultCurrency } from '@/lib/currency-preferences'
 import { useLanguage } from '@/contexts/language-context'
 import { ProjectSwitcher } from '@/components/projects/project-switcher'
 import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID } from '@/lib/projects'
-import { Project } from '@/lib/database.types'
 
 export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -259,8 +258,8 @@ export default function DashboardPage() {
       } else if (selectedProject === GENERAL_PROJECT_ID) {
         filteredSubs = allSubscriptions.filter(sub => sub.project_id === null) // Show only general subscriptions
       } else {
-        // Show subscriptions for specific project + general ones
-        filteredSubs = allSubscriptions.filter(sub => sub.project_id === selectedProject || sub.project_id === null)
+        // Show ONLY subscriptions for specific project (NOT general ones)
+        filteredSubs = allSubscriptions.filter(sub => sub.project_id === selectedProject)
       }
       setSubscriptions(filteredSubs)
     }
@@ -448,7 +447,7 @@ export default function DashboardPage() {
     }).format(amount)
   }
 
-  const shouldShowRenewalStatus = (renewalStatus: any) => {
+  const shouldShowRenewalStatus = (renewalStatus: { text: string }) => {
     // Show status only if text is not empty
     return renewalStatus.text !== ''
   }

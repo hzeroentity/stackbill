@@ -108,7 +108,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
     }
   }
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | null) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 

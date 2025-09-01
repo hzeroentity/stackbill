@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Plus, Lock } from "lucide-react"
+import { Lock } from "lucide-react"
 import { Project } from '@/lib/database.types'
-import { ProjectsService, GENERAL_PROJECT_ID, getProjectDisplayName } from '@/lib/projects'
+import { ProjectsService, GENERAL_PROJECT_ID } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 
@@ -67,22 +66,7 @@ export function ProjectSelector({ value, onChange, disabled, isPro }: ProjectSel
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium">Project</label>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            // TODO: Open project creation dialog
-            console.log('Open project creation dialog')
-          }}
-          className="h-7 px-2"
-        >
-          <Plus className="w-3 h-3 mr-1" />
-          New
-        </Button>
-      </div>
+      <label className="text-sm font-medium">Project</label>
       
       <Select
         value={value || GENERAL_PROJECT_ID}

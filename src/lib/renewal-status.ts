@@ -4,7 +4,7 @@ export interface RenewalStatus {
   icon: string
 }
 
-function getNextRenewalDate(renewalDate: Date, billingPeriod: 'monthly' | 'yearly', today: Date): Date {
+function getNextRenewalDate(renewalDate: Date, billingPeriod: 'weekly' | 'monthly' | 'quarterly' | 'yearly', today: Date): Date {
   const renewalDay = renewalDate.getDate()
   const renewalMonth = renewalDate.getMonth()
   
@@ -17,6 +17,41 @@ function getNextRenewalDate(renewalDate: Date, billingPeriod: 'monthly' | 'yearl
     if (nextRenewal <= today) {
       nextRenewal = new Date(currentYear + 1, renewalMonth, renewalDay)
     }
+    
+    return nextRenewal
+  } else if (billingPeriod === 'quarterly') {
+    // For quarterly subscriptions, find next occurrence 3 months ahead
+    const currentMonth = today.getMonth()
+    const currentYear = today.getFullYear()
+    
+    // Try this quarter first
+    let nextRenewal = new Date(currentYear, currentMonth, renewalDay)
+    
+    // If the renewal date this quarter has passed, move to next quarter
+    if (nextRenewal <= today) {
+      nextRenewal = new Date(currentYear, currentMonth + 3, renewalDay)
+    }
+    
+    // Handle edge case where renewal day doesn't exist in the next month
+    if (nextRenewal.getDate() !== renewalDay) {
+      // Move to the last day of that month
+      nextRenewal = new Date(nextRenewal.getFullYear(), nextRenewal.getMonth() + 1, 0)
+    }
+    
+    return nextRenewal
+  } else if (billingPeriod === 'weekly') {
+    // For weekly subscriptions, find next occurrence of the same day of week
+    const renewalDayOfWeek = renewalDate.getDay()
+    const todayDayOfWeek = today.getDay()
+    
+    // Calculate days until next renewal
+    let daysUntilRenewal = renewalDayOfWeek - todayDayOfWeek
+    if (daysUntilRenewal <= 0) {
+      daysUntilRenewal += 7 // Next week
+    }
+    
+    const nextRenewal = new Date(today)
+    nextRenewal.setDate(today.getDate() + daysUntilRenewal)
     
     return nextRenewal
   } else {
@@ -42,7 +77,7 @@ function getNextRenewalDate(renewalDate: Date, billingPeriod: 'monthly' | 'yearl
   }
 }
 
-export function getRenewalStatus(renewalDate: string, billingPeriod: 'monthly' | 'yearly' = 'monthly'): RenewalStatus {
+export function getRenewalStatus(renewalDate: string, billingPeriod: 'weekly' | 'monthly' | 'quarterly' | 'yearly' = 'monthly'): RenewalStatus {
   const today = new Date()
   const renewalDateObj = new Date(renewalDate)
   
