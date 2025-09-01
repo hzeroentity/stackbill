@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import Image from "next/image"
-import { Check, CreditCard, X, Calendar, Mail, BarChart3, Moon, Folder } from "lucide-react"
+import { Check, CreditCard, X, Calendar, Mail, BarChart3, Moon, Folder, FolderTree } from "lucide-react"
 import { LandingHeaderButtons } from "@/components/landing-header-buttons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
@@ -61,7 +61,7 @@ export default function Home() {
           </div>
           
           {/* Dashboard Preview Video */}
-          <div className="max-w-4xl mx-auto mt-16 bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
+          <div className="max-w-6xl mx-auto mt-16 bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
             <video 
               autoPlay 
               loop 
@@ -210,7 +210,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Add your subscriptions manually</h3>
+              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Add your subscriptions</h3>
               <div className="bg-slate-100 dark:bg-slate-700 rounded-lg p-6 mb-4">
                 <p className="text-slate-500 dark:text-slate-400">📝 Simple form UI placeholder</p>
               </div>
@@ -224,12 +224,12 @@ export default function Home() {
               <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Set renewal dates & currency</h3>
+              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Get renewal reminders & reports</h3>
               <div className="bg-slate-100 dark:bg-slate-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-slate-400">💰 Currency selector screenshot</p>
+                <p className="text-slate-500 dark:text-slate-400">📧 Email reminder preview</p>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-                Choose from 10+ currencies with automatic conversion
+                Email alerts before renewals plus monthly spending summaries
               </p>
             </div>
             
@@ -238,12 +238,12 @@ export default function Home() {
               <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Get notified before renewals</h3>
+              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Organize by projects</h3>
               <div className="bg-slate-100 dark:bg-slate-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-slate-400">📧 Example email preview</p>
+                <p className="text-slate-500 dark:text-slate-400">📁 Project categorization view</p>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-                Email reminders so you never get surprised again
+                Tag subscriptions by project for better cost tracking and insights
               </p>
             </div>
           </div>
@@ -329,25 +329,26 @@ export default function Home() {
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-4">
                   <Folder className="w-6 h-6 text-red-600 dark:text-red-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Group tools by category</CardTitle>
+                <CardTitle className="text-xl dark:text-white">Smart categorization</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Organize subscriptions with predefined categories for better spending insights.
+                  Organize subscriptions with 12+ predefined categories including AI/ML tools.
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-slate-800">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-slate-800">
+              <Badge className="absolute top-4 right-4 bg-purple-600 text-white text-xs">Pro</Badge>
               <CardHeader>
                 <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mb-4">
-                  <Moon className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                  <FolderTree className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Dark mode + multi-language</CardTitle>
+                <CardTitle className="text-xl dark:text-white">Multi-project management</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Beautiful dark theme and support for English, Spanish, and Italian.
+                  Tag subscriptions by project for granular cost tracking and team insights.
                 </p>
               </CardContent>
             </Card>
@@ -444,6 +445,10 @@ export default function Home() {
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
                   <span className="dark:text-slate-300">Priority customer support</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Multi-project management</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />

@@ -27,12 +27,19 @@ import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
 import { getDefaultCurrency } from '@/lib/currency-preferences'
 import { useLanguage } from '@/contexts/language-context'
+import { ProjectSwitcher } from '@/components/projects/project-switcher'
+import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID } from '@/lib/projects'
+import { Project } from '@/lib/database.types'
 
 export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
+  const [allSubscriptions, setAllSubscriptions] = useState<Subscription[]>([]) // Store all subscriptions for filtering
   const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  // Project state
+  const [selectedProject, setSelectedProject] = useState(ALL_PROJECTS_ID)
+  const [subscriptionCounts, setSubscriptionCounts] = useState<Record<string, number>>({})
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
@@ -58,6 +65,26 @@ export default function DashboardPage() {
   
   // Use stable user ID to prevent unnecessary re-renders
   const userId = user?.id
+
+  // Filter subscriptions based on selected project
+  const filterSubscriptionsByProject = useCallback((subs: Subscription[], projectId: string): Subscription[] => {
+    if (projectId === ALL_PROJECTS_ID) {
+      return subs // Show all subscriptions
+    }
+    
+    if (projectId === GENERAL_PROJECT_ID) {
+      return subs.filter(sub => sub.project_id === null) // Show only general subscriptions
+    }
+    
+    // Show subscriptions for specific project + general ones
+    return subs.filter(sub => sub.project_id === projectId || sub.project_id === null)
+  }, [])
+
+  // Handle project selection change
+  const handleProjectChange = useCallback((projectId: string) => {
+    setSelectedProject(projectId)
+    // The useEffect will handle filtering automatically
+  }, [])
 
   const calculateConvertedTotals = useCallback(async (subs: Subscription[]) => {
     setConversionsLoading(true)
@@ -149,7 +176,17 @@ export default function DashboardPage() {
         throw new Error(subscriptionResult.error.message)
       }
 
+      // Store all subscriptions for filtering
+      setAllSubscriptions(subscriptionResult.data || [])
+
+      // Get subscription counts for project switcher
+      if (userSubscription?.plan_type === 'pro') {
+        const counts = await ProjectsService.getProjectSubscriptionCounts(userId)
+        setSubscriptionCounts(counts)
+      }
+
       const fetchedSubscriptions = subscriptionResult.data || []
+      // Don't filter here - let the separate useEffect handle filtering
       setSubscriptions(fetchedSubscriptions)
       
       // Calculate converted totals only for active subscriptions
@@ -205,13 +242,29 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }, [userId, calculateConvertedTotals])
+  }, [userId, calculateConvertedTotals, userSubscription])
 
   useEffect(() => {
     if (userId) {
       fetchSubscriptions()
     }
-  }, [userId, fetchSubscriptions])
+  }, [userId]) // Removed fetchSubscriptions dependency to prevent loop
+
+  // Separate effect for filtering subscriptions when allSubscriptions or selectedProject changes
+  useEffect(() => {
+    if (allSubscriptions.length > 0) {
+      let filteredSubs
+      if (selectedProject === ALL_PROJECTS_ID) {
+        filteredSubs = allSubscriptions // Show all subscriptions
+      } else if (selectedProject === GENERAL_PROJECT_ID) {
+        filteredSubs = allSubscriptions.filter(sub => sub.project_id === null) // Show only general subscriptions
+      } else {
+        // Show subscriptions for specific project + general ones
+        filteredSubs = allSubscriptions.filter(sub => sub.project_id === selectedProject || sub.project_id === null)
+      }
+      setSubscriptions(filteredSubs)
+    }
+  }, [allSubscriptions, selectedProject])
 
   const handleAddSuccess = () => {
     setIsAddDialogOpen(false)
@@ -416,26 +469,36 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto p-4 sm:p-6">
-      <div className="flex items-center gap-3 mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold">{t('dashboard.title')}</h1>
-        {userSubscription && (
-          <Badge 
-            variant={userSubscription.plan_type === 'pro' ? 'default' : 'secondary'}
-            className={
-              userSubscription.plan_type === 'pro' 
-                ? 'bg-purple-600 hover:bg-purple-700 text-white' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
-            }
-          >
-            {userSubscription.plan_type.toUpperCase()}
-          </Badge>
-        )}
-        {conversionsLoading && (
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <div className="animate-spin rounded-full h-3 w-3 border-b border-current"></div>
-            Converting...
-          </div>
-        )}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold">{t('dashboard.title')}</h1>
+          {userSubscription && (
+            <Badge 
+              variant={userSubscription.plan_type === 'pro' ? 'default' : 'secondary'}
+              className={
+                userSubscription.plan_type === 'pro' 
+                  ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+              }
+            >
+              {userSubscription.plan_type.toUpperCase()}
+            </Badge>
+          )}
+          {conversionsLoading && (
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <div className="animate-spin rounded-full h-3 w-3 border-b border-current"></div>
+              Converting...
+            </div>
+          )}
+        </div>
+        
+        {/* Project Switcher */}
+        <ProjectSwitcher
+          selectedProject={selectedProject}
+          onProjectChange={handleProjectChange}
+          isPro={userSubscription?.plan_type === 'pro'}
+          subscriptionCounts={subscriptionCounts}
+        />
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
@@ -670,6 +733,7 @@ export default function DashboardPage() {
                 <SubscriptionForm 
                   onSuccess={handleAddSuccess}
                   onCancel={() => setIsAddDialogOpen(false)}
+                  isPro={userSubscription?.plan_type === 'pro'}
                 />
               </DialogContent>
             </Dialog>
@@ -689,7 +753,7 @@ export default function DashboardPage() {
             <div className="space-y-3">
               {/* Active Subscriptions */}
               {sortedActiveSubscriptions.map((subscription) => {
-                const renewalStatus = getRenewalStatus(subscription.renewal_date)
+                const renewalStatus = getRenewalStatus(subscription.renewal_date, subscription.billing_period)
                 return (
                   <div key={subscription.id} id={`subscription-${subscription.id}`} className="p-3 bg-muted/50 rounded-lg">
                     {/* Desktop Layout */}
@@ -976,6 +1040,7 @@ export default function DashboardPage() {
                 setIsEditDialogOpen(false)
                 setEditingSubscription(null)
               }}
+              isPro={userSubscription?.plan_type === 'pro'}
             />
           )}
         </DialogContent>

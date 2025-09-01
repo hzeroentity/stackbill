@@ -4,20 +4,54 @@ export interface RenewalStatus {
   icon: string
 }
 
-export function getRenewalStatus(renewalDate: string): RenewalStatus {
+function getNextRenewalDate(renewalDate: Date, billingPeriod: 'monthly' | 'yearly', today: Date): Date {
+  const renewalDay = renewalDate.getDate()
+  const renewalMonth = renewalDate.getMonth()
+  
+  if (billingPeriod === 'yearly') {
+    // For yearly subscriptions, find next occurrence of the same month and day
+    const currentYear = today.getFullYear()
+    let nextRenewal = new Date(currentYear, renewalMonth, renewalDay)
+    
+    // If the renewal date this year has passed, move to next year
+    if (nextRenewal <= today) {
+      nextRenewal = new Date(currentYear + 1, renewalMonth, renewalDay)
+    }
+    
+    return nextRenewal
+  } else {
+    // For monthly subscriptions, find next occurrence of the same day
+    const currentMonth = today.getMonth()
+    const currentYear = today.getFullYear()
+    
+    // Try this month first
+    let nextRenewal = new Date(currentYear, currentMonth, renewalDay)
+    
+    // If the renewal date this month has passed, move to next month
+    if (nextRenewal <= today) {
+      nextRenewal = new Date(currentYear, currentMonth + 1, renewalDay)
+    }
+    
+    // Handle edge case where renewal day doesn't exist in the next month (e.g., Feb 31st)
+    if (nextRenewal.getDate() !== renewalDay) {
+      // Move to the last day of that month
+      nextRenewal = new Date(currentYear, currentMonth + 2, 0)
+    }
+    
+    return nextRenewal
+  }
+}
+
+export function getRenewalStatus(renewalDate: string, billingPeriod: 'monthly' | 'yearly' = 'monthly'): RenewalStatus {
   const today = new Date()
-  const renewal = new Date(renewalDate)
-  const diffTime = renewal.getTime() - today.getTime()
+  const renewalDateObj = new Date(renewalDate)
+  
+  // Calculate next renewal date based on billing period
+  const nextRenewalDate = getNextRenewalDate(renewalDateObj, billingPeriod, today)
+  const diffTime = nextRenewalDate.getTime() - today.getTime()
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-  if (diffDays < 0) {
-    // For auto-renewing subscriptions, past dates mean they already renewed
-    return { 
-      text: 'Renewed', 
-      color: 'text-green-700 bg-green-100 border border-green-200 dark:text-green-200 dark:bg-green-900/30 dark:border-green-700/50',
-      icon: '✅'
-    }
-  } else if (diffDays === 0) {
+  if (diffDays === 0) {
     return { 
       text: 'Renews Today', 
       color: 'text-red-700 bg-red-100 border border-red-200 dark:text-red-200 dark:bg-red-900/30 dark:border-red-700/50',

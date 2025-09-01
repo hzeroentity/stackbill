@@ -10,15 +10,19 @@ import { SubscriptionsService } from '@/lib/subscriptions'
 import { BillingPeriod, Subscription, SubscriptionInsert, SubscriptionCategory } from '@/lib/database.types'
 import { SUPPORTED_CURRENCIES, getDefaultCurrency } from '@/lib/currency-preferences'
 import { useLanguage } from '@/contexts/language-context'
+import { ProjectSelector } from '@/components/projects/project-selector'
+import { useAuth } from '@/contexts/auth-context'
 
 interface SubscriptionFormProps {
   subscription?: Subscription
   onSuccess?: () => void
   onCancel?: () => void
+  isPro?: boolean
 }
 
-export function SubscriptionForm({ subscription, onSuccess, onCancel }: SubscriptionFormProps) {
+export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = false }: SubscriptionFormProps) {
   const { t } = useLanguage()
+  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
@@ -45,6 +49,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
     billing_period: subscription?.billing_period || 'monthly' as BillingPeriod,
     renewal_date: subscription?.renewal_date ? subscription.renewal_date.split('T')[0] : '',
     category: subscription?.category || 'Other',
+    project_id: subscription?.project_id || null,
   })
 
   // Update currency when not editing and default currency changes
@@ -56,6 +61,8 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
       }))
     }
   }, [subscription])
+
+  // No need to check Pro plan - it's passed as prop
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -79,6 +86,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
         billing_period: formData.billing_period,
         renewal_date: formData.renewal_date,
         category: formData.category,
+        project_id: isPro ? formData.project_id : null, // Only set project_id for Pro users
       }
 
       let result
@@ -198,6 +206,14 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel }: Subscrip
               </SelectContent>
             </Select>
           </div>
+
+          {/* Project Selector */}
+          <ProjectSelector
+            value={formData.project_id}
+            onChange={(projectId) => handleInputChange('project_id', projectId)}
+            disabled={isLoading}
+            isPro={isPro}
+          />
 
 
           {error && (
