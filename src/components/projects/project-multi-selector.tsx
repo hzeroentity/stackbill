@@ -18,6 +18,7 @@ interface ProjectMultiSelectorProps {
 export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMultiSelectorProps) {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectValue, setSelectValue] = useState<string>('') // Control the select state
   const { user } = useAuth()
 
   useEffect(() => {
@@ -44,6 +45,8 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
     if (projectId && !value.includes(projectId)) {
       onChange([...value, projectId])
     }
+    // Reset the select value to show placeholder again
+    setSelectValue('')
   }
 
   const handleRemoveProject = (projectId: string) => {
@@ -78,14 +81,19 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
         </div>
       )}
 
-      {/* Add project selector */}
-      {availableProjects.length > 0 && (
-        <Select onValueChange={handleAddProject} disabled={disabled || loading}>
-          <SelectTrigger>
-            <SelectValue placeholder="Add a project..." />
-          </SelectTrigger>
-          <SelectContent>
-            {availableProjects.map((project) => (
+      {/* Add project selector - always visible with fixed width */}
+      <Select 
+        key={`project-selector-${availableProjects.length}`} 
+        value={selectValue} 
+        onValueChange={handleAddProject} 
+        disabled={disabled || loading}
+      >
+        <SelectTrigger className="w-fit min-w-[140px]">
+          <SelectValue placeholder="Add a project..." />
+        </SelectTrigger>
+        <SelectContent>
+          {availableProjects.length > 0 ? (
+            availableProjects.map((project) => (
               <SelectItem key={project.id} value={project.id}>
                 <div className="flex items-center gap-2">
                   <div 
@@ -95,16 +103,17 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
                   {project.name}
                 </div>
               </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
+            ))
+          ) : (
+            <SelectItem value="no-projects" disabled>
+              <span className="text-muted-foreground">
+                {projects.length === 0 ? 'No projects available' : 'All projects selected'}
+              </span>
+            </SelectItem>
+          )}
+        </SelectContent>
+      </Select>
 
-      {projects.length === 0 && !loading && (
-        <p className="text-sm text-muted-foreground">
-          No projects available. Create a project first.
-        </p>
-      )}
     </div>
   )
 }

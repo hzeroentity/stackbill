@@ -8,7 +8,6 @@ export class ProjectsService {
       .from('projects')
       .select('*')
       .eq('user_id', userId)
-      .eq('is_active', true)
       .order('created_at', { ascending: true })
 
     if (error) {
@@ -26,7 +25,6 @@ export class ProjectsService {
       .select('*')
       .eq('id', projectId)
       .eq('user_id', userId)
-      .eq('is_active', true)
       .single()
 
     if (error) {
@@ -71,19 +69,13 @@ export class ProjectsService {
     return data
   }
 
-  // Delete a project (soft delete by setting is_active to false)
+  // Delete a project (hard delete with CASCADE handling)
   static async deleteProject(projectId: string, userId: string): Promise<void> {
-    // First, set all subscriptions in this project to have no project (project_id = null)
-    await supabase
-      .from('subscriptions')
-      .update({ project_id: null })
-      .eq('project_id', projectId)
-      .eq('user_id', userId)
-
-    // Then soft delete the project
+    // Hard delete the project - CASCADE will automatically handle
+    // the subscription_projects relationships
     const { error } = await supabase
       .from('projects')
-      .update({ is_active: false })
+      .delete()
       .eq('id', projectId)
       .eq('user_id', userId)
 

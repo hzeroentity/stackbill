@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -31,9 +31,10 @@ interface ProjectCreateDialogProps {
   onProjectCreated?: (projectId: string) => void
   existingProjectCount?: number
   userPlan?: PlanType
+  existingProjects?: { id: string; color: string }[]
 }
 
-export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, existingProjectCount = 0, userPlan = 'free' }: ProjectCreateDialogProps) {
+export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, existingProjectCount = 0, userPlan = 'free', existingProjects = [] }: ProjectCreateDialogProps) {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -41,12 +42,28 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
   // Form state
   const [projectName, setProjectName] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
-  const [projectColor, setProjectColor] = useState('#3B82F6')
+  const [projectColor, setProjectColor] = useState('')
+
+  // Filter out colors that are already used by other projects
+  const getAvailableColors = () => {
+    const usedColors = existingProjects.map(p => p.color)
+    return PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
+  }
+
+  const availableColors = getAvailableColors()
+
+  // Set default color when dialog opens
+  useEffect(() => {
+    if (open && !projectColor && availableColors.length > 0) {
+      setProjectColor(availableColors[0].value)
+    }
+  }, [open, projectColor, availableColors])
 
   const resetForm = () => {
     setProjectName('')
     setProjectDescription('')
-    setProjectColor('#3B82F6')
+    const availableColors = getAvailableColors()
+    setProjectColor(availableColors.length > 0 ? availableColors[0].value : '#3B82F6')
     setError(null)
   }
 
@@ -64,6 +81,11 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
       return
     }
 
+    if (availableColors.length === 0) {
+      setError('No available colors. Please edit an existing project to free up a color.')
+      return
+    }
+
     if (!user?.id) {
       setError('User not authenticated')
       return
@@ -77,8 +99,7 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
         user_id: user.id,
         name: projectName.trim(),
         description: projectDescription.trim() || null,
-        color: projectColor,
-        is_active: true
+        color: projectColor
       })
 
       // Reset form and close dialog
@@ -140,7 +161,7 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
                 <SelectValue placeholder="Select a color..." />
               </SelectTrigger>
               <SelectContent>
-                {PREDEFINED_COLORS.map((color) => (
+                {availableColors.length > 0 ? availableColors.map((color) => (
                   <SelectItem key={color.value} value={color.value}>
                     <div className="flex items-center gap-3">
                       <div 
@@ -150,7 +171,11 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
                       <span>{color.name}</span>
                     </div>
                   </SelectItem>
-                ))}
+                )) : (
+                  <SelectItem value="no-colors" disabled>
+                    <span className="text-muted-foreground">All colors are in use</span>
+                  </SelectItem>
+                )}
               </SelectContent>
             </Select>
           </div>

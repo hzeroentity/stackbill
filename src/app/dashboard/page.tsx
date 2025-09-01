@@ -509,6 +509,7 @@ export default function DashboardPage() {
           onProjectChange={handleProjectChange}
           isPro={userSubscription?.plan_type === 'pro'}
           subscriptionCounts={subscriptionCounts}
+          totalActiveSubscriptions={activeSubscriptions.length}
           userPlan={userSubscription?.plan_type || 'free'}
         />
       </div>
@@ -679,7 +680,7 @@ export default function DashboardPage() {
                         className="h-6 w-6 p-0 hover:bg-red-200 dark:hover:bg-red-800 cursor-pointer"
                       >
                         <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                       </Button>
                     )}
@@ -703,7 +704,7 @@ export default function DashboardPage() {
                         className="h-6 w-6 p-0 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer"
                       >
                         <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                       </Button>
                     )}
@@ -746,6 +747,7 @@ export default function DashboardPage() {
                   onSuccess={handleAddSuccess}
                   onCancel={() => setIsAddDialogOpen(false)}
                   isPro={userSubscription?.plan_type === 'pro'}
+                  preSelectedProjectId={selectedProject !== ALL_PROJECTS_ID ? selectedProject : undefined}
                 />
               </DialogContent>
             </Dialog>
@@ -845,7 +847,7 @@ export default function DashboardPage() {
                                   className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
                                 >
                                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                   </svg>
                                   Cancel
                                 </DropdownMenuItem>
@@ -935,7 +937,7 @@ export default function DashboardPage() {
                                   className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
                                 >
                                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                   </svg>
                                   Cancel
                                 </DropdownMenuItem>
@@ -1241,6 +1243,7 @@ export default function DashboardPage() {
         }}
         existingProjectCount={projects.length}
         userPlan={userSubscription?.plan_type || 'free'}
+        existingProjects={projects.map(p => ({ id: p.id, color: p.color }))}
       />
     </div>
   )

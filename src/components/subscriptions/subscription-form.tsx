@@ -19,9 +19,10 @@ interface SubscriptionFormProps {
   onSuccess?: () => void
   onCancel?: () => void
   isPro?: boolean
+  preSelectedProjectId?: string // Pre-select a project when adding new subscription
 }
 
-export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = false }: SubscriptionFormProps) {
+export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = false, preSelectedProjectId }: SubscriptionFormProps) {
   const { t } = useLanguage()
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -72,6 +73,9 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
         if (subscription) {
           const assignedProjects = await ProjectsService.getSubscriptionProjects(subscription.id)
           setSelectedProjects(assignedProjects.map(p => p.id))
+        } else if (preSelectedProjectId && userProjects.some(p => p.id === preSelectedProjectId)) {
+          // Pre-select the specified project for new subscriptions (if it exists)
+          setSelectedProjects([preSelectedProjectId])
         }
       } catch (error) {
         console.error('Error fetching projects:', error)
@@ -81,7 +85,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
     }
 
     fetchProjectsAndAssignments()
-  }, [user?.id, subscription])
+  }, [user?.id, subscription, preSelectedProjectId])
 
   // Update currency when not editing and default currency changes
   useEffect(() => {

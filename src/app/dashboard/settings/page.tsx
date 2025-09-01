@@ -182,7 +182,10 @@ export default function SettingsPage() {
   const resetProjectForm = () => {
     setProjectName('')
     setProjectDescription('')
-    setProjectColor('#3B82F6')
+    // Get first available color for new projects
+    const usedColors = projects.map(p => p.color)
+    const availableColor = PREDEFINED_COLORS.find(color => !usedColors.includes(color.value))
+    setProjectColor(availableColor?.value || '#3B82F6')
     setEditingProject(null)
   }
 
@@ -203,6 +206,17 @@ export default function SettingsPage() {
       return
     }
 
+    // Check if there are available colors
+    const usedColors = projects.map(p => p.color)
+    const availableColors = PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
+    if (availableColors.length === 0) {
+      setMessage({ 
+        type: 'error', 
+        text: 'No available colors. Please edit an existing project to change its color first.' 
+      })
+      return
+    }
+
     setProjectActionLoading(true)
     setMessage(null)
 
@@ -211,8 +225,7 @@ export default function SettingsPage() {
         user_id: user!.id,
         name: projectName.trim(),
         description: projectDescription.trim() || null,
-        color: projectColor,
-        is_active: true
+        color: projectColor
       })
 
       setProjects(prev => [...prev, newProject])
@@ -426,12 +439,11 @@ export default function SettingsPage() {
       </Card>
 
       {/* Project Management Card */}
-      <Card className="mb-6">
+      <Card className="mb-6" id="projects">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
             Project Management
-            {!isPro && <Badge variant="secondary" className="bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100">Free: {projects.length}/2</Badge>}
-            {isPro && <Badge variant="secondary" className="bg-purple-600 text-white">Pro: {projects.length}/10</Badge>}
+            <span className="text-sm font-normal text-muted-foreground">({projects.length}/{isPro ? '10' : '2'})</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -498,17 +510,25 @@ export default function SettingsPage() {
                           <SelectValue placeholder="Select a color..." />
                         </SelectTrigger>
                         <SelectContent>
-                          {PREDEFINED_COLORS.map((color) => (
-                            <SelectItem key={color.value} value={color.value}>
-                              <div className="flex items-center gap-3">
-                                <div 
-                                  className="w-4 h-4 rounded-full border border-gray-300"
-                                  style={{ backgroundColor: color.value }}
-                                />
-                                <span>{color.name}</span>
-                              </div>
-                            </SelectItem>
-                          ))}
+                          {(() => {
+                            const usedColors = projects.map(p => p.color)
+                            const availableColors = PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
+                            return availableColors.length > 0 ? availableColors.map((color) => (
+                              <SelectItem key={color.value} value={color.value}>
+                                <div className="flex items-center gap-3">
+                                  <div 
+                                    className="w-4 h-4 rounded-full border border-gray-300"
+                                    style={{ backgroundColor: color.value }}
+                                  />
+                                  <span>{color.name}</span>
+                                </div>
+                              </SelectItem>
+                            )) : (
+                              <SelectItem value="no-colors" disabled>
+                                <span className="text-muted-foreground">All colors are in use</span>
+                              </SelectItem>
+                            )
+                          })()} 
                         </SelectContent>
                       </Select>
                     </div>
@@ -654,17 +674,23 @@ export default function SettingsPage() {
                   <SelectValue placeholder="Select a color..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {PREDEFINED_COLORS.map((color) => (
-                    <SelectItem key={color.value} value={color.value}>
-                      <div className="flex items-center gap-3">
-                        <div 
-                          className="w-4 h-4 rounded-full border border-gray-300"
-                          style={{ backgroundColor: color.value }}
-                        />
-                        <span>{color.name}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
+                  {(() => {
+                    const usedColors = projects.filter(p => p.id !== editingProject?.id).map(p => p.color)
+                    const availableColors = PREDEFINED_COLORS.filter(color => 
+                      !usedColors.includes(color.value) || color.value === projectColor
+                    )
+                    return availableColors.map((color) => (
+                      <SelectItem key={color.value} value={color.value}>
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-4 h-4 rounded-full border border-gray-300"
+                            style={{ backgroundColor: color.value }}
+                          />
+                          <span>{color.name}</span>
+                        </div>
+                      </SelectItem>
+                    ))
+                  })()} 
                 </SelectContent>
               </Select>
             </div>

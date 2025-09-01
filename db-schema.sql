@@ -11,7 +11,6 @@ CREATE TABLE public.projects (
     name TEXT NOT NULL,
     description TEXT,
     color TEXT DEFAULT '#3B82F6',
-    is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );

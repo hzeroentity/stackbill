@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Plus, Lock } from "lucide-react"
+import { Plus, Lock, Settings } from "lucide-react"
 import { Project, PlanType } from '@/lib/database.types'
 import { ProjectsService, ALL_PROJECTS_ID } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
@@ -16,10 +16,11 @@ interface ProjectSwitcherProps {
   onProjectChange: (projectId: string) => void
   isPro: boolean
   subscriptionCounts: Record<string, number>
+  totalActiveSubscriptions: number
   userPlan?: PlanType
 }
 
-export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subscriptionCounts, userPlan = 'free' }: ProjectSwitcherProps) {
+export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subscriptionCounts, totalActiveSubscriptions, userPlan = 'free' }: ProjectSwitcherProps) {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -62,8 +63,8 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
 
   const getProjectCount = (projectId: string): number => {
     if (projectId === ALL_PROJECTS_ID) {
-      // Show number of projects instead of subscriptions
-      return projects.length
+      // Show total number of unique active subscriptions
+      return totalActiveSubscriptions
     }
     return subscriptionCounts[projectId] || 0
   }
@@ -113,15 +114,25 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
       </Select>
       
       {showCreateButton ? (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsCreateDialogOpen(true)}
-          className="h-8 px-2"
-        >
-          <Plus className="w-3 h-3 mr-1" />
-          <span className="hidden sm:inline">Project</span>
-        </Button>
+        <>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsCreateDialogOpen(true)}
+            className="h-8 px-2"
+          >
+            <Plus className="w-3 h-3 mr-1" />
+            <span className="hidden sm:inline">Project</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push('/dashboard/settings#projects')}
+            className="h-8 px-2"
+          >
+            <Settings className="w-3 h-3" />
+          </Button>
+        </>
       ) : (
         <Button
           variant="outline"
@@ -140,6 +151,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
         onProjectCreated={handleProjectCreated}
         existingProjectCount={projects.length}
         userPlan={userPlan}
+        existingProjects={projects.map(p => ({ id: p.id, color: p.color }))}
       />
     </div>
   )
