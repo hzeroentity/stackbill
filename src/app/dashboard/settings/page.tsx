@@ -88,11 +88,9 @@ export default function SettingsPage() {
         const isUserPro = userSubscription.plan_type === 'pro'
         setIsPro(isUserPro)
 
-        // Load projects if pro
-        if (isUserPro) {
-          const projectsData = await ProjectsService.getProjects(user!.id)
-          setProjects(projectsData)
-        }
+        // Load projects for all users (free users can have up to 2 projects)
+        const projectsData = await ProjectsService.getProjects(user!.id)
+        setProjects(projectsData)
       }
     } catch (error) {
       console.error('Error loading user data:', error)
@@ -196,8 +194,12 @@ export default function SettingsPage() {
       return
     }
 
-    if (projects.length >= 10) {
-      setMessage({ type: 'error', text: 'Maximum of 10 projects allowed' })
+    const maxProjects = isPro ? 10 : 2
+    if (projects.length >= maxProjects) {
+      setMessage({ 
+        type: 'error', 
+        text: `Maximum of ${maxProjects} projects allowed${!isPro ? ' on free plan. Upgrade to Pro for up to 10 projects.' : ''}` 
+      })
       return
     }
 
@@ -428,202 +430,192 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Project Management
-            {!isPro && <Badge variant="secondary" className="bg-purple-100 text-purple-800">Pro</Badge>}
+            {!isPro && <Badge variant="secondary" className="bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100">Free: {projects.length}/2</Badge>}
+            {isPro && <Badge variant="secondary" className="bg-purple-600 text-white">Pro: {projects.length}/10</Badge>}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {!isPro ? (
-            <div className="relative">
-              <div className="absolute inset-0 bg-background/50 backdrop-blur-sm rounded-lg flex items-center justify-center z-10">
-                <div className="text-center p-6">
-                  <Lock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="font-semibold text-lg mb-2">Upgrade to Pro</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Organize your subscriptions by project with Pro plan
-                  </p>
-                  <Button 
-                    onClick={() => window.location.href = '/dashboard/billing'}
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                  >
-                    Upgrade to Pro
-                  </Button>
-                </div>
-              </div>
-              
-              {/* Blurred preview */}
-              <div className="space-y-4 opacity-30">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">
-                    Create and manage projects to organize your subscriptions
-                  </p>
-                  <Button size="sm" disabled>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Project
-                  </Button>
-                </div>
-                <div className="grid gap-3">
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                      <div>
-                        <p className="font-medium">Sample Project</p>
-                        <p className="text-sm text-muted-foreground">Project description</p>
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="sm" disabled>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">
                   Create and manage projects to organize your subscriptions
                 </p>
-                <Dialog open={isCreateProjectDialogOpen} onOpenChange={setIsCreateProjectDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button size="sm" onClick={resetProjectForm}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Project
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create New Project</DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={handleCreateProject} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="project-name">Project Name</Label>
-                        <Input
-                          id="project-name"
-                          placeholder="Enter project name"
-                          value={projectName}
-                          onChange={(e) => setProjectName(e.target.value)}
-                          disabled={projectActionLoading}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="project-description">Description (Optional)</Label>
-                        <Input
-                          id="project-description"
-                          placeholder="Enter project description"
-                          value={projectDescription}
-                          onChange={(e) => setProjectDescription(e.target.value)}
-                          disabled={projectActionLoading}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="project-color">Color</Label>
-                        <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a color..." />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {PREDEFINED_COLORS.map((color) => (
-                              <SelectItem key={color.value} value={color.value}>
-                                <div className="flex items-center gap-3">
-                                  <div 
-                                    className="w-4 h-4 rounded-full border border-gray-300"
-                                    style={{ backgroundColor: color.value }}
-                                  />
-                                  <span>{color.name}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="flex justify-end space-x-2">
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          onClick={() => setIsCreateProjectDialogOpen(false)}
-                          disabled={projectActionLoading}
-                        >
-                          Cancel
-                        </Button>
-                        <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                          {projectActionLoading ? 'Creating...' : 'Create Project'}
-                        </Button>
-                      </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                {!isPro && (
+                  <p className="text-xs text-muted-foreground">
+                    Free plan: up to 2 projects • <button 
+                      onClick={() => window.location.href = '/dashboard/billing'}
+                      className="text-purple-600 hover:text-purple-700 underline"
+                    >
+                      Upgrade to Pro for up to 10 projects
+                    </button>
+                  </p>
+                )}
               </div>
-
-              {projectsLoading ? (
-                <div className="flex items-center justify-center p-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                </div>
-              ) : projects.length === 0 ? (
-                <div className="text-center p-8 text-muted-foreground">
-                  <p>No projects yet. Create your first project to organize subscriptions!</p>
-                </div>
-              ) : (
-                <div className="grid gap-3">
-                  {projects.map((project) => (
-                    <div key={project.id} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div 
-                          className="w-4 h-4 rounded-full" 
-                          style={{ backgroundColor: project.color }}
-                        ></div>
-                        <div>
-                          <p className="font-medium">{project.name}</p>
-                          {project.description && (
-                            <p className="text-sm text-muted-foreground">{project.description}</p>
-                          )}
-                        </div>
-                      </div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => openEditProject(project)}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </DropdownMenuItem>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Project</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to delete &quot;{project.name}&quot;? This action cannot be undone. 
-                                  All subscriptions in this project will be moved to General.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction 
-                                  onClick={() => handleDeleteProject(project.id)}
-                                  className="bg-red-600 hover:bg-red-700"
-                                >
-                                  Delete Project
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+              <Dialog open={isCreateProjectDialogOpen} onOpenChange={setIsCreateProjectDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    size="sm" 
+                    onClick={resetProjectForm}
+                    disabled={!isPro && projects.length >= 2}
+                    className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Project
+                    {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create New Project</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleCreateProject} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="project-name">Project Name</Label>
+                      <Input
+                        id="project-name"
+                        placeholder="Enter project name"
+                        value={projectName}
+                        onChange={(e) => setProjectName(e.target.value)}
+                        disabled={projectActionLoading}
+                        required
+                      />
                     </div>
-                  ))}
-                </div>
-              )}
+                    <div className="space-y-2">
+                      <Label htmlFor="project-description">Description (Optional)</Label>
+                      <Input
+                        id="project-description"
+                        placeholder="Enter project description"
+                        value={projectDescription}
+                        onChange={(e) => setProjectDescription(e.target.value)}
+                        disabled={projectActionLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="project-color">Color</Label>
+                      <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a color..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PREDEFINED_COLORS.map((color) => (
+                            <SelectItem key={color.value} value={color.value}>
+                              <div className="flex items-center gap-3">
+                                <div 
+                                  className="w-4 h-4 rounded-full border border-gray-300"
+                                  style={{ backgroundColor: color.value }}
+                                />
+                                <span>{color.name}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={() => setIsCreateProjectDialogOpen(false)}
+                        disabled={projectActionLoading}
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
+                        {projectActionLoading ? 'Creating...' : 'Create Project'}
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
-          )}
+
+            {/* Upgrade prompt for free users at limit */}
+            {!isPro && projects.length >= 2 && (
+              <Alert className="border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-900/20">
+                <Lock className="h-4 w-4 text-purple-600" />
+                <AlertDescription className="text-purple-800 dark:text-purple-200">
+                  You&apos;ve reached the free plan limit (2 projects). 
+                  <Button 
+                    variant="link" 
+                    size="sm"
+                    className="text-purple-600 dark:text-purple-400 p-0 ml-1 h-auto"
+                    onClick={() => window.location.href = '/dashboard/billing'}
+                  >
+                    Upgrade to Pro for up to 10 projects
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {projectsLoading ? (
+              <div className="flex items-center justify-center p-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : projects.length === 0 ? (
+              <div className="text-center p-8 text-muted-foreground">
+                <p>No projects yet. Create your first project to organize subscriptions!</p>
+              </div>
+            ) : (
+              <div className="grid gap-3">
+                {projects.map((project) => (
+                  <div key={project.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div 
+                        className="w-4 h-4 rounded-full" 
+                        style={{ backgroundColor: project.color }}
+                      ></div>
+                      <div>
+                        <p className="font-medium">{project.name}</p>
+                        {project.description && (
+                          <p className="text-sm text-muted-foreground">{project.description}</p>
+                        )}
+                      </div>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => openEditProject(project)}>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Project</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete &quot;{project.name}&quot;? This action cannot be undone. 
+                                All subscriptions in this project will be moved to General.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => handleDeleteProject(project.id)}
+                                className="bg-red-600 hover:bg-red-700"
+                              >
+                                Delete Project
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
 

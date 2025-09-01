@@ -783,7 +783,33 @@ export default function DashboardPage() {
                                 </div>
                               )}
                             </div>
-                            <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                              {/* Project badges */}
+                              {subscription.projects && subscription.projects.length > 0 && (
+                                <div className="flex items-center gap-1">
+                                  {subscription.projects.slice(0, 3).map((project) => (
+                                    <Badge 
+                                      key={project.id}
+                                      variant="outline" 
+                                      className="text-xs px-2 py-0.5 h-5"
+                                      style={{ 
+                                        borderColor: project.color, 
+                                        color: project.color,
+                                        backgroundColor: `${project.color}15`
+                                      }}
+                                    >
+                                      {project.name}
+                                    </Badge>
+                                  ))}
+                                  {subscription.projects.length > 3 && (
+                                    <Badge variant="outline" className="text-xs px-2 py-0.5 h-5 text-muted-foreground">
+                                      +{subscription.projects.length - 3}
+                                    </Badge>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -858,7 +884,33 @@ export default function DashboardPage() {
                               </div>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                            {/* Project badges */}
+                            {subscription.projects && subscription.projects.length > 0 && (
+                              <div className="flex items-center gap-1 flex-wrap">
+                                {subscription.projects.slice(0, 2).map((project) => (
+                                  <Badge 
+                                    key={project.id}
+                                    variant="outline" 
+                                    className="text-xs px-2 py-0.5 h-5"
+                                    style={{ 
+                                      borderColor: project.color, 
+                                      color: project.color,
+                                      backgroundColor: `${project.color}15`
+                                    }}
+                                  >
+                                    {project.name}
+                                  </Badge>
+                                ))}
+                                {subscription.projects.length > 2 && (
+                                  <Badge variant="outline" className="text-xs px-2 py-0.5 h-5 text-muted-foreground">
+                                    +{subscription.projects.length - 2}
+                                  </Badge>
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -941,7 +993,33 @@ export default function DashboardPage() {
                                   <span>Canceled</span>
                                 </div>
                               </div>
-                              <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
+                              <div className="flex items-center gap-2">
+                                <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
+                                {/* Project badges */}
+                                {subscription.projects && subscription.projects.length > 0 && (
+                                  <div className="flex items-center gap-1">
+                                    {subscription.projects.slice(0, 3).map((project) => (
+                                      <Badge 
+                                        key={project.id}
+                                        variant="outline" 
+                                        className="text-xs px-2 py-0.5 h-5 opacity-60"
+                                        style={{ 
+                                          borderColor: project.color, 
+                                          color: project.color,
+                                          backgroundColor: `${project.color}15`
+                                        }}
+                                      >
+                                        {project.name}
+                                      </Badge>
+                                    ))}
+                                    {subscription.projects.length > 3 && (
+                                      <Badge variant="outline" className="text-xs px-2 py-0.5 h-5 text-muted-foreground opacity-60">
+                                        +{subscription.projects.length - 3}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -993,7 +1071,33 @@ export default function DashboardPage() {
                                 <span>Canceled</span>
                               </div>
                             </div>
-                            <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
+                              {/* Project badges */}
+                              {subscription.projects && subscription.projects.length > 0 && (
+                                <div className="flex items-center gap-1 flex-wrap">
+                                  {subscription.projects.slice(0, 2).map((project) => (
+                                    <Badge 
+                                      key={project.id}
+                                      variant="outline" 
+                                      className="text-xs px-2 py-0.5 h-5 opacity-60"
+                                      style={{ 
+                                        borderColor: project.color, 
+                                        color: project.color,
+                                        backgroundColor: `${project.color}15`
+                                      }}
+                                    >
+                                      {project.name}
+                                    </Badge>
+                                  ))}
+                                  {subscription.projects.length > 2 && (
+                                    <Badge variant="outline" className="text-xs px-2 py-0.5 h-5 text-muted-foreground opacity-60">
+                                      +{subscription.projects.length - 2}
+                                    </Badge>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>

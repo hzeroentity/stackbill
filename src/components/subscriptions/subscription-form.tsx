@@ -111,6 +111,12 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
         throw new Error('Please assign this subscription to at least one project')
       }
 
+      // Validate amount is positive
+      const amount = parseFloat(formData.amount)
+      if (isNaN(amount) || amount <= 0) {
+        throw new Error('Amount must be a positive number greater than 0')
+      }
+
       // Validate renewal date is today or in the future
       const today = new Date()
       today.setHours(0, 0, 0, 0)
@@ -122,7 +128,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
 
       const subscriptionData: Omit<SubscriptionInsert, 'user_id'> = {
         name: formData.name,
-        amount: parseFloat(formData.amount),
+        amount: amount,
         currency: formData.currency,
         billing_period: formData.billing_period,
         renewal_date: formData.renewal_date,
@@ -157,6 +163,22 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    // Allow empty string for user to clear the field
+    if (value === '') {
+      handleInputChange('amount', value)
+      return
+    }
+    
+    // Parse the value and check if it's a valid positive number
+    const numValue = parseFloat(value)
+    if (!isNaN(numValue) && numValue >= 0) {
+      handleInputChange('amount', value)
+    }
+    // If invalid, don't update the state (effectively blocking the input)
+  }
+
   return (
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
@@ -184,9 +206,10 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, isPro = fa
                 id="amount"
                 type="number"
                 step="0.01"
+                min="0"
                 placeholder="0.00"
                 value={formData.amount}
-                onChange={(e) => handleInputChange('amount', e.target.value)}
+                onChange={handleAmountChange}
                 required
               />
             </div>
