@@ -72,12 +72,6 @@ export default function SettingsPage() {
   }, [])
 
   // Load user subscription and projects
-  useEffect(() => {
-    if (user?.id) {
-      loadUserData()
-    }
-  }, [user?.id, loadUserData])
-
   const loadUserData = useCallback(async () => {
     try {
       // Check if user has pro subscription
@@ -97,6 +91,12 @@ export default function SettingsPage() {
       setProjectsLoading(false)
     }
   }, [user])
+
+  useEffect(() => {
+    if (user?.id) {
+      loadUserData()
+    }
+  }, [user?.id, loadUserData])
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault()

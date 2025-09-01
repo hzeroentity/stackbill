@@ -80,16 +80,18 @@ export class AdminService {
     } = {}
   ): Promise<void> {
     try {
+      const logEntry = {
+        user_id: userId,
+        action,
+        details: details.metadata || {},
+        ip_address: details.ip_address,
+        user_agent: details.user_agent,
+        success: details.success ?? true
+      }
+      
       await supabaseAdmin
         .from('admin_security_log')
-        .insert({
-          user_id: userId,
-          action,
-          details: details.metadata || {},
-          ip_address: details.ip_address,
-          user_agent: details.user_agent,
-          success: details.success ?? true
-        } as unknown)
+        .insert(logEntry)
     } catch (error) {
       console.error('Failed to log security event:', error)
     }
