@@ -28,7 +28,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { getDefaultCurrency } from '@/lib/currency-preferences'
 import { useLanguage } from '@/contexts/language-context'
 import { ProjectSwitcher } from '@/components/projects/project-switcher'
-import { ProjectsService, ALL_PROJECTS_ID } from '@/lib/projects'
+import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID } from '@/lib/projects'
 import { ProjectCreateDialog } from '@/components/projects/project-create-dialog'
 
 export default function DashboardPage() {
@@ -240,11 +240,17 @@ export default function DashboardPage() {
       let filteredSubs
       if (selectedProject === ALL_PROJECTS_ID) {
         filteredSubs = allSubscriptions // Show all subscriptions
-      } else {
-        // Show subscriptions that are assigned to the selected project
+      } else if (selectedProject === GENERAL_PROJECT_ID) {
+        // Show only subscriptions assigned to General (find by name since we create real projects)
         filteredSubs = allSubscriptions.filter(sub => {
-          // For many-to-many: check if any of the subscription's projects match the selected project
-          return sub.projects && sub.projects.some(project => project.id === selectedProject)
+          return sub.projects && sub.projects.some(project => project.name === 'General')
+        })
+      } else {
+        // Show subscriptions that are assigned to the selected project OR to General
+        filteredSubs = allSubscriptions.filter(sub => {
+          return sub.projects && sub.projects.some(project => 
+            project.id === selectedProject || project.name === 'General'
+          )
         })
       }
       setSubscriptions(filteredSubs)
@@ -384,12 +390,6 @@ export default function DashboardPage() {
     const currentPlan = userSubscription?.plan_type || 'free'
     const activeCount = subscriptions.filter(sub => sub.is_active).length
     
-    // Check if user has any projects first
-    if (projects.length === 0) {
-      setIsCreateProjectDialogOpen(true)
-      return
-    }
-    
     if (!canAddSubscription(activeCount, currentPlan)) {
       // Show upgrade prompt instead of opening add dialog
       setIsUpgradeModalOpen(true)
@@ -430,6 +430,9 @@ export default function DashboardPage() {
   // Separate active and inactive subscriptions
   const activeSubscriptions = subscriptions.filter(sub => sub.is_active)
   const inactiveSubscriptions = subscriptions.filter(sub => !sub.is_active)
+  
+  // Get total active subscriptions across ALL projects for limit display
+  const totalActiveSubscriptions = allSubscriptions.filter(sub => sub.is_active)
   
   // Sort active subscriptions by due date (most imminent first)
   const sortedActiveSubscriptions = [...activeSubscriptions].sort((a, b) => {
@@ -509,7 +512,7 @@ export default function DashboardPage() {
           onProjectChange={handleProjectChange}
           isPro={userSubscription?.plan_type === 'pro'}
           subscriptionCounts={subscriptionCounts}
-          totalActiveSubscriptions={activeSubscriptions.length}
+          totalActiveSubscriptions={totalActiveSubscriptions.length}
           userPlan={userSubscription?.plan_type || 'free'}
         />
       </div>
@@ -579,11 +582,11 @@ export default function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold text-purple-900 dark:text-white">
               <AnimatedCounter 
-                value={activeSubscriptions.length} 
+                value={totalActiveSubscriptions.length} 
                 duration={300}
               />
               {userSubscription?.plan_type === 'free' && (
-                <span className="text-lg text-purple-600 dark:text-white/80 ml-1">/ 3</span>
+                <span className="text-lg text-purple-600 dark:text-white/80 ml-1">/ 5</span>
               )}
               {userSubscription?.plan_type === 'pro' && (
                 <span className="text-lg text-purple-600 dark:text-white/80 ml-1">/ 30</span>
@@ -591,13 +594,13 @@ export default function DashboardPage() {
             </div>
             <p className="text-xs text-purple-600 dark:text-white/80 mt-1">
               {userSubscription?.plan_type === 'free' 
-                ? `${3 - activeSubscriptions.length} ${t('dashboard.remainingFree')}`
+                ? `${5 - totalActiveSubscriptions.length} ${t('dashboard.remainingFree')}`
                 : userSubscription?.plan_type === 'pro'
                   ? `${t('dashboard.onProPlan')}`
                   : 'Subscriptions tracked'
               }
             </p>
-            {userSubscription?.plan_type === 'free' && activeSubscriptions.length >= 2 && (
+            {userSubscription?.plan_type === 'free' && totalActiveSubscriptions.length >= 4 && (
               <Button
                 onClick={handleUpgradeToPro}
                 disabled={upgrading}
@@ -1192,7 +1195,7 @@ export default function DashboardPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Upgrade to Pro</AlertDialogTitle>
             <AlertDialogDescription>
-              You&apos;ve reached your subscription limit (3 for free plan). Upgrade to Pro ($4/month) to track up to 30 subscriptions with email reminders?
+              You&apos;ve reached your subscription limit (5 for free plan). Upgrade to Pro ($4/month) to track up to 30 subscriptions with email reminders?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

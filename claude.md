@@ -43,7 +43,7 @@ StackBill is a subscription tracker designed for SaaS founders and development t
 - Smart paywall logic with clear upgrade paths
 
 ### Current Plan Structure
-- **Free Plan:** Up to 3 subscriptions + 2 projects
+- **Free Plan:** Up to 5 subscriptions + 2 projects
 - **Pro Plan ($4/month):** Up to 30 subscriptions + 10 projects + email reminders
 
 ### Outstanding Issues for Phase 7
@@ -282,3 +282,69 @@ StackBill is a subscription tracker designed for SaaS founders and development t
 - **Categories:** Now covers Financial, CRM, Legal, AI Tools, Analytics & Monitoring, Media & Content, and more
 
 **Status:** ✅ **COMPLETE** - Enhanced category system with improved mobile UX and clean database constraints
+
+---
+
+## Force Downgrade System & General Project Implementation
+
+**Date:** 2025-09-02
+
+✅ **Force Downgrade System Complete:**
+- **Comprehensive downgrade protection:** Users cannot downgrade while exceeding free plan limits
+- **Two-stage confirmation flow:** Limit exceeded modal → Force downgrade warning modal
+- **Smart data deletion:** Force downgrade deletes most recent excess subscriptions and projects (preserving oldest data)
+- **Complete Stripe integration:** Automatically cancels Stripe subscriptions during force downgrade
+- **Data integrity protection:** Prevents users from staying on free plan while having excess data
+- **Clear user communication:** Detailed warnings showing exactly what will be deleted before proceeding
+
+✅ **General Project System Implementation:**
+- **Virtual General project:** Always available in project selectors with gray color dot
+- **Cross-project visibility:** General subscriptions appear in All Projects view AND every specific project view
+- **Automatic project creation:** Creates real General project in database when first used by user
+- **Hybrid architecture:** Virtual GENERAL_PROJECT_ID in UI mapped to real database project for data integrity
+- **Seamless user experience:** Users can assign subscriptions to General without any setup
+- **Database integrity:** Real foreign key relationships maintained while providing special General behavior
+
+✅ **User Experience & UI Improvements:**
+- **Added "subs" labels:** Project dropdown counters now show "X subs" for clarity
+- **Responsive dropdown sizing:** Project switcher width optimized for content (w-40 sm:w-44)
+- **Removed mandatory project creation:** Users can add subscriptions immediately using General project
+- **Help tooltip system:** Added question mark icon with hover tooltip in subscription form explaining project creation
+- **HTML validation fixes:** Fixed nested paragraph elements in downgrade modals causing validation errors
+
+✅ **Technical Achievements:**
+- **Orphaned subscription cleanup:** Fixed SQL query issues using proper Supabase JavaScript client syntax
+- **Force downgrade API:** Complete `/api/force-downgrade` endpoint with comprehensive error handling
+- **User statistics API:** Enhanced `/api/user-stats` for accurate limit validation
+- **Project filtering logic:** Updated dashboard to handle General projects by name matching
+- **Subscription counting:** Enhanced to properly count and display General project subscriptions
+- **Database query optimization:** Replaced complex subqueries with simple JavaScript array operations
+
+✅ **Database & Architecture Improvements:**
+- **Fixed foreign key constraints:** General projects created as real database entities
+- **Cascade deletion handling:** Proper cleanup of orphaned subscriptions when projects deleted
+- **Junction table management:** Robust many-to-many relationship handling with General project support
+- **Plan limit enforcement:** Global subscription limits enforced across all projects (not per-project)
+- **Error handling improvements:** Comprehensive error logging without breaking main operations
+
+✅ **Bug Fixes & Error Resolution:**
+- **HTML validation errors:** Fixed nested `<p>` elements in AlertDialog modals
+- **Force downgrade subscription update:** Changed from upsert to explicit update/insert with proper field handling
+- **Orphaned subscription deletion:** Rewrote complex SQL subqueries using JavaScript array operations
+- **Project assignment errors:** Fixed General project foreign key constraint violations
+- **Modal backdrop darkness:** Increased opacity from 50% to 80% for better focus
+
+**Technical Details:**
+- **Files Modified:** `force-downgrade/route.ts`, `user-stats/route.ts`, `projects.ts`, `project-switcher.tsx`, `project-multi-selector.tsx`, `dashboard/page.tsx`, `subscription-form.tsx`, `billing/page.tsx`
+- **New Features:** Force downgrade system, General project hybrid architecture, help tooltip system
+- **Plan Limits:** Free plan updated to 5 subscriptions (was 3), limits now enforced globally across projects
+- **UI/UX:** Enhanced project dropdown with "subs" labels, responsive sizing, help tooltips
+
+**System Status:** 🚀 **PRODUCTION-READY** - Complete downgrade protection with General project system and enhanced UX
+
+**Force Downgrade Flow:**
+1. User attempts downgrade → Validation check
+2. If exceeding limits → Show limit exceeded modal with current usage
+3. User can "Force Downgrade Anyway" → Show detailed warning modal
+4. Confirmation → Delete excess data + cancel Stripe + downgrade to free
+5. Complete with success message showing what was deleted

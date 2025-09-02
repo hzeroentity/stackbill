@@ -19,6 +19,7 @@ import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
 import { UserSubscription } from '@/lib/database.types'
 import { useLanguage } from '@/contexts/language-context'
+import { PLAN_LIMITS } from '@/lib/plan-limits'
 
 export default function BillingPage() {
   const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null)
@@ -28,6 +29,9 @@ export default function BillingPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isDowngradeModalOpen, setIsDowngradeModalOpen] = useState(false)
+  const [isLimitExceededModalOpen, setIsLimitExceededModalOpen] = useState(false)
+  const [isForceDowngradeModalOpen, setIsForceDowngradeModalOpen] = useState(false)
+  const [userStats, setUserStats] = useState<{activeSubscriptions: number, projects: number} | null>(null)
   const { user } = useAuth()
   const { t } = useLanguage()
 
@@ -35,6 +39,7 @@ export default function BillingPage() {
     const loadUserSubscription = async () => {
       try {
         if (user) {
+          // Load user subscription
           const response = await fetch(`/api/user-subscription?userId=${user.id}`)
           if (response.ok) {
             const { userSubscription: userSub } = await response.json()
@@ -57,6 +62,17 @@ export default function BillingPage() {
             })
           } else {
             throw new Error('Failed to fetch user subscription')
+          }
+          
+          // Load user stats for downgrade validation
+          try {
+            const statsResponse = await fetch(`/api/user-stats?userId=${user.id}`)
+            if (statsResponse.ok) {
+              const stats = await statsResponse.json()
+              setUserStats(stats)
+            }
+          } catch (statsError) {
+            console.warn('Failed to load user stats:', statsError)
           }
         }
       } catch (error) {
@@ -126,6 +142,20 @@ export default function BillingPage() {
     }
   }
 
+  const handleDowngradeClick = () => {
+    // Check if user exceeds free plan limits
+    if (userStats) {
+      const freeLimit = PLAN_LIMITS.free
+      if (userStats.activeSubscriptions > freeLimit.subscriptions || userStats.projects > freeLimit.projects) {
+        setIsLimitExceededModalOpen(true)
+        return
+      }
+    }
+    
+    // User is within limits, proceed with normal downgrade
+    setIsDowngradeModalOpen(true)
+  }
+
   const handleDowngrade = async () => {
     setDowngrading(true)
     try {
@@ -155,6 +185,49 @@ export default function BillingPage() {
       setIsDowngradeModalOpen(false)
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : 'Failed to downgrade')
+      setIsErrorModalOpen(true)
+    } finally {
+      setDowngrading(false)
+    }
+  }
+
+  const handleForceDowngrade = async () => {
+    setDowngrading(true)
+    try {
+      const response = await fetch('/api/force-downgrade', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user?.id }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to force downgrade')
+      }
+
+      // Refresh user subscription data
+      if (user) {
+        const refreshResponse = await fetch(`/api/user-subscription?userId=${user.id}`)
+        if (refreshResponse.ok) {
+          const { userSubscription: userSub } = await refreshResponse.json()
+          setUserSubscription(userSub)
+        }
+        
+        // Refresh user stats
+        const statsResponse = await fetch(`/api/user-stats?userId=${user.id}`)
+        if (statsResponse.ok) {
+          const stats = await statsResponse.json()
+          setUserStats(stats)
+        }
+      }
+
+      setIsForceDowngradeModalOpen(false)
+      setIsLimitExceededModalOpen(false)
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to force downgrade')
       setIsErrorModalOpen(true)
     } finally {
       setDowngrading(false)
@@ -222,7 +295,7 @@ export default function BillingPage() {
                   <Button 
                     variant="outline" 
                     className="text-red-600 border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950/20"
-                    onClick={() => setIsDowngradeModalOpen(true)}
+                    onClick={handleDowngradeClick}
                     disabled={downgrading}
                   >
                     {downgrading ? t('dashboard.processing') : t('billing.downgrade')}
@@ -383,6 +456,120 @@ export default function BillingPage() {
               className="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
             >
               {downgrading ? t('dashboard.processing') : t('billing.downgrade')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Limit Exceeded Dialog */}
+      <AlertDialog open={isLimitExceededModalOpen} onOpenChange={setIsLimitExceededModalOpen}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cannot Downgrade to Free Plan</AlertDialogTitle>
+            <div className="text-sm text-muted-foreground space-y-3">
+              <p>You currently exceed the free plan limits:</p>
+              <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg space-y-1 text-sm">
+                {userStats && (
+                  <>
+                    <div className="flex justify-between">
+                      <span>Active Subscriptions:</span>
+                      <span className={userStats.activeSubscriptions > PLAN_LIMITS.free.subscriptions ? 'text-red-600 font-medium' : ''}>
+                        {userStats.activeSubscriptions}/{PLAN_LIMITS.free.subscriptions}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Projects:</span>
+                      <span className={userStats.projects > PLAN_LIMITS.free.projects ? 'text-red-600 font-medium' : ''}>
+                        {userStats.projects}/{PLAN_LIMITS.free.projects}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+              <p>
+                Please delete some subscriptions and/or projects from your Settings page, 
+                then try downgrading again.
+              </p>
+            </div>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col space-y-2 sm:flex-col sm:space-x-0">
+            <AlertDialogAction 
+              onClick={() => setIsLimitExceededModalOpen(false)}
+              className="w-full"
+            >
+              Got it
+            </AlertDialogAction>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                setIsLimitExceededModalOpen(false)
+                setIsForceDowngradeModalOpen(true)
+              }}
+              className="w-full bg-red-600 hover:bg-red-700 text-white"
+            >
+              Force Downgrade Anyway
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Force Downgrade Confirmation Dialog */}
+      <AlertDialog open={isForceDowngradeModalOpen} onOpenChange={setIsForceDowngradeModalOpen}>
+        <AlertDialogContent className="max-w-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-600">⚠️ Force Downgrade Warning</AlertDialogTitle>
+            <div className="text-sm text-muted-foreground space-y-4">
+              <p className="font-medium text-amber-700 dark:text-amber-400">
+                This will permanently delete your data!
+              </p>
+              
+              {userStats && (
+                <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg space-y-2 text-sm">
+                  <p className="font-medium text-red-800 dark:text-red-400">The following will be deleted:</p>
+                  {userStats.activeSubscriptions > PLAN_LIMITS.free.subscriptions && (
+                    <div className="flex justify-between items-center">
+                      <span>Most recent subscriptions:</span>
+                      <span className="font-bold text-red-600">
+                        {userStats.activeSubscriptions - PLAN_LIMITS.free.subscriptions} deleted
+                      </span>
+                    </div>
+                  )}
+                  {userStats.projects > PLAN_LIMITS.free.projects && (
+                    <div className="flex justify-between items-center">
+                      <span>Most recent projects:</span>
+                      <span className="font-bold text-red-600">
+                        {userStats.projects - PLAN_LIMITS.free.projects} deleted
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              <p className="text-sm text-muted-foreground">
+                <strong>What will happen:</strong>
+                <br />• Your most recently created subscriptions and projects will be permanently removed
+                <br />• You'll be downgraded to the Free plan immediately  
+                <br />• This action cannot be undone
+              </p>
+              
+              <p className="text-sm font-medium text-red-600">
+                Are you absolutely sure you want to proceed?
+              </p>
+            </div>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => setIsForceDowngradeModalOpen(false)}
+              disabled={downgrading}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleForceDowngrade}
+              disabled={downgrading}
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+            >
+              {downgrading ? 'Processing...' : 'Yes, Delete and Downgrade'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

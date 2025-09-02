@@ -7,7 +7,7 @@ export interface PlanLimits {
 
 export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
   free: {
-    subscriptions: 3,
+    subscriptions: 5,
     projects: 2
   },
   pro: {

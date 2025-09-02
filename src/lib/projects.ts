@@ -2,12 +2,13 @@ import { supabase } from './supabase'
 import { Project, ProjectInsert, ProjectUpdate } from './database.types'
 
 export class ProjectsService {
-  // Get all projects for a user
+  // Get all projects for a user (excluding the General project which is handled separately)
   static async getProjects(userId: string): Promise<Project[]> {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
       .eq('user_id', userId)
+      .neq('name', 'General') // Exclude General project from regular project list
       .order('created_at', { ascending: true })
 
     if (error) {
@@ -83,6 +84,50 @@ export class ProjectsService {
       console.error('Error deleting project:', error)
       throw new Error('Failed to delete project')
     }
+
+    // Delete any orphaned subscriptions (subscriptions with no project relationships left)
+    try {
+      // First, get all subscription IDs that still have project relationships
+      const { data: linkedSubs, error: linkedError } = await supabase
+        .from('subscription_projects')
+        .select('subscription_id')
+
+      if (linkedError) {
+        console.error('Error getting linked subscriptions:', linkedError)
+        return // Don't fail project deletion for this
+      }
+
+      const linkedSubIds = linkedSubs?.map(sp => sp.subscription_id) || []
+
+      // Then get all user's subscriptions that are NOT in the linked list
+      const { data: allUserSubs, error: allSubsError } = await supabase
+        .from('subscriptions')
+        .select('id')
+        .eq('user_id', userId)
+
+      if (allSubsError) {
+        console.error('Error getting user subscriptions:', allSubsError)
+        return // Don't fail project deletion for this
+      }
+
+      const orphanedSubIds = allUserSubs?.filter(sub => !linkedSubIds.includes(sub.id)).map(sub => sub.id) || []
+
+      // Delete orphaned subscriptions if any exist
+      if (orphanedSubIds.length > 0) {
+        const { error: deleteError } = await supabase
+          .from('subscriptions')
+          .delete()
+          .in('id', orphanedSubIds)
+
+        if (deleteError) {
+          console.error('Error deleting orphaned subscriptions:', deleteError)
+          // Don't throw error to avoid blocking project deletion
+        }
+      }
+    } catch (error) {
+      console.error('Error in orphaned subscription cleanup:', error)
+      // Don't throw error to avoid blocking project deletion
+    }
   }
 
   // Get subscription count per project using the new many-to-many relationship
@@ -116,11 +161,68 @@ export class ProjectsService {
       // Note: Subscriptions without projects won't be counted for any specific project
     })
 
+    // Add General project virtual count by finding the actual General project
+    // We need to get the user's General project ID and map it to GENERAL_PROJECT_ID for UI purposes
+    const generalProject = await supabase
+      .from('projects')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('name', 'General')
+      .single()
+    
+    if (generalProject.data && !generalProject.error) {
+      // Move the count from the real General project ID to the virtual GENERAL_PROJECT_ID
+      counts[GENERAL_PROJECT_ID] = counts[generalProject.data.id] || 0
+      // Remove the count from the real project ID to avoid duplication in project switcher
+      delete counts[generalProject.data.id]
+    } else {
+      counts[GENERAL_PROJECT_ID] = 0
+    }
+
     return counts
   }
 
+  // Ensure General project exists for a user
+  static async ensureGeneralProject(userId: string): Promise<string> {
+    // Check if user already has a General project
+    const { data: existingGeneral, error: fetchError } = await supabase
+      .from('projects')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('name', 'General')
+      .single()
+
+    if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no rows returned
+      console.error('Error checking for General project:', fetchError)
+      throw new Error('Failed to check for General project')
+    }
+
+    if (existingGeneral) {
+      return existingGeneral.id
+    }
+
+    // Create General project for this user
+    const { data: newGeneral, error: createError } = await supabase
+      .from('projects')
+      .insert({
+        user_id: userId,
+        name: 'General',
+        description: 'General project for subscriptions that apply to all projects',
+        color: '#6B7280' // Gray color
+      })
+      .select('id')
+      .single()
+
+    if (createError) {
+      console.error('Error creating General project:', createError)
+      throw new Error('Failed to create General project')
+    }
+
+    return newGeneral.id
+  }
+
   // Assign a subscription to multiple projects
-  static async assignSubscriptionToProjects(subscriptionId: string, projectIds: string[]): Promise<void> {
+  static async assignSubscriptionToProjects(subscriptionId: string, projectIds: string[], userId?: string): Promise<void> {
     // First, remove all existing assignments for this subscription
     const { error: deleteError } = await supabase
       .from('subscription_projects')
@@ -134,7 +236,21 @@ export class ProjectsService {
 
     // Then add new assignments
     if (projectIds.length > 0) {
-      const assignments = projectIds.map(projectId => ({
+      // Handle General project - convert GENERAL_PROJECT_ID to actual project ID
+      const resolvedProjectIds = []
+      for (const projectId of projectIds) {
+        if (projectId === GENERAL_PROJECT_ID) {
+          if (!userId) {
+            throw new Error('User ID is required when assigning to General project')
+          }
+          const generalProjectId = await this.ensureGeneralProject(userId)
+          resolvedProjectIds.push(generalProjectId)
+        } else {
+          resolvedProjectIds.push(projectId)
+        }
+      }
+
+      const assignments = resolvedProjectIds.map(projectId => ({
         subscription_id: subscriptionId,
         project_id: projectId
       }))
@@ -198,14 +314,16 @@ export class ProjectsService {
 
 // Special project types
 export const ALL_PROJECTS_ID = 'all'
+export const GENERAL_PROJECT_ID = 'general'
 
 // Helper function to check if a project ID represents a special filter
 export function isSpecialProjectId(projectId: string | null): boolean {
-  return projectId === ALL_PROJECTS_ID
+  return projectId === ALL_PROJECTS_ID || projectId === GENERAL_PROJECT_ID
 }
 
 // Helper function to get display name for project
 export function getProjectDisplayName(project: Project | null, projectId?: string): string {
   if (projectId === ALL_PROJECTS_ID) return 'All Projects'
+  if (projectId === GENERAL_PROJECT_ID) return 'General'
   return project?.name || 'Unknown Project'
 }

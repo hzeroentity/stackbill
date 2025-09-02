@@ -108,11 +108,6 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
     setError(null)
 
     try {
-      // Validate that user has projects before creating subscription
-      if (projects.length === 0) {
-        throw new Error('You must create at least one project before adding subscriptions')
-      }
-
       // Validate that at least one project is selected
       if (selectedProjects.length === 0) {
         throw new Error('Please assign this subscription to at least one project')
@@ -154,8 +149,8 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
       }
 
       // Assign subscription to selected projects
-      if (result.data) {
-        await ProjectsService.assignSubscriptionToProjects(result.data.id, selectedProjects)
+      if (result.data && user?.id) {
+        await ProjectsService.assignSubscriptionToProjects(result.data.id, selectedProjects, user.id)
       }
 
       onSuccess?.()

@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import { Plus, Lock, Settings } from "lucide-react"
 import { Project, PlanType } from '@/lib/database.types'
-import { ProjectsService, ALL_PROJECTS_ID } from '@/lib/projects'
+import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import { ProjectCreateDialog } from './project-create-dialog'
@@ -66,6 +66,10 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
       // Show total number of unique active subscriptions
       return totalActiveSubscriptions
     }
+    if (projectId === GENERAL_PROJECT_ID) {
+      // For now, return 0 as we need to calculate General subscriptions from the parent
+      return subscriptionCounts[projectId] || 0
+    }
     return subscriptionCounts[projectId] || 0
   }
 
@@ -79,7 +83,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
         onValueChange={onProjectChange}
         disabled={loading}
       >
-        <SelectTrigger className="w-40">
+        <SelectTrigger className="w-40 sm:w-44">
           <SelectValue placeholder="Select project..." />
         </SelectTrigger>
         <SelectContent>
@@ -90,7 +94,18 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
                 All Projects
               </div>
               <span className="text-xs text-muted-foreground ml-2">
-                {getProjectCount(ALL_PROJECTS_ID)}
+                {getProjectCount(ALL_PROJECTS_ID)} subs
+              </span>
+            </div>
+          </SelectItem>
+          <SelectItem value={GENERAL_PROJECT_ID}>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-gray-500" />
+                General
+              </div>
+              <span className="text-xs text-muted-foreground ml-2">
+                {getProjectCount(GENERAL_PROJECT_ID)} subs
               </span>
             </div>
           </SelectItem>
@@ -105,7 +120,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
                   {project.name}
                 </div>
                 <span className="text-xs text-muted-foreground ml-2">
-                  {getProjectCount(project.id)}
+                  {getProjectCount(project.id)} subs
                 </span>
               </div>
             </SelectItem>
