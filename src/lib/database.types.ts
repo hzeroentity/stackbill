@@ -12,16 +12,19 @@ export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'incomplet
 
 export type SubscriptionCategory = 
   | 'Cloud & Hosting'
-  | 'Analytics & Tracking'
-  | 'AI & Machine Learning'
+  | 'Analytics & Monitoring'
+  | 'AI Tools & LLMs'
   | 'Database & Storage'
   | 'Developer Tools'
   | 'Communication'
   | 'Design & Creative'
   | 'Marketing & SEO'
   | 'Security'
-  | 'Entertainment'
+  | 'Media & Content'
   | 'Productivity'
+  | 'Financial & Accounting'
+  | 'CRM & Sales'
+  | 'Legal & Compliance'
   | 'Other'
 
 export interface Database {

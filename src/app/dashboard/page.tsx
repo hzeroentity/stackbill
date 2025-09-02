@@ -736,7 +736,8 @@ export default function DashboardPage() {
                     handleAddSubscription()
                   }}
                 >
-                  {t('dashboard.addSubscription')}
+                  <span className="sm:hidden">+ Add</span>
+                  <span className="hidden sm:inline">{t('dashboard.addSubscription')}</span>
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -778,15 +779,15 @@ export default function DashboardPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <p className="font-medium truncate">{subscription.name}</p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-1">
+                              <p className="text-sm text-muted-foreground">{subscription.category}</p>
                               {shouldShowRenewalStatus(renewalStatus) && (
                                 <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
                                   <span>{renewalStatus.icon}</span>
                                   <span>{renewalStatus.text}</span>
                                 </div>
                               )}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <p className="text-sm text-muted-foreground">{subscription.category}</p>
                               {/* Project badges */}
                               {subscription.projects && subscription.projects.length > 0 && (
                                 <div className="flex items-center gap-1">
@@ -879,15 +880,15 @@ export default function DashboardPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <p className="font-medium truncate">{subscription.name}</p>
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap mt-1">
+                            <p className="text-sm text-muted-foreground">{subscription.category}</p>
                             {shouldShowRenewalStatus(renewalStatus) && (
                               <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
                                 <span>{renewalStatus.icon}</span>
                                 <span>{renewalStatus.text}</span>
                               </div>
                             )}
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-sm text-muted-foreground">{subscription.category}</p>
                             {/* Project badges */}
                             {subscription.projects && subscription.projects.length > 0 && (
                               <div className="flex items-center gap-1 flex-wrap">
@@ -990,13 +991,13 @@ export default function DashboardPage() {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
                                 <p className="font-medium truncate line-through text-muted-foreground">{subscription.name}</p>
+                              </div>
+                              <div className="flex items-center gap-2 mt-1">
+                                <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
                                 <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
                                   <span>🚫</span>
                                   <span>Canceled</span>
                                 </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
                                 {/* Project badges */}
                                 {subscription.projects && subscription.projects.length > 0 && (
                                   <div className="flex items-center gap-1">
@@ -1068,13 +1069,13 @@ export default function DashboardPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
                               <p className="font-medium truncate line-through text-muted-foreground">{subscription.name}</p>
+                            </div>
+                            <div className="flex items-center gap-2 flex-wrap mt-1">
+                              <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
                               <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
                                 <span>🚫</span>
                                 <span>Canceled</span>
                               </div>
-                            </div>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
                               {/* Project badges */}
                               {subscription.projects && subscription.projects.length > 0 && (
                                 <div className="flex items-center gap-1 flex-wrap">

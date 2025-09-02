@@ -193,3 +193,92 @@ StackBill is a subscription tracker designed for SaaS founders and development t
 - `package.json` - Added @radix-ui/react-progress dependency
 
 **Security Enhancement:** ✅ Significantly improved account security with strong password enforcement and user-friendly validation
+
+---
+
+## Critical Bug Fix - AnimatedCounter Infinite Loop (AGAIN!)
+
+**Date:** 2025-09-02
+
+⚠️ **RECURRING BUG ALERT:** The AnimatedCounter infinite loop bug has reappeared and was fixed again.
+
+🔧 **Root Cause (same as before):**
+- AnimatedCounter's useEffect had `displayValue` as a dependency in line 66
+- This creates an infinite loop: useEffect updates `displayValue` → triggers effect again → exponential growth
+- Bug is most visible when switching to projects with **0 subscriptions**
+
+🛠️ **The Fix (applied again):**
+```typescript
+// ❌ WRONG (causes infinite loop):
+}, [value, duration, displayValue])
+
+// ✅ CORRECT (fixed):
+}, [value, duration])
+```
+
+📍 **File Location:** `src/components/ui/animated-counter.tsx:66`
+
+📋 **Symptoms to watch for:**
+- Numbers exponentially growing when switching between projects
+- Most noticeable when switching to empty projects (0 subscriptions)
+- Dashboard counters animating indefinitely instead of stopping
+
+🚨 **IMPORTANT:** This is a React anti-pattern of using internal state (`displayValue`) as a useEffect dependency that updates that same state. If this bug reappears, immediately check line 66 of AnimatedCounter and remove `displayValue` from the dependency array.
+
+**Status:** ✅ **FIXED** - AnimatedCounter now only triggers on `value` or `duration` changes
+
+---
+
+## Enhanced Categories & Mobile UX Improvements
+
+**Date:** 2025-09-02
+
+✅ **Comprehensive Category System Overhaul:**
+- **Expanded from 12 to 15 categories** to better cover SaaS founder needs
+- **Added new categories:**
+  - "Financial & Accounting" (Stripe, QuickBooks, accounting tools)
+  - "CRM & Sales" (Salesforce, HubSpot, sales tools)  
+  - "Legal & Compliance" (DocuSign, legal services)
+- **Renamed categories for clarity:**
+  - "Analytics & Tracking" → "Analytics & Monitoring"
+  - "AI & Machine Learning" → "AI Tools & LLMs"
+  - "Entertainment" → "Media & Content"
+
+✅ **Database Constraint Management:**
+- **Fixed conflicting constraints:** Resolved duplicate category constraints (`valid_category` and `subscriptions_category_check`)
+- **Clean constraint implementation:** Single, comprehensive constraint covering all 15 categories
+- **Proper migration approach:** Clean removal of conflicting constraints and single replacement
+
+✅ **Mobile Responsiveness Improvements:**
+- **"Add Subscription" button:** Shows "+ Add" on mobile, full text on desktop
+- **Header navigation redesign:** Implemented professional burger menu for mobile
+  - Navigation links (Dashboard, Billing, Settings) inside burger menu
+  - User profile and sign-out moved to burger menu
+  - Theme toggle remains outside for easy access
+  - Auto-closes when navigating to new pages
+- **Professional mobile UX:** Clean slide-out sheet with proper spacing and styling
+
+✅ **Visual Badge Layout Enhancement:**
+- **Renewal badge repositioning:** Moved renewal status badges from title line to subtitle line
+- **Better visual grouping:** All metadata (category, renewal status, project badges) now grouped together
+- **Improved spacing:** Added proper vertical spacing between subscription title and metadata lines
+- **Consistent layout:** Applied to both active and inactive subscriptions across desktop and mobile
+
+✅ **Technical Achievements:**
+- **Complete category consistency:** All 15 categories synchronized across TypeScript definitions, form dropdowns, database schema, and constraints
+- **ShadCN Sheet component:** Added and integrated for professional mobile navigation
+- **Responsive design patterns:** Proper mobile-first approach with `sm:hidden` and `hidden sm:inline` classes
+- **Clean database architecture:** Single constraint managing all category validation without conflicts
+
+✅ **User Experience Improvements:**
+- Comprehensive category coverage for all types of SaaS subscriptions founders might use
+- Clean mobile navigation without cluttered header
+- Better visual hierarchy in subscription cards with grouped metadata
+- Professional mobile experience matching modern web app standards
+
+**Technical Details:**
+- **Files Updated:** `database.types.ts`, `subscription-form.tsx`, `db-schema.sql`, header.tsx`, `dashboard/page.tsx`
+- **Database Migration:** Clean constraint replacement handling multiple conflicting constraints
+- **Categories:** Now covers Financial, CRM, Legal, AI Tools, Analytics & Monitoring, Media & Content, and more
+
+**Status:** ✅ **COMPLETE** - Enhanced category system with improved mobile UX and clean database constraints
