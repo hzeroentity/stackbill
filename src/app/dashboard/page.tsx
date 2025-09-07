@@ -20,7 +20,17 @@ import { Badge } from "@/components/ui/badge"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
-import { SubscriptionWithProjects, UserSubscription, Project } from '@/lib/database.types'
+import { Tables } from '@/lib/database.types'
+
+type SubscriptionWithProjects = Tables<'subscriptions'> & {
+  projects: Array<{ 
+    id: string
+    name: string
+    color: string | null
+  }>
+}
+type UserSubscription = Tables<'user_subscriptions'>
+type Project = Tables<'projects'>
 import { getRenewalStatus } from '@/lib/renewal-status'
 import { canAddSubscription } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
@@ -387,7 +397,7 @@ export default function DashboardPage() {
   }
 
   const handleAddSubscription = () => {
-    const currentPlan = userSubscription?.plan_type || 'free'
+    const currentPlan = (userSubscription?.plan_type || 'free') as 'free' | 'pro'
     const activeCount = subscriptions.filter(sub => sub.is_active).length
     
     if (!canAddSubscription(activeCount, currentPlan)) {
@@ -513,7 +523,7 @@ export default function DashboardPage() {
           isPro={userSubscription?.plan_type === 'pro'}
           subscriptionCounts={subscriptionCounts}
           totalActiveSubscriptions={totalActiveSubscriptions.length}
-          userPlan={userSubscription?.plan_type || 'free'}
+          userPlan={(userSubscription?.plan_type || 'free') as 'free' | 'pro'}
         />
       </div>
       
@@ -771,7 +781,7 @@ export default function DashboardPage() {
             <div className="space-y-3">
               {/* Active Subscriptions */}
               {sortedActiveSubscriptions.map((subscription) => {
-                const renewalStatus = getRenewalStatus(subscription.renewal_date, subscription.billing_period)
+                const renewalStatus = getRenewalStatus(subscription.renewal_date, subscription.billing_period as 'weekly' | 'monthly' | 'quarterly' | 'yearly')
                 return (
                   <div key={subscription.id} id={`subscription-${subscription.id}`} className="p-3 bg-muted/50 rounded-lg">
                     {/* Desktop Layout */}
@@ -800,9 +810,9 @@ export default function DashboardPage() {
                                       variant="outline" 
                                       className="text-xs px-2 py-0.5 h-5"
                                       style={{ 
-                                        borderColor: project.color, 
-                                        color: project.color,
-                                        backgroundColor: `${project.color}15`
+                                        borderColor: project.color || '#3B82F6', 
+                                        color: project.color || '#3B82F6',
+                                        backgroundColor: `${project.color || '#3B82F6'}15`
                                       }}
                                     >
                                       {project.name}
@@ -901,9 +911,9 @@ export default function DashboardPage() {
                                     variant="outline" 
                                     className="text-xs px-2 py-0.5 h-5"
                                     style={{ 
-                                      borderColor: project.color, 
-                                      color: project.color,
-                                      backgroundColor: `${project.color}15`
+                                      borderColor: project.color || '#3B82F6', 
+                                      color: project.color || '#3B82F6',
+                                      backgroundColor: `${project.color || '#3B82F6'}15`
                                     }}
                                   >
                                     {project.name}
@@ -1010,9 +1020,9 @@ export default function DashboardPage() {
                                         variant="outline" 
                                         className="text-xs px-2 py-0.5 h-5 opacity-60"
                                         style={{ 
-                                          borderColor: project.color, 
-                                          color: project.color,
-                                          backgroundColor: `${project.color}15`
+                                          borderColor: project.color || '#3B82F6', 
+                                          color: project.color || '#3B82F6',
+                                          backgroundColor: `${project.color || '#3B82F6'}15`
                                         }}
                                       >
                                         {project.name}
@@ -1088,9 +1098,9 @@ export default function DashboardPage() {
                                       variant="outline" 
                                       className="text-xs px-2 py-0.5 h-5 opacity-60"
                                       style={{ 
-                                        borderColor: project.color, 
-                                        color: project.color,
-                                        backgroundColor: `${project.color}15`
+                                        borderColor: project.color || '#3B82F6', 
+                                        color: project.color || '#3B82F6',
+                                        backgroundColor: `${project.color || '#3B82F6'}15`
                                       }}
                                     >
                                       {project.name}
@@ -1246,8 +1256,8 @@ export default function DashboardPage() {
           setIsAddDialogOpen(true)
         }}
         existingProjectCount={projects.length}
-        userPlan={userSubscription?.plan_type || 'free'}
-        existingProjects={projects.map(p => ({ id: p.id, color: p.color }))}
+        userPlan={(userSubscription?.plan_type || 'free') as 'free' | 'pro'}
+        existingProjects={projects.map(p => ({ id: p.id, color: p.color || '#3B82F6' }))}
       />
     </div>
   )

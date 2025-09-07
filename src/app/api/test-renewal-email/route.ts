@@ -8,6 +8,8 @@ import { Database } from '@/lib/database.types'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 const supabase = createClient<Database>(supabaseUrl, supabaseServiceKey)
+// Untyped client for auth.users access
+const supabaseUntyped = createClient(supabaseUrl, supabaseServiceKey)
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,18 +27,12 @@ export async function POST(request: NextRequest) {
       .eq('user_id', userId)
       .single()
 
-    // Get user's profile for email and name
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('email, raw_user_meta_data')
-      .eq('id', userId)
-      .single()
+    // Get user's profile for email and name using auth.users
+    const { data: profile } = await supabaseUntyped.auth.admin.getUserById(userId)
 
     // For testing, use a fallback email if profile email not found
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let userEmail = (profile as any)?.email || 'test@example.com' // Hardcoded for testing
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let userName = (profile as any)?.raw_user_meta_data?.name || (profile as any)?.raw_user_meta_data?.full_name
+    let userEmail = profile?.user?.email || 'test@example.com' // Hardcoded for testing
+    let userName = profile?.user?.user_metadata?.name || profile?.user?.user_metadata?.full_name
     
     // Only try auth lookup if userId looks like a UUID and email isn't hardcoded
     if (!userEmail || (userEmail === 'test@example.com' && userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))) {

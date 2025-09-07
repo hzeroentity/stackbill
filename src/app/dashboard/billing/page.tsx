@@ -17,12 +17,12 @@ import {
 import { PLANS, getPlan } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
-import { UserSubscription } from '@/lib/database.types'
+import { Tables } from '@/lib/database.types'
 import { useLanguage } from '@/contexts/language-context'
 import { PLAN_LIMITS } from '@/lib/plan-limits'
 
 export default function BillingPage() {
-  const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null)
+  const [userSubscription, setUserSubscription] = useState<Tables<'user_subscriptions'> | null>(null)
   const [loading, setLoading] = useState(true)
   const [upgrading, setUpgrading] = useState(false)
   const [downgrading, setDowngrading] = useState(false)

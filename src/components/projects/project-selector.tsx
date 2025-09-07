@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Project } from '@/lib/database.types'
+import { Tables } from '@/lib/database.types'
 import { ProjectsService } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 
@@ -13,7 +13,7 @@ interface ProjectSelectorProps {
 }
 
 export function ProjectSelector({ value, onChange, disabled }: ProjectSelectorProps) {
-  const [projects, setProjects] = useState<Project[]>([])
+  const [projects, setProjects] = useState<Tables<'projects'>[]>([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
 
@@ -60,7 +60,7 @@ export function ProjectSelector({ value, onChange, disabled }: ProjectSelectorPr
               <div className="flex items-center gap-2">
                 <div 
                   className="w-3 h-3 rounded-full" 
-                  style={{ backgroundColor: project.color }}
+                  style={{ backgroundColor: project.color || '#3B82F6' }}
                 />
                 {project.name}
               </div>

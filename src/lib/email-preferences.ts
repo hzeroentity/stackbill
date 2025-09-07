@@ -1,20 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
-import { Database } from './database.types'
+import { Database, Tables } from './database.types'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-export interface EmailPreferences {
-  id: string
-  user_id: string
-  monthly_summary_enabled: boolean
-  renewal_alerts_enabled: boolean
-  renewal_reminder_days: number[]
-  last_monthly_summary_sent?: string
-  last_renewal_alert_sent?: string
-  created_at: string
-  updated_at: string
-}
+export type EmailPreferences = Tables<'email_preferences'>
 
 export class EmailPreferencesService {
   private static supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
@@ -52,8 +42,7 @@ export class EmailPreferencesService {
       renewal_reminder_days: [7, 3, 1] // 7 days, 3 days, 1 day before renewal
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (this.supabase as any)
+    const { data, error } = await this.supabase
       .from('email_preferences')
       .insert([defaultPrefs])
       .select()
@@ -73,8 +62,7 @@ export class EmailPreferencesService {
     userId: string, 
     updates: Partial<Pick<EmailPreferences, 'monthly_summary_enabled' | 'renewal_alerts_enabled' | 'renewal_reminder_days'>>
   ): Promise<EmailPreferences> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (this.supabase as any)
+    const { data, error } = await this.supabase
       .from('email_preferences')
       .update(updates)
       .eq('user_id', userId)
@@ -97,8 +85,7 @@ export class EmailPreferencesService {
   ): Promise<void> {
     const field = type === 'monthly_summary' ? 'last_monthly_summary_sent' : 'last_renewal_alert_sent'
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (this.supabase as any)
+    const { error } = await this.supabase
       .from('email_preferences')
       .update({ [field]: new Date().toISOString() })
       .eq('user_id', userId)
@@ -170,7 +157,6 @@ export class EmailPreferencesService {
       throw new Error(`Failed to get users with emails enabled: ${error.message}`)
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return data.map(pref => (pref as any).user_id)
+    return data.map(pref => pref.user_id)
   }
 }

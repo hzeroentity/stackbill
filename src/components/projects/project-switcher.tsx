@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Plus, Lock, Settings } from "lucide-react"
-import { Project, PlanType } from '@/lib/database.types'
+import { Tables, PlanType } from '@/lib/database.types'
 import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
@@ -21,7 +21,7 @@ interface ProjectSwitcherProps {
 }
 
 export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subscriptionCounts, totalActiveSubscriptions, userPlan = 'free' }: ProjectSwitcherProps) {
-  const [projects, setProjects] = useState<Project[]>([])
+  const [projects, setProjects] = useState<Tables<'projects'>[]>([])
   const [loading, setLoading] = useState(true)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const { user } = useAuth()
@@ -115,7 +115,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
                 <div className="flex items-center gap-2">
                   <div 
                     className="w-3 h-3 rounded-full" 
-                    style={{ backgroundColor: project.color }}
+                    style={{ backgroundColor: project.color || '#3B82F6' }}
                   />
                   {project.name}
                 </div>
@@ -166,7 +166,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
         onProjectCreated={handleProjectCreated}
         existingProjectCount={projects.length}
         userPlan={userPlan}
-        existingProjects={projects.map(p => ({ id: p.id, color: p.color }))}
+        existingProjects={projects.map(p => ({ id: p.id, color: p.color || '#3B82F6' }))}
       />
     </div>
   )

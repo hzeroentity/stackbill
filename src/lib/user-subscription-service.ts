@@ -71,7 +71,7 @@ export class UserSubscriptionService {
 
   async getUserPlan(userId: string): Promise<PlanType> {
     const userSub = await this.ensureUserSubscription(userId)
-    return userSub.plan_type
+    return userSub.plan_type as PlanType
   }
 
   async canUserAddSubscription(userId: string, currentSubscriptionCount: number): Promise<boolean> {

@@ -138,6 +138,7 @@ ALTER TABLE public.admin_security_log ENABLE ROW LEVEL SECURITY;
 -- Create indexes for better performance
 CREATE INDEX idx_projects_user_id ON public.projects(user_id);
 CREATE INDEX idx_user_subscriptions_user_id ON public.user_subscriptions(user_id);
+CREATE INDEX idx_user_subscriptions_user_id_unique ON public.user_subscriptions(user_id);
 CREATE INDEX idx_subscriptions_user_id ON public.subscriptions(user_id);
 CREATE INDEX idx_subscriptions_renewal_date ON public.subscriptions(renewal_date);
 CREATE INDEX idx_subscription_projects_subscription_id ON public.subscription_projects(subscription_id);
@@ -158,17 +159,23 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Create specific trigger function for projects table
+CREATE OR REPLACE FUNCTION update_projects_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
+
 -- Apply updated_at triggers
-CREATE TRIGGER update_projects_updated_at BEFORE UPDATE ON public.projects
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER projects_updated_at BEFORE UPDATE ON public.projects
+    FOR EACH ROW EXECUTE FUNCTION update_projects_updated_at();
 
 CREATE TRIGGER update_user_subscriptions_updated_at BEFORE UPDATE ON public.user_subscriptions
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_subscriptions_updated_at BEFORE UPDATE ON public.subscriptions
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_email_preferences_updated_at BEFORE UPDATE ON public.email_preferences
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_admin_user_updated_at BEFORE UPDATE ON public.admin_user
@@ -189,32 +196,27 @@ CREATE POLICY "Users can delete their own projects" ON public.projects
     FOR DELETE USING (user_id = auth.uid());
 
 -- RLS Policies for user_subscriptions table
-CREATE POLICY "Users can view their own user subscriptions" ON public.user_subscriptions
-    FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "Users can only see their own app subscription" ON public.user_subscriptions
+    FOR ALL USING (auth.uid() = user_id);
 
-CREATE POLICY "Users can insert their own user subscriptions" ON public.user_subscriptions
-    FOR INSERT WITH CHECK (user_id = auth.uid());
+CREATE POLICY "Users can insert their own app subscription" ON public.user_subscriptions
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-CREATE POLICY "Users can update their own user subscriptions" ON public.user_subscriptions
-    FOR UPDATE USING (user_id = auth.uid())
-    WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users can delete their own user subscriptions" ON public.user_subscriptions
-    FOR DELETE USING (user_id = auth.uid());
+CREATE POLICY "Users can update their own app subscription" ON public.user_subscriptions
+    FOR UPDATE USING (auth.uid() = user_id);
 
 -- RLS Policies for subscriptions table
-CREATE POLICY "Users can view their own subscriptions" ON public.subscriptions
-    FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "Users can only see their own subscriptions" ON public.subscriptions
+    FOR ALL USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert their own subscriptions" ON public.subscriptions
-    FOR INSERT WITH CHECK (user_id = auth.uid());
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can update their own subscriptions" ON public.subscriptions
-    FOR UPDATE USING (user_id = auth.uid())
-    WITH CHECK (user_id = auth.uid());
+    FOR UPDATE USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete their own subscriptions" ON public.subscriptions
-    FOR DELETE USING (user_id = auth.uid());
+    FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for subscription_projects table
 CREATE POLICY "Users can view their own subscription-project relationships" ON public.subscription_projects

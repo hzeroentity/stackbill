@@ -4,26 +4,13 @@ import { sendRenewalAlertEmail } from '@/lib/resend'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { EmailPreferencesService } from '@/lib/email-preferences'
 
-interface UserData {
-  user_id: string
-  profiles: {
-    email: string
-    raw_user_meta_data?: {
-      name?: string
-      full_name?: string
-    }
-  }[]
-}
 
 export async function POST() {
   try {
     // Get all Pro users who have active subscriptions
-    const { data: proUsers, error: usersError } = await supabase
+    const { data: proUserSubscriptions, error: usersError } = await supabase
       .from('user_subscriptions')
-      .select(`
-        user_id,
-        profiles!inner(email, raw_user_meta_data)
-      `)
+      .select('user_id')
       .eq('plan_type', 'pro')
       .eq('status', 'active')
     
@@ -32,7 +19,7 @@ export async function POST() {
       return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 })
     }
 
-    if (!proUsers || proUsers.length === 0) {
+    if (!proUserSubscriptions || proUserSubscriptions.length === 0) {
       return NextResponse.json({ message: 'No Pro users found' }, { status: 200 })
     }
 
@@ -40,14 +27,28 @@ export async function POST() {
     const results: { userId: string; email: string; success: boolean; error?: string }[] = []
 
     // Process each Pro user
-    for (const user of proUsers) {
+    for (const userSub of proUserSubscriptions) {
       try {
+        // Get user details from auth
+        const { data: userData, error: userError } = await supabase.auth.admin.getUserById(userSub.user_id)
+        if (userError || !userData.user) {
+          results.push({
+            userId: userSub.user_id,
+            email: 'unknown@email.com',
+            success: false,
+            error: 'Failed to fetch user details'
+          })
+          continue
+        }
+
+        const user = userData.user
+
         // Check if user should receive renewal alert emails
-        const shouldSend = await EmailPreferencesService.shouldSendEmail(user.user_id, 'renewal_alert')
+        const shouldSend = await EmailPreferencesService.shouldSendEmail(userSub.user_id, 'renewal_alert')
         if (!shouldSend) {
           results.push({
-            userId: user.user_id,
-            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+            userId: userSub.user_id,
+            email: user.email || 'unknown@email.com',
             success: true,
             error: 'Skipped - user preferences or anti-spam protection'
           })
@@ -55,22 +56,22 @@ export async function POST() {
         }
 
         // Get user's email preferences to know their preferred reminder days
-        const emailPrefs = await EmailPreferencesService.getUserPreferences(user.user_id)
+        const emailPrefs = await EmailPreferencesService.getUserPreferences(userSub.user_id)
         const reminderDays = emailPrefs.renewal_reminder_days || [7, 3, 1]
 
         // Get user's subscriptions
         const { data: subscriptions, error: subsError } = await supabase
           .from('subscriptions')
           .select('*')
-          .eq('user_id', user.user_id)
+          .eq('user_id', userSub.user_id)
           .eq('is_active', true)
           .order('renewal_date', { ascending: true })
 
         if (subsError) {
-          console.error(`Failed to fetch subscriptions for user ${user.user_id}:`, subsError)
+          console.error(`Failed to fetch subscriptions for user ${userSub.user_id}:`, subsError)
           results.push({
-            userId: user.user_id,
-            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+            userId: userSub.user_id,
+            email: user.email || 'unknown@email.com',
             success: false,
             error: 'Failed to fetch subscriptions'
           })
@@ -79,8 +80,8 @@ export async function POST() {
 
         if (!subscriptions || subscriptions.length === 0) {
           results.push({
-            userId: user.user_id,
-            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+            userId: userSub.user_id,
+            email: user.email || 'unknown@email.com',
             success: true,
             error: 'No subscriptions found'
           })
@@ -93,8 +94,8 @@ export async function POST() {
 
         if (upcomingRenewals.length === 0) {
           results.push({
-            userId: user.user_id,
-            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+            userId: userSub.user_id,
+            email: user.email || 'unknown@email.com',
             success: true,
             error: 'No upcoming renewals'
           })
@@ -120,8 +121,8 @@ export async function POST() {
 
         if (renewalsWithDays.length === 0) {
           results.push({
-            userId: user.user_id,
-            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+            userId: userSub.user_id,
+            email: user.email || 'unknown@email.com',
             success: true,
             error: 'No renewals matching user preferred reminder days'
           })
@@ -129,13 +130,13 @@ export async function POST() {
         }
 
         // Extract user name from metadata
-        const userName = (user as UserData).profiles?.[0]?.raw_user_meta_data?.name || 
-                        (user as UserData).profiles?.[0]?.raw_user_meta_data?.full_name ||
-                        (user as UserData).profiles?.[0]?.email || 'unknown@email.com'?.split('@')[0]
+        const userName = user.user_metadata?.name || 
+                        user.user_metadata?.full_name ||
+                        user.email?.split('@')[0] || 'Unknown'
 
         // Send renewal alert email
         const emailResult = await sendRenewalAlertEmail(
-          (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+          user.email || 'unknown@email.com',
           renewalsWithDays,
           userName
         )
@@ -144,27 +145,27 @@ export async function POST() {
           emailsSent++
           
           // Update last sent timestamp for anti-spam tracking
-          await EmailPreferencesService.updateLastSent(user.user_id, 'renewal_alert')
+          await EmailPreferencesService.updateLastSent(userSub.user_id, 'renewal_alert')
           
           results.push({
-            userId: user.user_id,
-            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+            userId: userSub.user_id,
+            email: user.email || 'unknown@email.com',
             success: true
           })
         } else {
           results.push({
-            userId: user.user_id,
-            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+            userId: userSub.user_id,
+            email: user.email || 'unknown@email.com',
             success: false,
             error: emailResult.error?.toString() || 'Unknown error'
           })
         }
 
       } catch (error) {
-        console.error(`Error processing user ${user.user_id}:`, error)
+        console.error(`Error processing user ${userSub.user_id}:`, error)
         results.push({
-          userId: user.user_id,
-          email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
+          userId: userSub.user_id,
+          email: 'unknown@email.com',
           success: false,
           error: error instanceof Error ? error.message : 'Unknown error'
         })
@@ -174,7 +175,7 @@ export async function POST() {
     return NextResponse.json({
       message: `Renewal alerts processing completed`,
       emailsSent,
-      totalUsers: proUsers.length,
+      totalUsers: proUserSubscriptions.length,
       results
     })
 

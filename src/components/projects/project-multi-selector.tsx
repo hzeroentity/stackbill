@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { X, HelpCircle } from 'lucide-react'
-import { Project } from '@/lib/database.types'
+import { Tables } from '@/lib/database.types'
 import { ProjectsService, GENERAL_PROJECT_ID } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 
@@ -16,7 +16,7 @@ interface ProjectMultiSelectorProps {
 }
 
 export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMultiSelectorProps) {
-  const [projects, setProjects] = useState<Project[]>([])
+  const [projects, setProjects] = useState<Tables<'projects'>[]>([])
   const [loading, setLoading] = useState(true)
   const [selectValue, setSelectValue] = useState<string>('') // Control the select state
   const { user } = useAuth()
@@ -94,7 +94,7 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
             <Badge key={project.id} variant="secondary" className="flex items-center gap-1">
               <div 
                 className="w-2 h-2 rounded-full" 
-                style={{ backgroundColor: project.color }}
+                style={{ backgroundColor: project.color || '#3B82F6' }}
               />
               {project.name}
               <Button
@@ -137,7 +137,7 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
               <div className="flex items-center gap-2">
                 <div 
                   className="w-3 h-3 rounded-full" 
-                  style={{ backgroundColor: project.color }}
+                  style={{ backgroundColor: project.color || '#3B82F6' }}
                 />
                 {project.name}
               </div>

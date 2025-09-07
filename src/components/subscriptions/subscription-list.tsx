@@ -89,7 +89,7 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
   return (
     <div className="space-y-4">
       {subscriptions.map((subscription) => {
-        const renewalStatus = getRenewalStatus(subscription.renewal_date, subscription.billing_period)
+        const renewalStatus = getRenewalStatus(subscription.renewal_date, subscription.billing_period as 'weekly' | 'monthly' | 'quarterly' | 'yearly')
         
         return (
           <Card key={subscription.id}>

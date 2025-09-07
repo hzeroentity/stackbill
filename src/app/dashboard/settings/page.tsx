@@ -33,7 +33,7 @@ import { useLanguage } from '@/contexts/language-context'
 import { createClient } from '@supabase/supabase-js'
 import { Currency, SUPPORTED_CURRENCIES, getDefaultCurrency, setDefaultCurrency } from '@/lib/currency-preferences'
 import { ProjectsService } from '@/lib/projects'
-import { Project } from '@/lib/database.types'
+import { Tables } from '@/lib/database.types'
 import { EmailPreferencesService, EmailPreferences } from '@/lib/email-preferences'
 
 const supabase = createClient(
@@ -50,11 +50,11 @@ export default function SettingsPage() {
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false)
   const [defaultCurrency, setDefaultCurrencyState] = useState<Currency>('USD')
   const [isPro, setIsPro] = useState(false)
-  const [projects, setProjects] = useState<Project[]>([])
+  const [projects, setProjects] = useState<Tables<'projects'>[]>([])
   const [projectsLoading, setProjectsLoading] = useState(true)
   const [isCreateProjectDialogOpen, setIsCreateProjectDialogOpen] = useState(false)
   const [isEditProjectDialogOpen, setIsEditProjectDialogOpen] = useState(false)
-  const [editingProject, setEditingProject] = useState<Project | null>(null)
+  const [editingProject, setEditingProject] = useState<Tables<'projects'> | null>(null)
   const [projectActionLoading, setProjectActionLoading] = useState(false)
   
   // Email preferences state
@@ -102,7 +102,7 @@ export default function SettingsPage() {
     } finally {
       setProjectsLoading(false)
     }
-  }, [user])
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load email preferences
   const loadEmailPreferences = useCallback(async () => {
@@ -304,7 +304,7 @@ export default function SettingsPage() {
   const handleReminderDayToggle = (day: number) => {
     if (!emailPreferences) return
 
-    const currentDays = emailPreferences.renewal_reminder_days
+    const currentDays = emailPreferences.renewal_reminder_days || [7, 3, 1]
     const newDays = currentDays.includes(day) 
       ? currentDays.filter(d => d !== day)
       : [...currentDays, day].sort((a, b) => b - a) // Sort descending
@@ -312,11 +312,11 @@ export default function SettingsPage() {
     handleEmailPreferenceUpdate({ renewal_reminder_days: newDays })
   }
 
-  const openEditProject = (project: Project) => {
+  const openEditProject = (project: Tables<'projects'>) => {
     setEditingProject(project)
     setProjectName(project.name)
     setProjectDescription(project.description || '')
-    setProjectColor(project.color)
+    setProjectColor(project.color || '#3B82F6')
     setIsEditProjectDialogOpen(true)
   }
 
@@ -597,7 +597,7 @@ export default function SettingsPage() {
                     <div className="flex items-center space-x-3">
                       <div 
                         className="w-4 h-4 rounded-full" 
-                        style={{ backgroundColor: project.color }}
+                        style={{ backgroundColor: project.color || '#3B82F6' }}
                       ></div>
                       <div>
                         <p className="font-medium">{project.name}</p>
@@ -750,7 +750,7 @@ export default function SettingsPage() {
                     </p>
                   </div>
                   <Switch
-                    checked={emailPreferences.monthly_summary_enabled}
+                    checked={emailPreferences.monthly_summary_enabled ?? false}
                     onCheckedChange={(checked) => 
                       handleEmailPreferenceUpdate({ monthly_summary_enabled: checked })
                     }
@@ -767,7 +767,7 @@ export default function SettingsPage() {
                       </p>
                     </div>
                     <Switch
-                      checked={emailPreferences.renewal_alerts_enabled}
+                      checked={emailPreferences.renewal_alerts_enabled ?? false}
                       onCheckedChange={(checked) => 
                         handleEmailPreferenceUpdate({ renewal_alerts_enabled: checked })
                       }
@@ -775,7 +775,7 @@ export default function SettingsPage() {
                   </div>
 
                   {/* Reminder Days Selection */}
-                  {emailPreferences.renewal_alerts_enabled && (
+                  {(emailPreferences.renewal_alerts_enabled ?? false) && (
                     <div className="pl-4 border-l-2 border-muted space-y-3">
                       <Label className="text-sm font-medium text-muted-foreground">Reminder Schedule</Label>
                       <p className="text-xs text-muted-foreground mb-3">
@@ -785,9 +785,9 @@ export default function SettingsPage() {
                         {[14, 7, 3, 1].map((day) => (
                           <Badge
                             key={day}
-                            variant={emailPreferences.renewal_reminder_days.includes(day) ? "default" : "outline"}
+                            variant={(emailPreferences.renewal_reminder_days ?? []).includes(day) ? "default" : "outline"}
                             className={`cursor-pointer transition-colors ${
-                              emailPreferences.renewal_reminder_days.includes(day) 
+                              (emailPreferences.renewal_reminder_days ?? []).includes(day) 
                                 ? "bg-primary text-primary-foreground hover:bg-primary/90" 
                                 : "hover:bg-muted"
                             }`}
@@ -798,7 +798,7 @@ export default function SettingsPage() {
                         ))}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Currently selected: {emailPreferences.renewal_reminder_days
+                        Currently selected: {(emailPreferences.renewal_reminder_days ?? [])
                           .sort((a, b) => b - a)
                           .map(d => `${d} day${d !== 1 ? 's' : ''}`)
                           .join(', ') || 'None'}

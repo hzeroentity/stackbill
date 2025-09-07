@@ -3,27 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Database } from '@/lib/database.types'
 import { PLAN_LIMITS } from '@/lib/plan-limits'
 
-interface UserSubscription {
-  stripe_subscription_id?: string
-  stripe_customer_id?: string
-  created_at?: string
-  [key: string]: unknown
-}
-
-interface Subscription {
-  id: string
-  [key: string]: unknown
-}
-
-interface Project {
-  id: string
-  [key: string]: unknown
-}
-
-interface SubscriptionProject {
-  subscription_id: string
-  [key: string]: unknown
-}
+//
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -55,10 +35,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Cancel Stripe subscription if it exists
-    const subscription = userSubscription as unknown as UserSubscription
-    if (subscription?.stripe_subscription_id) {
+    if (userSubscription?.stripe_subscription_id) {
       try {
-        await stripe.subscriptions.cancel(subscription.stripe_subscription_id)
+        await stripe.subscriptions.cancel(userSubscription.stripe_subscription_id)
       } catch (stripeError) {
         console.error('Error canceling Stripe subscription:', stripeError)
         // Continue with downgrade even if Stripe cancellation fails
@@ -83,7 +62,7 @@ export async function POST(request: NextRequest) {
     // Delete excess subscriptions
     if (subscriptions && subscriptions.length > freeSubLimit) {
       const excessSubs = subscriptions.slice(freeSubLimit) // Keep first N, delete rest
-      const excessSubIds = excessSubs.map(sub => (sub as Subscription).id)
+      const excessSubIds = excessSubs.map(sub => sub.id)
       
       const { error: deleteSubsError } = await supabase
         .from('subscriptions')
@@ -113,7 +92,7 @@ export async function POST(request: NextRequest) {
     // Delete excess projects
     if (projects && projects.length > freeProjectLimit) {
       const excessProjects = projects.slice(freeProjectLimit) // Keep first N, delete rest
-      const excessProjectIds = excessProjects.map(project => (project as Project).id)
+      const excessProjectIds = excessProjects.map(project => project.id)
       
       const { error: deleteProjectsError } = await supabase
         .from('projects')
@@ -133,7 +112,7 @@ export async function POST(request: NextRequest) {
           .select('subscription_id')
 
         if (!linkedError && linkedSubs) {
-          const linkedSubIds = linkedSubs.map(sp => (sp as SubscriptionProject).subscription_id)
+          const linkedSubIds = linkedSubs.map(sp => sp.subscription_id)
 
           // Then get all user's subscriptions that are NOT in the linked list
           const { data: allUserSubs, error: allSubsError } = await supabase
@@ -142,7 +121,7 @@ export async function POST(request: NextRequest) {
             .eq('user_id', userId)
 
           if (!allSubsError && allUserSubs) {
-            const orphanedSubIds = allUserSubs.filter(sub => !linkedSubIds.includes((sub as Subscription).id)).map(sub => (sub as Subscription).id)
+            const orphanedSubIds = allUserSubs.filter(sub => !linkedSubIds.includes(sub.id)).map(sub => sub.id)
 
             // Delete orphaned subscriptions if any exist
             if (orphanedSubIds.length > 0) {
@@ -167,8 +146,7 @@ export async function POST(request: NextRequest) {
     let updateError = null
     if (userSubscription) {
       // Update existing subscription
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('user_subscriptions')
         .update({
           stripe_subscription_id: null,
@@ -183,8 +161,7 @@ export async function POST(request: NextRequest) {
       updateError = error
     } else {
       // Insert new subscription record
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('user_subscriptions')
         .insert({
           user_id: userId,
@@ -204,14 +181,14 @@ export async function POST(request: NextRequest) {
       console.error('User subscription data:', userSubscription)
       console.error('Attempted upsert data:', {
         user_id: userId,
-        stripe_customer_id: (userSubscription as unknown as UserSubscription)?.stripe_customer_id || null,
+        stripe_customer_id: userSubscription?.stripe_customer_id || null,
         stripe_subscription_id: null,
         plan_type: 'free',
         status: 'active',
         current_period_start: null,
         current_period_end: null,
         canceled_at: new Date().toISOString(),
-        created_at: (userSubscription as unknown as UserSubscription)?.created_at || new Date().toISOString(),
+        created_at: userSubscription?.created_at || new Date().toISOString(),
         updated_at: new Date().toISOString()
       })
       return NextResponse.json({ error: 'Failed to update subscription' }, { status: 500 })

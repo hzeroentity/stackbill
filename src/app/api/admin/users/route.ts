@@ -3,7 +3,17 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { adminService } from '@/lib/admin-service'
-import type { Database } from '@/lib/database.types'
+import type { Database, Tables } from '@/lib/database.types'
+
+// Type for subscription-project relationships with nested project data
+interface SubscriptionProjectWithProject {
+  subscription_id: string
+  project_id: string
+  projects: {
+    name: string
+    color: string | null
+  } | null
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -126,9 +136,9 @@ export async function GET(request: NextRequest) {
 
     // Build comprehensive user data
     const users = authUsers.users.map(authUser => {
-      const userSub = userSubscriptions?.find((us: unknown) => (us as { user_id: string }).user_id === authUser.id) ?? null as { plan_type: string; is_active: boolean; stripe_customer_id: string; created_at: string } | null
-      const userSubscriptionsList = allSubscriptions?.filter((s: unknown) => (s as { user_id: string }).user_id === authUser.id) ?? [] as Array<{ is_active: boolean; amount: number; billing_period: string; user_id: string; id: string }>
-      const userProjects = allProjects?.filter((p: unknown) => (p as { user_id: string }).user_id === authUser.id) ?? [] as Array<{ user_id: string; id: string }>
+      const userSub = userSubscriptions?.find((us: Tables<'user_subscriptions'>) => us.user_id === authUser.id) ?? null
+      const userSubscriptionsList = allSubscriptions?.filter((s: Tables<'subscriptions'>) => s.user_id === authUser.id) ?? []
+      const userProjects = allProjects?.filter((p: Tables<'projects'>) => p.user_id === authUser.id) ?? []
 
       // Calculate monthly spending by converting all subscriptions to monthly amounts
       const monthlySpending = userSubscriptionsList
@@ -164,7 +174,7 @@ export async function GET(request: NextRequest) {
       // Format subscriptions with project info
       const subscriptionsWithProjects = userSubscriptionsList.map(sub => ({
         ...sub,
-        projects: (subscriptionProjects as Array<{ subscription_id: string; projects?: { id: string; name: string; color: string } }> | undefined)
+        projects: (subscriptionProjects as SubscriptionProjectWithProject[] | null)
           ?.filter(sp => sp.subscription_id === sub.id)
           .map(sp => ({
             name: sp.projects?.name || 'Unknown',

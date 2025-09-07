@@ -371,7 +371,14 @@ export class AdminService {
         .limit(limit)
 
       if (error) throw error
-      return data || []
+      return (data || []).map(log => ({
+        ...log,
+        details: (log.details as Record<string, unknown>) || {},
+        success: log.success ?? false,
+        created_at: log.created_at || new Date().toISOString(),
+        ip_address: typeof log.ip_address === 'string' ? log.ip_address : undefined,
+        user_agent: log.user_agent || undefined
+      }))
     } catch (error) {
       console.error('Failed to get security logs:', error)
       return []
