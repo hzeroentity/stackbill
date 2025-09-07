@@ -7,6 +7,9 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(request: NextRequest) {
   console.log('=== WEBHOOK RECEIVED ===')
+  console.log('Headers:', Object.fromEntries(request.headers.entries()))
+  console.log('URL:', request.url)
+  console.log('Method:', request.method)
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')!

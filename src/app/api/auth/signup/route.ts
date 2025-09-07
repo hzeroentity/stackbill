@@ -36,27 +36,6 @@ export async function POST(request: Request) {
 
     const processedEmail = email.trim().toLowerCase()
 
-    // Check if user already exists
-    const { data: existingUser } = await supabaseAdmin
-      .from('auth.users')
-      .select('id, email_confirmed_at')
-      .eq('email', processedEmail)
-      .single()
-
-    if (existingUser) {
-      if (existingUser.email_confirmed_at) {
-        return NextResponse.json(
-          { error: 'An account with this email already exists' },
-          { status: 400 }
-        )
-      } else {
-        return NextResponse.json(
-          { error: 'Please check your email for a confirmation link' },
-          { status: 400 }
-        )
-      }
-    }
-
     // Create user with Supabase Auth (but with email confirmation disabled temporarily)
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: processedEmail,
@@ -66,6 +45,15 @@ export async function POST(request: Request) {
 
     if (authError) {
       console.error('Supabase auth error:', authError)
+      
+      // Handle specific auth errors
+      if (authError.message.includes('already been registered') || authError.code === 'email_exists') {
+        return NextResponse.json(
+          { error: 'An account with this email already exists. Please sign in instead.' },
+          { status: 400 }
+        )
+      }
+      
       return NextResponse.json(
         { error: 'Failed to create account. Please try again.' },
         { status: 500 }
