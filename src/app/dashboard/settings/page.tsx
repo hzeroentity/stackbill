@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -45,7 +46,6 @@ export default function SettingsPage() {
   const { t } = useLanguage()
   const [emailLoading, setEmailLoading] = useState(false)
   const [passwordLoading, setPasswordLoading] = useState(false)
-  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false)
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false)
   const [defaultCurrency, setDefaultCurrencyState] = useState<Currency>('USD')
@@ -114,7 +114,7 @@ export default function SettingsPage() {
       setEmailPreferences(preferences)
     } catch (error) {
       console.error('Error loading email preferences:', error)
-      setMessage({ type: 'error', text: 'Failed to load email preferences' })
+      toast.error('Failed to load email preferences')
     } finally {
       setEmailPreferencesLoading(false)
     }
@@ -130,17 +130,16 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (newPassword !== confirmPassword) {
-      setMessage({ type: 'error', text: t('auth.passwordsDontMatch') })
+      toast.error(t('auth.passwordsDontMatch'))
       return
     }
     
     if (newPassword.length < 6) {
-      setMessage({ type: 'error', text: 'Password must be at least 6 characters' })
+      toast.error('Password must be at least 6 characters')
       return
     }
     
     setPasswordLoading(true)
-    setMessage(null)
     
     try {
       const { error } = await supabase.auth.updateUser({
@@ -149,15 +148,12 @@ export default function SettingsPage() {
       
       if (error) throw error
       
-      setMessage({ type: 'success', text: t('settings.passwordChanged') })
+      toast.success(t('settings.passwordChanged'))
       setNewPassword('')
       setConfirmPassword('')
       setIsPasswordDialogOpen(false)
     } catch (error) {
-      setMessage({ 
-        type: 'error', 
-        text: error instanceof Error ? error.message : 'Failed to update password' 
-      })
+      toast.error(error instanceof Error ? error.message : 'Failed to update password')
     } finally {
       setPasswordLoading(false)
     }
@@ -167,12 +163,11 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (!newEmail || !newEmail.includes('@')) {
-      setMessage({ type: 'error', text: 'Please enter a valid email address' })
+      toast.error('Please enter a valid email address')
       return
     }
     
     setEmailLoading(true)
-    setMessage(null)
     
     try {
       const { error } = await supabase.auth.updateUser({
@@ -181,17 +176,11 @@ export default function SettingsPage() {
       
       if (error) throw error
       
-      setMessage({ 
-        type: 'success', 
-        text: t('settings.emailChanged') 
-      })
+      toast.success(t('settings.emailChanged'))
       setNewEmail('')
       setIsEmailDialogOpen(false)
     } catch (error) {
-      setMessage({ 
-        type: 'error', 
-        text: error instanceof Error ? error.message : 'Failed to update email' 
-      })
+      toast.error(error instanceof Error ? error.message : 'Failed to update email')
     } finally {
       setEmailLoading(false)
     }
@@ -200,10 +189,7 @@ export default function SettingsPage() {
   const handleCurrencyChange = (currency: Currency) => {
     setDefaultCurrency(currency)
     setDefaultCurrencyState(currency)
-    setMessage({ 
-      type: 'success', 
-      text: t('settings.currencyUpdated') 
-    })
+    toast.success(t('settings.currencyUpdated'))
   }
 
   const resetProjectForm = () => {
@@ -220,16 +206,13 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (!projectName.trim()) {
-      setMessage({ type: 'error', text: 'Project name is required' })
+      toast.error('Project name is required')
       return
     }
 
     const maxProjects = isPro ? 10 : 2
     if (projects.length >= maxProjects) {
-      setMessage({ 
-        type: 'error', 
-        text: `Maximum of ${maxProjects} projects allowed${!isPro ? ' on free plan. Upgrade to Pro for up to 10 projects.' : ''}` 
-      })
+      toast.error(`Maximum of ${maxProjects} projects allowed${!isPro ? ' on free plan. Upgrade to Pro for up to 10 projects.' : ''}`)
       return
     }
 
@@ -237,15 +220,11 @@ export default function SettingsPage() {
     const usedColors = projects.map(p => p.color)
     const availableColors = PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
     if (availableColors.length === 0) {
-      setMessage({ 
-        type: 'error', 
-        text: 'No available colors. Please edit an existing project to change its color first.' 
-      })
+      toast.error('No available colors. Please edit an existing project to change its color first.')
       return
     }
 
     setProjectActionLoading(true)
-    setMessage(null)
 
     try {
       const newProject = await ProjectsService.createProject({
@@ -258,12 +237,9 @@ export default function SettingsPage() {
       setProjects(prev => [...prev, newProject])
       resetProjectForm()
       setIsCreateProjectDialogOpen(false)
-      setMessage({ type: 'success', text: 'Project created successfully!' })
+      toast.success('Project created successfully!')
     } catch (error) {
-      setMessage({ 
-        type: 'error', 
-        text: error instanceof Error ? error.message : 'Failed to create project' 
-      })
+      toast.error(error instanceof Error ? error.message : 'Failed to create project')
     } finally {
       setProjectActionLoading(false)
     }
@@ -273,12 +249,11 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (!editingProject || !projectName.trim()) {
-      setMessage({ type: 'error', text: 'Project name is required' })
+      toast.error('Project name is required')
       return
     }
 
     setProjectActionLoading(true)
-    setMessage(null)
 
     try {
       const updatedProject = await ProjectsService.updateProject(editingProject.id, user!.id, {
@@ -292,29 +267,22 @@ export default function SettingsPage() {
       )
       resetProjectForm()
       setIsEditProjectDialogOpen(false)
-      setMessage({ type: 'success', text: 'Project updated successfully!' })
+      toast.success('Project updated successfully!')
     } catch (error) {
-      setMessage({ 
-        type: 'error', 
-        text: error instanceof Error ? error.message : 'Failed to update project' 
-      })
+      toast.error(error instanceof Error ? error.message : 'Failed to update project')
     } finally {
       setProjectActionLoading(false)
     }
   }
 
   const handleDeleteProject = async (projectId: string) => {
-    setMessage(null)
 
     try {
       await ProjectsService.deleteProject(projectId, user!.id)
       setProjects(prev => prev.filter(p => p.id !== projectId))
-      setMessage({ type: 'success', text: 'Project deleted successfully!' })
+      toast.success('Project deleted successfully!')
     } catch (error) {
-      setMessage({ 
-        type: 'error', 
-        text: error instanceof Error ? error.message : 'Failed to delete project' 
-      })
+      toast.error(error instanceof Error ? error.message : 'Failed to delete project')
     }
   }
 
@@ -327,12 +295,9 @@ export default function SettingsPage() {
     try {
       const updatedPreferences = await EmailPreferencesService.updatePreferences(user.id, updates)
       setEmailPreferences(updatedPreferences)
-      setMessage({ type: 'success', text: 'Email preferences updated successfully!' })
+      toast.success('Email preferences updated successfully!')
     } catch (error) {
-      setMessage({ 
-        type: 'error', 
-        text: error instanceof Error ? error.message : 'Failed to update email preferences' 
-      })
+      toast.error(error instanceof Error ? error.message : 'Failed to update email preferences')
     }
   }
 
@@ -362,13 +327,6 @@ export default function SettingsPage() {
         <p className="text-muted-foreground mt-2">{t('settings.accountSettings')}</p>
       </div>
 
-      {message && (
-        <Alert className={`mb-6 ${message.type === 'error' ? 'border-red-200 bg-red-50' : 'border-green-200 bg-green-50'}`}>
-          <AlertDescription className={message.type === 'error' ? 'text-red-800' : 'text-green-800'}>
-            {message.text}
-          </AlertDescription>
-        </Alert>
-      )}
 
       {/* Account Settings Card */}
       <Card className="mb-6">

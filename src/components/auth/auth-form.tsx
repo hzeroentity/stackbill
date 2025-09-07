@@ -184,6 +184,17 @@ export function AuthForm() {
   return (
     <Card className="w-full max-w-md mx-auto shadow-xl border-0">
       <CardHeader className="space-y-2 pb-6">
+        {/* Security & Legitimacy Notice */}
+        <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-300 text-sm font-medium">
+            <CheckCircle className="w-4 h-4" />
+            Secure Business Application
+          </div>
+          <p className="text-center text-xs text-green-600 dark:text-green-400 mt-1">
+            StackBill is a legitimate SaaS productivity tool trusted by developers worldwide
+          </p>
+        </div>
+
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Image
             src="/stackbill-logo.svg"

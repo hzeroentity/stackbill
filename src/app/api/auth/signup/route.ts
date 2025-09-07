@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendConfirmationEmail } from '@/lib/resend'
+import { createVerificationToken } from '@/lib/email-verification'
 
 // Server-side Supabase client with service role key for admin operations
 const supabaseAdmin = createClient(
@@ -78,9 +79,10 @@ export async function POST(request: Request) {
       )
     }
 
-    // Generate confirmation URL
+    // Generate secure confirmation token
+    const verificationToken = createVerificationToken(authData.user.id, processedEmail)
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    const confirmationUrl = `${baseUrl}/api/auth/confirm?token=${authData.user.id}&email=${encodeURIComponent(processedEmail)}`
+    const confirmationUrl = `${baseUrl}/confirm-email?token=${verificationToken}`
 
     // Send confirmation email via Resend
     const emailResult = await sendConfirmationEmail(processedEmail, confirmationUrl)

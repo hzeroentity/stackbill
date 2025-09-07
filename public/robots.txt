@@ -1,0 +1,19 @@
+# StackBill - Legitimate SaaS Subscription Tracker
+# https://stackbill.dev
+
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /signup
+Allow: /confirm-email
+
+Disallow: /api/
+Disallow: /admin-panel/
+Disallow: /dashboard/
+
+Sitemap: https://stackbill.dev/sitemap.xml
+
+# Business Information
+# Company: StackBill
+# Purpose: Subscription tracking and management tool
+# Contact: hello@stackbill.dev

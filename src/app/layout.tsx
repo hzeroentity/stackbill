@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from '@/contexts/auth-context'
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from '@/contexts/language-context'
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +17,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StackBill - Subscription Tracker",
-  description: "Track all your subscriptions in one place",
+  title: "StackBill - Professional Subscription Tracker for SaaS Founders",
+  description: "Legitimate business tool for tracking SaaS subscriptions and recurring expenses. Trusted by developers and entrepreneurs worldwide.",
+  keywords: "subscription tracker, SaaS management, recurring expenses, business tools, subscription analytics",
+  authors: [{ name: "StackBill Team" }],
+  creator: "StackBill",
+  publisher: "StackBill",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  verification: {
+    google: "google-site-verification-code-here", // You'll need to add your actual verification code
+  },
+  other: {
+    "business-type": "legitimate-saas-application",
+    "content-category": "business-productivity-tool"
+  }
 };
 
 export default function RootLayout({
@@ -39,6 +59,7 @@ export default function RootLayout({
           <LanguageProvider>
             <AuthProvider>
               {children}
+              <Toaster />
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
