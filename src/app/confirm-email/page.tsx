@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -41,7 +41,7 @@ const statusConfig = {
   }
 }
 
-export default function ConfirmEmailPage() {
+function ConfirmEmailContent() {
   const [status, setStatus] = useState<ConfirmationStatus>('loading')
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -145,5 +145,22 @@ export default function ConfirmEmailPage() {
         </Card>
       </div>
     </div>
+  )
+}
+
+export default function ConfirmEmailPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+        <div className="flex items-center justify-center min-h-screen p-4">
+          <div className="flex items-center gap-2">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <span>Loading...</span>
+          </div>
+        </div>
+      </div>
+    }>
+      <ConfirmEmailContent />
+    </Suspense>
   )
 }

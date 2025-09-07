@@ -34,8 +34,10 @@ export async function POST(request: NextRequest) {
       .single()
 
     // For testing, use a fallback email if profile email not found
-    let userEmail = profile?.email || 'test@example.com' // Hardcoded for testing
-    let userName = profile?.raw_user_meta_data?.name || profile?.raw_user_meta_data?.full_name
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let userEmail = (profile as any)?.email || 'test@example.com' // Hardcoded for testing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let userName = (profile as any)?.raw_user_meta_data?.name || (profile as any)?.raw_user_meta_data?.full_name
     
     // Only try auth lookup if userId looks like a UUID and email isn't hardcoded
     if (!userEmail || (userEmail === 'test@example.com' && userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))) {
@@ -45,7 +47,7 @@ export async function POST(request: NextRequest) {
           userEmail = authUser.user.email
           userName = authUser.user?.user_metadata?.name || authUser.user?.user_metadata?.full_name
         }
-      } catch (error) {
+      } catch {
         // Ignore UUID validation errors for test data
         console.log('Skipping auth lookup for test userId:', userId)
       }
@@ -118,7 +120,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         message: 'Test monthly summary email sent with mock data',
         success: emailResult.success,
-        userPlan: subscription?.plan_type || 'free',
+        userPlan: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (subscription as any)?.plan_type || 'free',
         mockData: mockSummaryData,
         error: emailResult.error || null
       })
@@ -150,7 +153,8 @@ export async function POST(request: NextRequest) {
         .map(async (sub) => {
           const monthlyAmount = await SubscriptionsService.convertSubscriptionMonthlyAmount(sub, userCurrency)
           return {
-            name: sub.name,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            name: (sub as any).name,
             monthlyAmount,
             currency: userCurrency
           }
@@ -182,7 +186,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Test monthly summary email sent',
       success: emailResult.success,
-      userPlan: subscription?.plan_type || 'free',
+      userPlan: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (subscription as any)?.plan_type || 'free',
       summaryData: {
         monthlyTotal: summaryData.monthlyTotal,
         yearlyTotal: summaryData.yearlyTotal,

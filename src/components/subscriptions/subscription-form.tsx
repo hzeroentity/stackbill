@@ -27,7 +27,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [projects, setProjects] = useState<Project[]>([])
+  const [, setProjects] = useState<Project[]>([])
   const [selectedProjects, setSelectedProjects] = useState<string[]>([])
   const [loadingProjects, setLoadingProjects] = useState(true)
   

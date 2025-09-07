@@ -33,8 +33,10 @@ export async function POST(request: NextRequest) {
       .single()
 
     // For testing, use a fallback email if profile email not found
-    let userEmail = profile?.email || 'test@example.com' // Hardcoded for testing
-    let userName = profile?.raw_user_meta_data?.name || profile?.raw_user_meta_data?.full_name
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let userEmail = (profile as any)?.email || 'test@example.com' // Hardcoded for testing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let userName = (profile as any)?.raw_user_meta_data?.name || (profile as any)?.raw_user_meta_data?.full_name
     
     // Only try auth lookup if userId looks like a UUID and email isn't hardcoded
     if (!userEmail || (userEmail === 'test@example.com' && userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))) {
@@ -44,7 +46,7 @@ export async function POST(request: NextRequest) {
           userEmail = authUser.user.email
           userName = authUser.user?.user_metadata?.name || authUser.user?.user_metadata?.full_name
         }
-      } catch (error) {
+      } catch {
         // Ignore UUID validation errors for test data
         console.log('Skipping auth lookup for test userId:', userId)
       }
@@ -113,14 +115,16 @@ export async function POST(request: NextRequest) {
       // Send test renewal alert email
       const emailResult = await sendRenewalAlertEmail(
         userEmail,
-        mockRenewals,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        mockRenewals as any,
         userName
       )
 
       return NextResponse.json({
         message: 'Test renewal alert email sent with mock data',
         success: emailResult.success,
-        userPlan: subscription?.plan_type || 'free',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        userPlan: (subscription as any)?.plan_type || 'free',
         renewalCount: mockRenewals.length,
         error: emailResult.error || null
       })
@@ -132,7 +136,8 @@ export async function POST(request: NextRequest) {
     if (upcomingRenewals.length === 0) {
       return NextResponse.json({
         message: 'No upcoming renewals found',
-        userPlan: subscription?.plan_type || 'free',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        userPlan: (subscription as any)?.plan_type || 'free',
         totalSubscriptions: subscriptions.length
       })
     }
@@ -164,7 +169,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Test renewal alert email sent',
       success: emailResult.success,
-      userPlan: subscription?.plan_type || 'free',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      userPlan: (subscription as any)?.plan_type || 'free',
       renewalCount: renewalsWithDays.length,
       renewals: renewalsWithDays.map(r => ({
         name: r.name,

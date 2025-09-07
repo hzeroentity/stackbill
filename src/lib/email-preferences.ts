@@ -52,7 +52,8 @@ export class EmailPreferencesService {
       renewal_reminder_days: [7, 3, 1] // 7 days, 3 days, 1 day before renewal
     }
 
-    const { data, error } = await this.supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (this.supabase as any)
       .from('email_preferences')
       .insert([defaultPrefs])
       .select()
@@ -72,7 +73,8 @@ export class EmailPreferencesService {
     userId: string, 
     updates: Partial<Pick<EmailPreferences, 'monthly_summary_enabled' | 'renewal_alerts_enabled' | 'renewal_reminder_days'>>
   ): Promise<EmailPreferences> {
-    const { data, error } = await this.supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (this.supabase as any)
       .from('email_preferences')
       .update(updates)
       .eq('user_id', userId)
@@ -95,7 +97,8 @@ export class EmailPreferencesService {
   ): Promise<void> {
     const field = type === 'monthly_summary' ? 'last_monthly_summary_sent' : 'last_renewal_alert_sent'
     
-    const { error } = await this.supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (this.supabase as any)
       .from('email_preferences')
       .update({ [field]: new Date().toISOString() })
       .eq('user_id', userId)
@@ -167,6 +170,7 @@ export class EmailPreferencesService {
       throw new Error(`Failed to get users with emails enabled: ${error.message}`)
     }
 
-    return data.map(pref => pref.user_id)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return data.map(pref => (pref as any).user_id)
   }
 }

@@ -5,6 +5,17 @@ import { SubscriptionsService } from '@/lib/subscriptions'
 import { Currency } from '@/lib/currency-preferences'
 import { EmailPreferencesService } from '@/lib/email-preferences'
 
+interface UserData {
+  user_id: string
+  profiles: {
+    email: string
+    raw_user_meta_data?: {
+      name?: string
+      full_name?: string
+    }
+  }[]
+}
+
 export async function POST() {
   try {
     // Get current month and year
@@ -42,7 +53,7 @@ export async function POST() {
         if (!shouldSend) {
           results.push({
             userId: user.user_id,
-            email: user.profiles.email,
+            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
             success: true,
             error: 'Skipped - user preferences or anti-spam protection'
           })
@@ -61,7 +72,7 @@ export async function POST() {
           console.error(`Failed to fetch subscriptions for user ${user.user_id}:`, subsError)
           results.push({
             userId: user.user_id,
-            email: user.profiles.email,
+            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
             success: false,
             error: 'Failed to fetch subscriptions'
           })
@@ -71,7 +82,7 @@ export async function POST() {
         if (!subscriptions || subscriptions.length === 0) {
           results.push({
             userId: user.user_id,
-            email: user.profiles.email,
+            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
             success: true,
             error: 'No subscriptions found'
           })
@@ -115,9 +126,9 @@ export async function POST() {
         topSubscriptions.sort((a, b) => b.monthlyAmount - a.monthlyAmount)
 
         // Extract user name from metadata
-        const userName = user.profiles.raw_user_meta_data?.name || 
-                        user.profiles.raw_user_meta_data?.full_name ||
-                        user.profiles.email?.split('@')[0]
+        const userName = (user as UserData).profiles?.[0]?.raw_user_meta_data?.name || 
+                        (user as UserData).profiles?.[0]?.raw_user_meta_data?.full_name ||
+                        (user as UserData).profiles?.[0]?.email || 'unknown@email.com'?.split('@')[0]
 
         // Prepare summary data
         const summaryData = {
@@ -133,7 +144,7 @@ export async function POST() {
 
         // Send monthly summary email
         const emailResult = await sendMonthlySummaryEmail(
-          user.profiles.email,
+          (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
           summaryData,
           userName
         )
@@ -146,13 +157,13 @@ export async function POST() {
           
           results.push({
             userId: user.user_id,
-            email: user.profiles.email,
+            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
             success: true
           })
         } else {
           results.push({
             userId: user.user_id,
-            email: user.profiles.email,
+            email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
             success: false,
             error: emailResult.error?.toString() || 'Unknown error'
           })
@@ -162,7 +173,7 @@ export async function POST() {
         console.error(`Error processing user ${user.user_id}:`, error)
         results.push({
           userId: user.user_id,
-          email: user.profiles.email,
+          email: (user as UserData).profiles?.[0]?.email || 'unknown@email.com',
           success: false,
           error: error instanceof Error ? error.message : 'Unknown error'
         })

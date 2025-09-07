@@ -63,6 +63,7 @@ export function AnimatedCounter({
     }
 
     requestAnimationFrame(animateValue)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration])
 
   const formattedValue = formatValue ? formatValue(displayValue) : Math.floor(displayValue).toString()

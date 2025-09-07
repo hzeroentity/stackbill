@@ -548,7 +548,7 @@ export default function BillingPage() {
               <p className="text-sm text-muted-foreground">
                 <strong>What will happen:</strong>
                 <br />• Your most recently created subscriptions and projects will be permanently removed
-                <br />• You'll be downgraded to the Free plan immediately  
+                <br />• You&apos;ll be downgraded to the Free plan immediately  
                 <br />• This action cannot be undone
               </p>
               

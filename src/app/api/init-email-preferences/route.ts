@@ -13,7 +13,7 @@ export async function POST() {
     // The table needs to be created directly in Supabase dashboard or via proper migration
     
     // For now, let's just test if the table exists and create a default preference
-    const { data: existingTable, error: checkError } = await supabase
+    const { error: checkError } = await supabase
       .from('email_preferences')
       .select('id')
       .limit(1)
