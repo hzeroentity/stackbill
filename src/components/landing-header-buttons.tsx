@@ -7,16 +7,8 @@ import { useAuth } from "@/contexts/auth-context"
 export function LandingHeaderButtons() {
   const { user, isInitialized } = useAuth()
 
-  if (!isInitialized) {
-    return (
-      <div className="flex items-center space-x-4">
-        <div className="w-16 h-9 bg-slate-200 dark:bg-slate-700 animate-pulse rounded"></div>
-        <div className="w-24 h-9 bg-slate-200 dark:bg-slate-700 animate-pulse rounded"></div>
-      </div>
-    )
-  }
-
-  if (user) {
+  // Show authenticated state only when both initialized and user exists
+  if (isInitialized && user) {
     return (
       <div className="flex items-center space-x-4">
         <Link href="/dashboard">
@@ -26,6 +18,7 @@ export function LandingHeaderButtons() {
     )
   }
 
+  // Show sign-in buttons by default (both during loading and when not authenticated)
   return (
     <div className="flex items-center space-x-4">
       <Link href="/login">

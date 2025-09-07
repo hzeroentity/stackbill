@@ -16,6 +16,7 @@ interface AdminUser {
   email?: string
   created_at: string
   plan_type: string
+  pro_subscription_started?: string | null
   total_subscriptions: number
   active_subscriptions: number  
   total_projects: number
@@ -136,6 +137,32 @@ export default function AdminDashboard() {
       month: 'short',
       day: 'numeric'
     })
+  }
+
+  const calculateProDuration = (proStartDate: string) => {
+    const start = new Date(proStartDate)
+    const now = new Date()
+    const diffTime = Math.abs(now.getTime() - start.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    
+    if (diffDays < 30) {
+      return `${diffDays} day${diffDays !== 1 ? 's' : ''}`
+    } else if (diffDays < 365) {
+      const months = Math.floor(diffDays / 30)
+      const remainingDays = diffDays % 30
+      if (remainingDays === 0) {
+        return `${months} month${months !== 1 ? 's' : ''}`
+      }
+      return `${months} month${months !== 1 ? 's' : ''}, ${remainingDays} day${remainingDays !== 1 ? 's' : ''}`
+    } else {
+      const years = Math.floor(diffDays / 365)
+      const remainingDays = diffDays % 365
+      const months = Math.floor(remainingDays / 30)
+      if (months === 0) {
+        return `${years} year${years !== 1 ? 's' : ''}`
+      }
+      return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`
+    }
   }
 
   // Calculate totals
@@ -281,7 +308,7 @@ export default function AdminDashboard() {
             <TableBody>
               {filteredUsers.map((user) => (
                 <React.Fragment key={user.id}>
-                  <TableRow key={`user-${user.id}`} className="cursor-pointer hover:bg-muted/50">
+                  <TableRow key={`user-${user.id}`} className="cursor-pointer hover:bg-muted/50" onClick={() => toggleUserExpansion(user.id)}>
                     <TableCell>
                       <Button
                         variant="ghost"
@@ -304,16 +331,23 @@ export default function AdminDashboard() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge 
-                        variant={user.plan_type === 'pro' ? 'default' : 'secondary'}
-                        className={
-                          user.plan_type === 'pro' 
-                            ? 'bg-purple-600 hover:bg-purple-700' 
-                            : ''
-                        }
-                      >
-                        {user.plan_type.toUpperCase()}
-                      </Badge>
+                      <div className="flex flex-col">
+                        <Badge 
+                          variant={user.plan_type === 'pro' ? 'default' : 'secondary'}
+                          className={
+                            user.plan_type === 'pro' 
+                              ? 'bg-purple-600 hover:bg-purple-700' 
+                              : ''
+                          }
+                        >
+                          {user.plan_type.toUpperCase()}
+                        </Badge>
+                        {user.plan_type === 'pro' && user.pro_subscription_started && (
+                          <span className="text-xs text-muted-foreground mt-1">
+                            {calculateProDuration(user.pro_subscription_started)}
+                          </span>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">

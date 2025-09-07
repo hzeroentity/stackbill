@@ -31,14 +31,14 @@ You should see your admin record with `is_active = true`.
 ## Step 3: Test Admin Access
 
 1. Logout and login again to refresh your session
-2. Visit `/admin` - you should now have access
+2. Visit `/admin-panel` - you should now have access
 3. Check browser console for any errors
 
 ## Step 4: Setup 2FA (Required for Security)
 
 After accessing the admin dashboard:
 
-1. **Visit `/admin`** - you'll see a 2FA setup section
+1. **Visit `/admin-panel`** - you'll see a 2FA setup section
 2. **Click "Setup Two-Factor Authentication"**
 3. **Scan QR code** with Google Authenticator app
 4. **Save backup codes** in a secure location

@@ -53,9 +53,14 @@ export class AdminService {
         return null
       }
 
-      // Check session expiry
+      // Auto-renew expired sessions for active admin users
       if (typedAdminUser.session_expires_at && new Date(typedAdminUser.session_expires_at) < new Date()) {
-        return null
+        // Session expired, but user is valid admin - auto-renew
+        await this.updateAdminSession(userId)
+        
+        // Update the local object to reflect the new session expiry
+        typedAdminUser.session_expires_at = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        typedAdminUser.last_login_at = new Date().toISOString()
       }
 
       // Get user email

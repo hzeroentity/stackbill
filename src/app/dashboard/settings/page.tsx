@@ -9,6 +9,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { Badge } from "@/components/ui/badge"
 
 // Predefined color options
 const PREDEFINED_COLORS = [
@@ -31,6 +33,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Currency, SUPPORTED_CURRENCIES, getDefaultCurrency, setDefaultCurrency } from '@/lib/currency-preferences'
 import { ProjectsService } from '@/lib/projects'
 import { Project } from '@/lib/database.types'
+import { EmailPreferencesService, EmailPreferences } from '@/lib/email-preferences'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -53,6 +56,10 @@ export default function SettingsPage() {
   const [isEditProjectDialogOpen, setIsEditProjectDialogOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [projectActionLoading, setProjectActionLoading] = useState(false)
+  
+  // Email preferences state
+  const [emailPreferences, setEmailPreferences] = useState<EmailPreferences | null>(null)
+  const [emailPreferencesLoading, setEmailPreferencesLoading] = useState(false)
   
   // Password change form
   const [newPassword, setNewPassword] = useState('')
@@ -84,11 +91,32 @@ export default function SettingsPage() {
         // Load projects for all users (free users can have up to 2 projects)
         const projectsData = await ProjectsService.getProjects(user!.id)
         setProjects(projectsData)
+
+        // Load email preferences for Pro users
+        if (isUserPro) {
+          await loadEmailPreferences()
+        }
       }
     } catch (error) {
       console.error('Error loading user data:', error)
     } finally {
       setProjectsLoading(false)
+    }
+  }, [user])
+
+  // Load email preferences
+  const loadEmailPreferences = useCallback(async () => {
+    if (!user?.id) return
+    
+    try {
+      setEmailPreferencesLoading(true)
+      const preferences = await EmailPreferencesService.getUserPreferences(user.id)
+      setEmailPreferences(preferences)
+    } catch (error) {
+      console.error('Error loading email preferences:', error)
+      setMessage({ type: 'error', text: 'Failed to load email preferences' })
+    } finally {
+      setEmailPreferencesLoading(false)
     }
   }, [user])
 
@@ -288,6 +316,35 @@ export default function SettingsPage() {
         text: error instanceof Error ? error.message : 'Failed to delete project' 
       })
     }
+  }
+
+  // Handle email preference updates
+  const handleEmailPreferenceUpdate = async (
+    updates: Partial<Pick<EmailPreferences, 'monthly_summary_enabled' | 'renewal_alerts_enabled' | 'renewal_reminder_days'>>
+  ) => {
+    if (!user?.id || !emailPreferences) return
+
+    try {
+      const updatedPreferences = await EmailPreferencesService.updatePreferences(user.id, updates)
+      setEmailPreferences(updatedPreferences)
+      setMessage({ type: 'success', text: 'Email preferences updated successfully!' })
+    } catch (error) {
+      setMessage({ 
+        type: 'error', 
+        text: error instanceof Error ? error.message : 'Failed to update email preferences' 
+      })
+    }
+  }
+
+  const handleReminderDayToggle = (day: number) => {
+    if (!emailPreferences) return
+
+    const currentDays = emailPreferences.renewal_reminder_days
+    const newDays = currentDays.includes(day) 
+      ? currentDays.filter(d => d !== day)
+      : [...currentDays, day].sort((a, b) => b - a) // Sort descending
+
+    handleEmailPreferenceUpdate({ renewal_reminder_days: newDays })
   }
 
   const openEditProject = (project: Project) => {
@@ -709,6 +766,113 @@ export default function SettingsPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Email Preferences Card (Pro users only) */}
+      {isPro && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              Email Preferences
+              <Badge variant="secondary" className="text-xs">Pro</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {emailPreferencesLoading ? (
+              <div className="flex items-center justify-center p-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : emailPreferences ? (
+              <div className="space-y-6">
+                {/* Monthly Summary Toggle */}
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <Label className="text-base font-medium">Monthly Summary Emails</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive a monthly summary of your subscription expenses and insights
+                    </p>
+                  </div>
+                  <Switch
+                    checked={emailPreferences.monthly_summary_enabled}
+                    onCheckedChange={(checked) => 
+                      handleEmailPreferenceUpdate({ monthly_summary_enabled: checked })
+                    }
+                  />
+                </div>
+
+                <div className="border-t pt-6">
+                  {/* Renewal Alerts Toggle */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="space-y-1">
+                      <Label className="text-base font-medium">Renewal Alert Emails</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Get notified before your subscriptions renew
+                      </p>
+                    </div>
+                    <Switch
+                      checked={emailPreferences.renewal_alerts_enabled}
+                      onCheckedChange={(checked) => 
+                        handleEmailPreferenceUpdate({ renewal_alerts_enabled: checked })
+                      }
+                    />
+                  </div>
+
+                  {/* Reminder Days Selection */}
+                  {emailPreferences.renewal_alerts_enabled && (
+                    <div className="pl-4 border-l-2 border-muted space-y-3">
+                      <Label className="text-sm font-medium text-muted-foreground">Reminder Schedule</Label>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Choose when you want to receive renewal reminders (you can select multiple)
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {[14, 7, 3, 1].map((day) => (
+                          <Badge
+                            key={day}
+                            variant={emailPreferences.renewal_reminder_days.includes(day) ? "default" : "outline"}
+                            className={`cursor-pointer transition-colors ${
+                              emailPreferences.renewal_reminder_days.includes(day) 
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                                : "hover:bg-muted"
+                            }`}
+                            onClick={() => handleReminderDayToggle(day)}
+                          >
+                            {day} day{day !== 1 ? 's' : ''} before
+                          </Badge>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Currently selected: {emailPreferences.renewal_reminder_days
+                          .sort((a, b) => b - a)
+                          .map(d => `${d} day${d !== 1 ? 's' : ''}`)
+                          .join(', ') || 'None'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Anti-spam Notice */}
+                <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+                  <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
+                    📧 <strong>Smart Delivery:</strong> We&apos;ll never spam you. Monthly summaries are sent once per month, 
+                    and renewal alerts are limited to once per day maximum to avoid overwhelming your inbox.
+                  </AlertDescription>
+                </Alert>
+              </div>
+            ) : (
+              <div className="text-center p-8 text-muted-foreground">
+                <p>Failed to load email preferences</p>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-2"
+                  onClick={loadEmailPreferences}
+                >
+                  Retry
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Currency Preferences Card */}
       <Card>

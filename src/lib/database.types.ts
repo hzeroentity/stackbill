@@ -76,6 +76,41 @@ export interface Database {
           created_at?: string
         }
       }
+      email_preferences: {
+        Row: {
+          id: string
+          user_id: string
+          monthly_summary_enabled: boolean
+          renewal_alerts_enabled: boolean
+          renewal_reminder_days: number[]
+          last_monthly_summary_sent: string | null
+          last_renewal_alert_sent: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          monthly_summary_enabled?: boolean
+          renewal_alerts_enabled?: boolean
+          renewal_reminder_days?: number[]
+          last_monthly_summary_sent?: string | null
+          last_renewal_alert_sent?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          monthly_summary_enabled?: boolean
+          renewal_alerts_enabled?: boolean
+          renewal_reminder_days?: number[]
+          last_monthly_summary_sent?: string | null
+          last_renewal_alert_sent?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
       subscriptions: {
         Row: {
           id: string

@@ -126,7 +126,7 @@ export async function GET(request: NextRequest) {
 
     // Build comprehensive user data
     const users = authUsers.users.map(authUser => {
-      const userSub = userSubscriptions?.find((us: unknown) => (us as { user_id: string }).user_id === authUser.id) ?? null as { plan_type: string; is_active: boolean; stripe_customer_id: string } | null
+      const userSub = userSubscriptions?.find((us: unknown) => (us as { user_id: string }).user_id === authUser.id) ?? null as { plan_type: string; is_active: boolean; stripe_customer_id: string; created_at: string } | null
       const userSubscriptionsList = allSubscriptions?.filter((s: unknown) => (s as { user_id: string }).user_id === authUser.id) ?? [] as Array<{ is_active: boolean; amount: number; billing_period: string; user_id: string; id: string }>
       const userProjects = allProjects?.filter((p: unknown) => (p as { user_id: string }).user_id === authUser.id) ?? [] as Array<{ user_id: string; id: string }>
 
@@ -177,6 +177,7 @@ export async function GET(request: NextRequest) {
         email: authUser.email,
         created_at: authUser.created_at,
         plan_type: userSub?.plan_type || 'free',
+        pro_subscription_started: userSub?.plan_type === 'pro' ? userSub.created_at : null,
         total_subscriptions: userSubscriptionsList.length,
         active_subscriptions: userSubscriptionsList.filter(s => s.is_active).length,
         total_projects: userProjects.length,
