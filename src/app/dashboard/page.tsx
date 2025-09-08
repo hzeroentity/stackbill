@@ -472,6 +472,18 @@ export default function DashboardPage() {
     }).format(amount)
   }
 
+  // Helper component for displaying currency or FREE badge
+  const CurrencyOrFree = ({ amount, currency }: { amount: number; currency?: string }) => {
+    if (amount === 0) {
+      return (
+        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+          FREE
+        </span>
+      )
+    }
+    return <span className="font-semibold">{formatCurrency(amount, currency)}</span>
+  }
+
   const shouldShowRenewalStatus = (renewalStatus: { text: string }) => {
     // Show status only if text is not empty
     return renewalStatus.text !== ''
@@ -833,7 +845,7 @@ export default function DashboardPage() {
                       {/* Right side - Price, Due Date, and Menu */}
                       <div className="flex items-center gap-4 ml-4">
                         <div className="text-right">
-                          <p className="font-semibold">{formatCurrency(subscription.amount, subscription.currency)}</p>
+                          <p><CurrencyOrFree amount={subscription.amount} currency={subscription.currency} /></p>
                           <p className="text-xs text-muted-foreground capitalize">
                             {subscription.billing_period}
                           </p>
@@ -977,7 +989,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex justify-between items-center text-sm">
                         <div>
-                          <span className="font-semibold dark:text-white">{formatCurrency(subscription.amount, subscription.currency)}</span>
+                          <span className="dark:text-white"><CurrencyOrFree amount={subscription.amount} currency={subscription.currency} /></span>
                           <span className="text-muted-foreground capitalize ml-1">
                             {subscription.billing_period}
                           </span>
@@ -1043,7 +1055,7 @@ export default function DashboardPage() {
                         {/* Right side - Price, Menu */}
                         <div className="flex items-center gap-4 ml-4">
                           <div className="text-right opacity-75">
-                            <p className="font-semibold line-through text-muted-foreground">{formatCurrency(subscription.amount, subscription.currency)}</p>
+                            <p className="line-through text-muted-foreground"><CurrencyOrFree amount={subscription.amount} currency={subscription.currency} /></p>
                             <p className="text-xs text-muted-foreground capitalize">
                               {subscription.billing_period}
                             </p>
@@ -1143,7 +1155,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="flex justify-between items-center text-sm opacity-75">
                           <div>
-                            <span className="font-semibold line-through text-muted-foreground">{formatCurrency(subscription.amount, subscription.currency)}</span>
+                            <span className="line-through text-muted-foreground"><CurrencyOrFree amount={subscription.amount} currency={subscription.currency} /></span>
                             <span className="text-muted-foreground capitalize ml-1">
                               {subscription.billing_period}
                             </span>

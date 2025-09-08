@@ -39,23 +39,30 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 lg:py-32">
+      <section className="py-20">
         <div className="container mx-auto px-6 text-center">
+          <div className="mb-6">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800">
+              <span className="text-blue-700 dark:text-blue-300 text-sm font-medium">
+                ✨ Just Launched - Early Access
+              </span>
+            </div>
+          </div>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            {t('landing.hero.title')}, <br /><span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">keep your stack under control.</span>
+Stop surprise charges. <br /><span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Track your stack in seconds.</span>
           </h1>
           <p className="text-xl lg:text-2xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto">
-            {t('landing.hero.subtitle')}
+Track every subscription in one clean dashboard with reminders, reports, and real-time currency conversion.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="/login?mode=signup">
               <Button size="lg" className="text-lg px-8 py-4">
-                {t('landing.hero.cta')}
+Start Free
               </Button>
             </Link>
             <Link href="#how-it-works">
               <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-                {t('landing.hero.howItWorks')}
+See How It Works
               </Button>
             </Link>
           </div>
@@ -76,8 +83,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Problem Statement Section */}
+      <section className="py-20 bg-white dark:bg-gray-800">
+        <div className="container mx-auto px-6">
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="mb-16">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">The Hidden Cost Crisis</h2>
+              <p className="text-xl text-slate-600 dark:text-slate-300">Most developers and SaaS founders are hemorrhaging money without realizing it</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="text-4xl mb-4">⚡</div>
+                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">62%</div>
+                <p className="text-slate-600 dark:text-slate-300 font-medium">of developers get surprise charges</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-4xl mb-4">💸</div>
+                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">$180</div>
+                <p className="text-slate-600 dark:text-slate-300 font-medium">average monthly SaaS spend per founder</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-4xl mb-4">🗑️</div>
+                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">73%</div>
+                <p className="text-slate-600 dark:text-slate-300 font-medium">pay for tools they rarely use</p>
+              </div>
+            </div>
+            
+            <div className="mt-12">
+              <p className="text-xl text-slate-600 dark:text-slate-300 font-semibold">
+                That's potentially <span className="text-slate-900 dark:text-white font-bold">$1,000+ per year</span> down the drain
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 bg-white dark:bg-gray-800">
+      <section id="how-it-works" className="py-20 bg-slate-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
@@ -94,12 +139,12 @@ export default function Home() {
               <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">📝 Add your subscriptions</h3>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">📝 Add your subscriptions</h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
                 <p className="text-slate-500 dark:text-gray-400">📝 Simple form UI placeholder</p>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-                Quick form to add subscription name, cost, and renewal date
+Quick form for name, cost, currency, billing period, renewal date, category, and project.
               </p>
             </div>
             
@@ -108,12 +153,12 @@ export default function Home() {
               <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">📁 Organize by projects</h3>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">📁 Get reminders + reports</h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
                 <p className="text-slate-500 dark:text-gray-400">📁 Project categorization view</p>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-                Tag subscriptions by project for better cost tracking and insights
+Email alerts before renewals + monthly spending summaries straight to your inbox.
               </p>
             </div>
             
@@ -122,12 +167,12 @@ export default function Home() {
               <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">📊 View spending insights</h3>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">📊 Organize by projects</h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
                 <p className="text-slate-500 dark:text-gray-400">📊 Dashboard analytics view</p>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-                See total monthly/yearly costs with renewal status tracking
+Group subscriptions per project for granular cost tracking and team insights.
               </p>
             </div>
           </div>
@@ -144,11 +189,11 @@ export default function Home() {
       <section className="py-20 bg-gray-100 dark:bg-gray-800">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
               Spreadsheets don&apos;t send reminders.
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
-              StackBill gives you clarity, control, and reminders — in one clean dashboard.
+              StackBill gives you clarity, control, and reminders in one clean dashboard.
             </p>
           </div>
           
@@ -168,7 +213,7 @@ export default function Home() {
                       Surprise charges
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Forgot a $29 tool was still renewing and got hit with unexpected charges
+                      Surprise charges when a $39 tool renews you forgot about.
                     </p>
                   </div>
                 </div>
@@ -182,7 +227,7 @@ export default function Home() {
                       Double payments
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Paid twice for the same subscription because you lost track of renewals
+                      Double payments because two tools overlap.
                     </p>
                   </div>
                 </div>
@@ -196,7 +241,7 @@ export default function Home() {
                       No spending visibility
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      No idea how much you&apos;re spending each month on your dev tools
+                      No idea how much you're actually spending.
                     </p>
                   </div>
                 </div>
@@ -215,10 +260,10 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Never miss a renewal
+                      Email alerts before every renewal
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Get email reminders before renewals so you can cancel or prepare for charges
+                      Email alerts before every renewal.
                     </p>
                   </div>
                 </div>
@@ -229,10 +274,10 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Complete overview
+                      Monthly + yearly spending at a glance
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      See all your subscriptions in one place, organized and easy to manage
+                      Monthly + yearly spending at a glance.
                     </p>
                   </div>
                 </div>
@@ -243,10 +288,10 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Clear spending insights
+                      Clear project-level insights and category breakdowns
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Know exactly how much you spend monthly and yearly with smart breakdowns
+                      Clear project-level insights and category breakdowns.
                     </p>
                   </div>
                 </div>
@@ -263,6 +308,9 @@ export default function Home() {
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
               Everything you need. Nothing you don&apos;t.
             </h2>
+            <p className="text-xl text-slate-600 dark:text-slate-300">
+              Complete subscription management with all the features you actually need.
+            </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -275,7 +323,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  See your total costs at a glance with smart category breakdowns and spending insights.
+                  Know exactly how much your stack costs over time.
                 </p>
               </CardContent>
             </Card>
@@ -285,11 +333,11 @@ export default function Home() {
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
                   <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Auto currency conversion (10+ supported)</CardTitle>
+                <CardTitle className="text-xl dark:text-white">Auto currency conversion</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Track subscriptions in multiple currencies with real-time conversion rates.
+                  10+ currencies supported with live FX rates.
                 </p>
               </CardContent>
             </Card>
@@ -304,7 +352,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Get notified before subscription renewals so you never get surprise charges again.
+                  Never get surprised by a charge again.
                 </p>
               </CardContent>
             </Card>
@@ -319,7 +367,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Receive monthly spending summaries with insights and renewal forecasts.
+                  Recap your costs + trends, every month.
                 </p>
               </CardContent>
             </Card>
@@ -333,7 +381,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Organize subscriptions with 15+ predefined categories including AI/ML tools.
+                  Group tools by type: infra, analytics, AI, etc.
                 </p>
               </CardContent>
             </Card>
@@ -348,7 +396,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Tag subscriptions by project for granular cost tracking and team insights.
+                  Separate client projects or products in one place.
                 </p>
               </CardContent>
             </Card>
@@ -368,7 +416,7 @@ export default function Home() {
             </p>
             <div className="mt-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg px-4 py-2 inline-block">
               <p className="text-orange-800 dark:text-orange-200 text-sm font-medium">
-                🚀 Early Bird: Lock in $3/month forever for the first 100 customers
+                🚀 Early Access: Lock in $3/month forever for the first 100 customers
               </p>
             </div>
           </div>
@@ -379,7 +427,7 @@ export default function Home() {
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Free</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">$0</div>
-                <p className="text-slate-600 dark:text-slate-300">Perfect for getting started • No credit card required</p>
+                <p className="text-slate-600 dark:text-slate-300">Perfect to start</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -388,7 +436,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Monthly & annual spend overview</span>
+                  <span className="dark:text-slate-300">Monthly spending report</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -430,7 +478,7 @@ export default function Home() {
                 <div className="text-4xl font-bold mb-2 dark:text-white">
                   <span className="text-2xl line-through text-slate-400 mr-2">$5</span>$3
                 </div>
-                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-blue-600 font-semibold">Early Bird Price</span></p>
+                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-blue-600 font-semibold">$3 at launch</span></p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -455,7 +503,11 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Priority support & billing history</span>
+                  <span className="dark:text-slate-300">Priority support</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Export data & reports</span>
                 </div>
                 <div className="pt-6">
                   <Link href="/login?mode=signup" className="w-full block">
@@ -473,11 +525,11 @@ export default function Home() {
       {/* Social Proof Section */}
       <section className="py-20 bg-slate-50 dark:bg-gray-900/50 overflow-hidden">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
               Early adopters are already saving money
             </h2>
-            <p className="text-slate-500 dark:text-slate-400">
+            <p className="text-xl text-slate-600 dark:text-slate-300">
               Be part of the first wave of developers taking control of their SaaS costs
             </p>
           </div>
@@ -502,7 +554,7 @@ export default function Home() {
               {/* Testimonial 1 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Way better than my janky Notion page. Love the reminders.&rdquo;
+                  &ldquo;Way better than my messy Notion table. Love the reminders.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -518,7 +570,7 @@ export default function Home() {
               {/* Testimonial 2 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Finally stopped getting surprise $99 charges from tools I forgot about.&rdquo;
+                  &ldquo;Finally stopped getting surprise $99 charges. Totally worth it.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -550,7 +602,7 @@ export default function Home() {
               {/* Testimonial 4 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;The currency conversion feature is perfect for my international subscriptions.&rdquo;
+                  &ldquo;The FX conversion is perfect for my international stack.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -598,7 +650,7 @@ export default function Home() {
               {/* Complete duplicate set for seamless loop */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Way better than my janky Notion page. Love the reminders.&rdquo;
+                  &ldquo;Way better than my messy Notion table. Love the reminders.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -613,7 +665,7 @@ export default function Home() {
 
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Finally stopped getting surprise $99 charges from tools I forgot about.&rdquo;
+                  &ldquo;Finally stopped getting surprise $99 charges. Totally worth it.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -643,7 +695,7 @@ export default function Home() {
 
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;The currency conversion feature is perfect for my international subscriptions.&rdquo;
+                  &ldquo;The FX conversion is perfect for my international stack.&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -694,10 +746,10 @@ export default function Home() {
       <section className="py-20 bg-blue-600 dark:bg-blue-700">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-            Join the first developers taking control of their stack.
+            Stop paying for tools you forgot about.
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Start free today, no credit card required.
+            Start tracking your stack in 60 seconds.
           </p>
           <Link href="/login?mode=signup">
             <Button size="lg" variant="secondary" className="text-lg px-8 py-4">

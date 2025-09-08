@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { BillingPeriod, Subscription, SubscriptionInsert, SubscriptionCategory, Project } from '@/lib/database.types'
 import { SUPPORTED_CURRENCIES, getDefaultCurrency } from '@/lib/currency-preferences'
@@ -30,6 +31,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
   const [, setProjects] = useState<Project[]>([])
   const [selectedProjects, setSelectedProjects] = useState<string[]>([])
   const [loadingProjects, setLoadingProjects] = useState(true)
+  const [isFree, setIsFree] = useState(subscription?.amount === 0)
   
   // Predefined categories for better organization
   const categories: SubscriptionCategory[] = [
@@ -52,7 +54,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
   
   const [formData, setFormData] = useState({
     name: subscription?.name || '',
-    amount: subscription?.amount?.toString() || '',
+    amount: (subscription?.amount === 0) ? '0.00' : (subscription?.amount?.toString() || ''),
     currency: subscription?.currency || getDefaultCurrency(),
     billing_period: subscription?.billing_period || 'monthly' as BillingPeriod,
     renewal_date: subscription?.renewal_date ? subscription.renewal_date.split('T')[0] : '',
@@ -100,6 +102,15 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
     }
   }, [subscription])
 
+  // Handle free subscription state changes
+  useEffect(() => {
+    if (isFree) {
+      setFormData(prev => ({ ...prev, amount: '0.00' }))
+    } else if (formData.amount === '0.00') {
+      setFormData(prev => ({ ...prev, amount: '' }))
+    }
+  }, [isFree, formData.amount])
+
   // No need to check Pro plan - it's passed as prop
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,10 +124,10 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
         throw new Error('Please assign this subscription to at least one project')
       }
 
-      // Validate amount is positive
+      // Validate amount is positive (allow 0 for free subscriptions)
       const amount = parseFloat(formData.amount)
-      if (isNaN(amount) || amount <= 0) {
-        throw new Error('Amount must be a positive number greater than 0')
+      if (isNaN(amount) || amount < 0) {
+        throw new Error('Amount must be a positive number or 0 for free subscriptions')
       }
 
       // Validate renewal date is today or in the future
@@ -166,6 +177,8 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isFree) return // Don't allow manual changes when free is checked
+    
     const value = e.target.value
     // Allow empty string for user to clear the field
     if (value === '') {
@@ -212,13 +225,18 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
                 placeholder="0.00"
                 value={formData.amount}
                 onChange={handleAmountChange}
+                disabled={isFree}
                 required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="currency">Currency</Label>
-              <Select value={formData.currency} onValueChange={(value) => handleInputChange('currency', value)}>
-                <SelectTrigger>
+              <Select 
+                value={formData.currency} 
+                onValueChange={(value) => handleInputChange('currency', value)}
+                disabled={isFree}
+              >
+                <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -232,39 +250,54 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="billing_period">Billing Period</Label>
-            <Select 
-              value={formData.billing_period} 
-              onValueChange={(value) => handleInputChange('billing_period', value)}
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="free-subscription" 
+              checked={isFree}
+              onCheckedChange={(checked) => setIsFree(checked === true)}
+            />
+            <Label 
+              htmlFor="free-subscription" 
+              className="text-sm font-medium cursor-pointer"
             >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="quarterly">Quarterly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
-              </SelectContent>
-            </Select>
+              This subscription is free
+            </Label>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="renewal_date">Next Renewal Date</Label>
-            <Input
-              id="renewal_date"
-              type="date"
-              value={formData.renewal_date}
-              onChange={(e) => handleInputChange('renewal_date', e.target.value)}
-              required
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="billing_period">Billing Period</Label>
+              <Select 
+                value={formData.billing_period} 
+                onValueChange={(value) => handleInputChange('billing_period', value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="quarterly">Quarterly</SelectItem>
+                  <SelectItem value="yearly">Yearly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="renewal_date">Next Renewal Date</Label>
+              <Input
+                id="renewal_date"
+                type="date"
+                value={formData.renewal_date}
+                onChange={(e) => handleInputChange('renewal_date', e.target.value)}
+                required
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
             <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
