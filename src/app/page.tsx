@@ -15,9 +15,9 @@ export default function Home() {
   const { t } = useLanguage()
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-950 dark:to-gray-900">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -61,7 +61,7 @@ export default function Home() {
           </div>
           
           {/* Dashboard Preview Video */}
-          <div className="max-w-6xl mx-auto mt-16 bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
+          <div className="max-w-6xl mx-auto mt-16 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             <video 
               autoPlay 
               loop 
@@ -76,8 +76,72 @@ export default function Home() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20 bg-white dark:bg-gray-800">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
+              How It Works
+            </h2>
+            <p className="text-xl text-slate-600 dark:text-slate-300">
+              Simple, visual tracking in 3 steps
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+            {/* Step 1 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">📝 Add your subscriptions</h3>
+              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
+                <p className="text-slate-500 dark:text-gray-400">📝 Simple form UI placeholder</p>
+              </div>
+              <p className="text-slate-600 dark:text-slate-300">
+                Quick form to add subscription name, cost, and renewal date
+              </p>
+            </div>
+            
+            {/* Step 2 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">📁 Organize by projects</h3>
+              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
+                <p className="text-slate-500 dark:text-gray-400">📁 Project categorization view</p>
+              </div>
+              <p className="text-slate-600 dark:text-slate-300">
+                Tag subscriptions by project for better cost tracking and insights
+              </p>
+            </div>
+            
+            {/* Step 3 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">📊 View spending insights</h3>
+              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
+                <p className="text-slate-500 dark:text-gray-400">📊 Dashboard analytics view</p>
+              </div>
+              <p className="text-slate-600 dark:text-slate-300">
+                See total monthly/yearly costs with renewal status tracking
+              </p>
+            </div>
+          </div>
+          
+          <div className="text-center mt-12">
+            <p className="text-lg text-slate-600 dark:text-slate-300 mb-6">
+              <strong>Optional 4th step:</strong> Upgrade to Pro for email reminders, monthly reports, and unlimited subscriptions.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Problem vs Solution Section */}
-      <section className="py-20 bg-slate-50 dark:bg-slate-900/50">
+      <section className="py-20 bg-gray-100 dark:bg-gray-800">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
@@ -192,72 +256,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 bg-white dark:bg-slate-800">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              How It Works
-            </h2>
-            <p className="text-xl text-slate-600 dark:text-slate-300">
-              Simple, visual tracking in 3 steps
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
-            {/* Step 1 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Add your subscriptions</h3>
-              <div className="bg-slate-100 dark:bg-slate-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-slate-400">📝 Simple form UI placeholder</p>
-              </div>
-              <p className="text-slate-600 dark:text-slate-300">
-                Quick form to add subscription name, cost, and renewal date
-              </p>
-            </div>
-            
-            {/* Step 2 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Get renewal reminders & reports</h3>
-              <div className="bg-slate-100 dark:bg-slate-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-slate-400">📧 Email reminder preview</p>
-              </div>
-              <p className="text-slate-600 dark:text-slate-300">
-                Email alerts before renewals plus monthly spending summaries
-              </p>
-            </div>
-            
-            {/* Step 3 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Organize by projects</h3>
-              <div className="bg-slate-100 dark:bg-slate-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-slate-400">📁 Project categorization view</p>
-              </div>
-              <p className="text-slate-600 dark:text-slate-300">
-                Tag subscriptions by project for better cost tracking and insights
-              </p>
-            </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <p className="text-lg text-slate-600 dark:text-slate-300 mb-6">
-              <strong>Optional 4th step:</strong> Upgrade to Pro to track more tools and get monthly summaries.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Features Section */}
-      <section id="features" className="py-20 bg-slate-50 dark:bg-slate-900/50">
+      <section id="features" className="py-20 bg-slate-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
@@ -266,7 +266,7 @@ export default function Home() {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-slate-800">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-800">
               <CardHeader>
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
                   <CreditCard className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -280,7 +280,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-slate-800">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-800">
               <CardHeader>
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
                   <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -294,7 +294,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-slate-800">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-gray-800">
               <Badge className="absolute top-4 right-4 bg-purple-600 text-white text-xs">Pro</Badge>
               <CardHeader>
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
@@ -309,7 +309,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-slate-800">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-gray-800">
               <Badge className="absolute top-4 right-4 bg-purple-600 text-white text-xs">Pro</Badge>
               <CardHeader>
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-4">
@@ -324,7 +324,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-slate-800">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-800">
               <CardHeader>
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-4">
                   <Folder className="w-6 h-6 text-red-600 dark:text-red-400" />
@@ -333,12 +333,12 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Organize subscriptions with 12+ predefined categories including AI/ML tools.
+                  Organize subscriptions with 15+ predefined categories including AI/ML tools.
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-slate-800">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-gray-800">
               <Badge className="absolute top-4 right-4 bg-purple-600 text-white text-xs">Pro</Badge>
               <CardHeader>
                 <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mb-4">
@@ -357,7 +357,7 @@ export default function Home() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 bg-white dark:bg-slate-800">
+      <section className="py-20 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
@@ -370,7 +370,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Free Plan */}
-            <Card className="border-2 shadow-lg dark:bg-slate-800 dark:border-slate-700">
+            <Card className="border-2 shadow-lg dark:bg-gray-800 dark:border-gray-700">
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Free</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">€0</div>
@@ -379,7 +379,7 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Track up to 3 subscriptions</span>
+                  <span className="dark:text-slate-300">Track up to 5 subscriptions</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -395,15 +395,15 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Multi-currency support (10+ currencies)</span>
+                  <span className="dark:text-slate-300">2 projects for organization</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Real-time currency conversion</span>
+                  <span className="dark:text-slate-300">Live currency conversion (10+ currencies)</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Dark mode & multi-language</span>
+                  <span className="dark:text-slate-300">Renewal status tracking</span>
                 </div>
                 <div className="pt-6">
                   <Link href="/login?mode=signup" className="w-full block">
@@ -416,7 +416,7 @@ export default function Home() {
             </Card>
 
             {/* Pro Plan */}
-            <Card className="border-2 border-blue-200 dark:border-blue-600 shadow-xl relative dark:bg-slate-800">
+            <Card className="border-2 border-blue-200 dark:border-blue-600 shadow-xl relative dark:bg-gray-800">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <Badge className="bg-blue-600 text-white px-4 py-1">Most Popular</Badge>
               </div>
@@ -428,35 +428,27 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">All Free plan features included</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
                   <span className="dark:text-slate-300">Track up to 30 subscriptions</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">All Free features included</span>
+                  <span className="dark:text-slate-300">10 projects for organization</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Email renewal reminders</span>
+                  <span className="dark:text-slate-300">Email renewal reminders (7, 3, 1 day alerts)</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Monthly spending summaries</span>
+                  <span className="dark:text-slate-300">Monthly spending email reports</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Priority customer support</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Multi-project management</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Advanced spending insights</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Export data & reports</span>
+                  <span className="dark:text-slate-300">Priority support & billing history</span>
                 </div>
                 <div className="pt-6">
                   <Link href="/login?mode=signup" className="w-full block">
@@ -472,7 +464,7 @@ export default function Home() {
       </section>
 
       {/* Social Proof Section */}
-      <section className="py-20 bg-slate-50 dark:bg-slate-900/50 overflow-hidden">
+      <section className="py-20 bg-slate-50 dark:bg-gray-900/50 overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
@@ -484,10 +476,24 @@ export default function Home() {
           </div>
           
           {/* Auto-scrolling Carousel */}
-          <div className="relative">
-            <div className="flex space-x-6 animate-[scroll_30s_linear_infinite] hover:[animation-play-state:paused]">
+          <div className="relative overflow-hidden">
+            <div className="flex space-x-6 animate-scroll hover:[animation-play-state:paused]">
+              <style jsx global>{`
+                @keyframes scroll {
+                  0% {
+                    transform: translateX(0);
+                  }
+                  100% {
+                    transform: translateX(-50%);
+                  }
+                }
+                .animate-scroll {
+                  animation: scroll 60s linear infinite;
+                  width: 200%;
+                }
+              `}</style>
               {/* Testimonial 1 */}
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;Way better than my janky Notion page. Love the reminders.&rdquo;
                 </blockquote>
@@ -496,14 +502,14 @@ export default function Home() {
                     M
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@mikeDeveloper</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@michaelchen</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">Full-stack Developer</div>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 2 */}
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;Finally stopped getting surprise $99 charges from tools I forgot about.&rdquo;
                 </blockquote>
@@ -512,14 +518,14 @@ export default function Home() {
                     S
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@sarahCodes</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@sarah_kim</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">SaaS Founder</div>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 3 */}
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;Simple, clean interface. Exactly what I needed to track my dev tools.&rdquo;
                 </blockquote>
@@ -528,14 +534,14 @@ export default function Home() {
                     A
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@alexBuilds</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@alex_rodriguez</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">Indie Hacker</div>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 4 */}
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;The currency conversion feature is perfect for my international subscriptions.&rdquo;
                 </blockquote>
@@ -544,14 +550,14 @@ export default function Home() {
                     L
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@lucasDev</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@lucas_weber</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">Tech Lead</div>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 5 */}
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;Saved me $200+ this month by catching unused subscriptions!&rdquo;
                 </blockquote>
@@ -560,14 +566,14 @@ export default function Home() {
                     R
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@rachelTech</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@rachel_tech</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">Frontend Developer</div>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 6 */}
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;Clean design, no bloat. Just tracks what I need to know.&rdquo;
                 </blockquote>
@@ -576,14 +582,14 @@ export default function Home() {
                     J
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@jakeCode</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@jake_martinez</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">DevOps Engineer</div>
                   </div>
                 </div>
               </div>
 
-              {/* Duplicate first few for seamless loop */}
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              {/* Complete duplicate set for seamless loop */}
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;Way better than my janky Notion page. Love the reminders.&rdquo;
                 </blockquote>
@@ -592,13 +598,13 @@ export default function Home() {
                     M
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@mikeDeveloper</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@michaelchen</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">Full-stack Developer</div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex-shrink-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border dark:border-slate-700">
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
                   &ldquo;Finally stopped getting surprise $99 charges from tools I forgot about.&rdquo;
                 </blockquote>
@@ -607,8 +613,68 @@ export default function Home() {
                     S
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@sarahCodes</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@sarah_kim</div>
                     <div className="text-slate-500 dark:text-slate-400 text-xs">SaaS Founder</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
+                <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
+                  &ldquo;Simple, clean interface. Exactly what I needed to track my dev tools.&rdquo;
+                </blockquote>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
+                    A
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@alex_rodriguez</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">Indie Hacker</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
+                <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
+                  &ldquo;The currency conversion feature is perfect for my international subscriptions.&rdquo;
+                </blockquote>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
+                    L
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@lucas_weber</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">Tech Lead</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
+                <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
+                  &ldquo;Saved me $200+ this month by catching unused subscriptions!&rdquo;
+                </blockquote>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                    R
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@rachel_tech</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">Frontend Developer</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
+                <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
+                  &ldquo;Clean design, no bloat. Just tracks what I need to know.&rdquo;
+                </blockquote>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
+                    J
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@jake_martinez</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">DevOps Engineer</div>
                   </div>
                 </div>
               </div>
