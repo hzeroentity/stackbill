@@ -366,6 +366,11 @@ export default function Home() {
             <p className="text-xl text-slate-600 dark:text-slate-300">
               Start free, upgrade when you&apos;re ready
             </p>
+            <div className="mt-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg px-4 py-2 inline-block">
+              <p className="text-orange-800 dark:text-orange-200 text-sm font-medium">
+                🚀 Early Bird: Lock in $3/month forever for the first 100 customers
+              </p>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -373,8 +378,8 @@ export default function Home() {
             <Card className="border-2 shadow-lg dark:bg-gray-800 dark:border-gray-700">
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Free</CardTitle>
-                <div className="text-4xl font-bold mb-2 dark:text-white">€0</div>
-                <p className="text-slate-600 dark:text-slate-300">Perfect for getting started</p>
+                <div className="text-4xl font-bold mb-2 dark:text-white">$0</div>
+                <p className="text-slate-600 dark:text-slate-300">Perfect for getting started • No credit card required</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -418,12 +423,14 @@ export default function Home() {
             {/* Pro Plan */}
             <Card className="border-2 border-blue-200 dark:border-blue-600 shadow-xl relative dark:bg-gray-800">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-blue-600 text-white px-4 py-1">Most Popular</Badge>
+                <Badge className="bg-orange-600 text-white px-4 py-1">Limited Time</Badge>
               </div>
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Pro</CardTitle>
-                <div className="text-4xl font-bold mb-2 dark:text-white">€4</div>
-                <p className="text-slate-600 dark:text-slate-300">per month</p>
+                <div className="text-4xl font-bold mb-2 dark:text-white">
+                  <span className="text-2xl line-through text-slate-400 mr-2">$5</span>$3
+                </div>
+                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-blue-600 font-semibold">Early Bird Price</span></p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -468,10 +475,10 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              What developers are saying
+              Early adopters are already saving money
             </h2>
             <p className="text-slate-500 dark:text-slate-400">
-              Join early testers getting better control of their SaaS costs
+              Be part of the first wave of developers taking control of their SaaS costs
             </p>
           </div>
           
@@ -687,10 +694,10 @@ export default function Home() {
       <section className="py-20 bg-blue-600 dark:bg-blue-700">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-            Stop paying for tools you forgot about.
+            Join the first developers taking control of their stack.
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Start tracking your stack in 60 seconds.
+            Start free today, no credit card required.
           </p>
           <Link href="/login?mode=signup">
             <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
@@ -714,7 +721,7 @@ export default function Home() {
               />
               <span className="text-xl font-bold text-white">StackBill</span>
             </div>
-            <p className="mb-6">Simple SaaS cost tracking for founders and development teams</p>
+            <p className="mb-6">Built by developers, for developers. Simple SaaS cost tracking made right.</p>
             <div className="flex justify-center space-x-6 text-sm">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
