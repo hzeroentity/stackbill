@@ -51,7 +51,7 @@
         }
         .template-content iframe {
             width: 100%;
-            height: 600px;
+            height: 800px;
             border: none;
         }
     </style>
@@ -80,49 +80,66 @@
     <meta charset="utf-8">
     <title>Confirm Your Account - StackBill</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f8fafc; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; text-align: center; padding: 40px 20px; }
+        .logo-container { display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+        .logo-svg { width: 32px; height: 24px; margin-right: 12px; }
+        .logo-text { font-size: 24px; font-weight: bold; }
+        .content { padding: 40px; }
+        .welcome-title { color: #1f2937; font-size: 28px; font-weight: 700; margin: 0 0 24px 0; text-align: center; }
         .button { 
             display: inline-block; 
-            padding: 12px 24px; 
-            background-color: #2563eb; 
+            padding: 16px 32px; 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white; 
             text-decoration: none; 
-            border-radius: 6px; 
-            font-weight: 500;
-            margin: 20px 0;
+            border-radius: 8px; 
+            font-weight: 600;
+            font-size: 16px;
+            margin: 24px 0;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s;
         }
-        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; }
+        .button:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+        .footer { margin-top: 40px; padding: 30px 40px; background-color: #f8fafc; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; text-align: center; }
         .text-center { text-align: center; }
+        .link-fallback { background-color: #f0f9ff; padding: 16px; border-radius: 8px; border: 1px solid #bae6fd; margin: 20px 0; word-break: break-all; color: #0369a1; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">📊 StackBill</div>
+            <div class="logo-container">
+                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; border: 2px solid rgba(255,255,255,0.3);">
+                    <span style="font-size: 20px; font-weight: bold; color: #ffffff;">S</span>
+                </div>
+                <div class="logo-text">StackBill</div>
+            </div>
+            <div style="font-size: 16px; opacity: 0.9;">Welcome aboard!</div>
         </div>
         
-        <h1>Welcome to StackBill!</h1>
-        
-        <p>Thanks for joining StackBill, the subscription tracker built by developers, for developers.</p>
-        
-        <p>Please confirm your account by clicking the button below:</p>
-        
-        <div class="text-center">
-            <a href="#" class="button">Confirm Your Account</a>
+        <div class="content">
+            <h1 class="welcome-title">Welcome to StackBill! 🎉</h1>
+            
+            <p style="font-size: 16px; line-height: 1.7; color: #4b5563;">Thanks for joining StackBill, the subscription tracker built by developers, for developers.</p>
+            
+            <p style="font-size: 16px; line-height: 1.7; color: #4b5563;">Please confirm your account by clicking the button below:</p>
+            
+            <div class="text-center">
+                <a href="#" class="button">✅ Confirm Your Account</a>
+            </div>
+            
+            <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">If the button above does not work, copy and paste this link:</p>
+            <div class="link-fallback">https://stackbill.dev/confirm-email?token=example123</div>
+            
+            <p style="font-size: 16px; line-height: 1.7; color: #4b5563;">Once confirmed, you can start tracking your subscriptions and take control of your recurring expenses. 🚀</p>
         </div>
-        
-        <p>If the button above does not work, you can also copy and paste the following link into your browser:</p>
-        <p style="word-break: break-all; color: #2563eb;">https://stackbill.dev/confirm-email?token=example123</p>
-        
-        <p>Once confirmed, you can start tracking your subscriptions and take control of your recurring expenses.</p>
         
         <div class="footer">
-            <p>If you did not create this account, you can safely ignore this email.</p>
-            <p><strong>The StackBill Team</strong><br>
-            <a href="mailto:hello@stackbill.dev">hello@stackbill.dev</a></p>
+            <p style="margin: 0 0 16px 0;">If you did not create this account, you can safely ignore this email.</p>
+            <p style="margin: 0;"><strong>The StackBill Team</strong><br>
+            <a href="mailto:hello@stackbill.dev" style="color: #2563eb; text-decoration: none;">hello@stackbill.dev</a></p>
         </div>
     </div>
 </body>
@@ -160,12 +177,17 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">📊 StackBill</div>
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                <div style="width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 12px; border: 2px solid rgba(255,255,255,0.3);">
+                    <span style="font-size: 18px; font-weight: bold; color: #ffffff;">S</span>
+                </div>
+                <div style="font-size: 24px; font-weight: bold; color: #ffffff;">StackBill</div>
+            </div>
             <div class="header-subtitle">Subscription Renewal Alerts</div>
         </div>
         
         <h1>📋 Upcoming Renewals</h1>
-        <p>Hi John, you have subscriptions renewing soon:</p>
+        <p>Hey! You have subscriptions renewing soon:</p>
         
         <div class="alert-urgent">
             <h3 style="color: #dc2626; margin: 0 0 12px 0;">🚨 Renewing Tomorrow (1 day)</h3>
@@ -225,7 +247,7 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
-        .header { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header { background: #ffffff; color: #1f2937; padding: 40px 20px; text-align: center; border-bottom: 1px solid #e5e7eb; }
         .logo { font-size: 28px; font-weight: bold; margin-bottom: 8px; }
         .header-subtitle { font-size: 18px; opacity: 0.9; }
         .content { padding: 30px 20px; }
@@ -248,12 +270,17 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">📊 StackBill</div>
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                <div style="width: 40px; height: 40px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);">
+                    <span style="font-size: 20px; font-weight: bold; color: #ffffff;">S</span>
+                </div>
+                <div style="font-size: 28px; font-weight: bold; color: #2563eb;">StackBill</div>
+            </div>
             <div class="header-subtitle">Your January 2025 Summary</div>
         </div>
         
         <div class="content">
-            <h1>Hey John! 👋</h1>
+            <h1>Hey! 👋</h1>
             <p>Here is your subscription spending breakdown for <strong>January 2025</strong>:</p>
             
             <div class="stats-grid">
@@ -350,53 +377,100 @@
     <meta charset="utf-8">
     <title>Subscription Canceled - StackBill</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
-        .content { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .button { display: inline-block; padding: 12px 24px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; margin: 20px 0; }
-        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f8fafc; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: #ffffff; color: #1f2937; text-align: center; padding: 40px 20px; border-bottom: 1px solid #e5e7eb; }
+        .logo-container { display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+        .logo-svg { width: 32px; height: 24px; margin-right: 12px; }
+        .logo-text { font-size: 24px; font-weight: bold; color: #2563eb; }
+        .content { padding: 40px; }
+        .title { color: #dc2626; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center; }
+        .details-box { background: #fef2f2; padding: 24px; border-radius: 12px; border: 1px solid #fecaca; margin: 24px 0; }
+        .detail-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #fee2e2; }
+        .detail-item:last-child { border-bottom: none; }
+        .detail-label { font-weight: 600; color: #991b1b; }
+        .detail-value { color: #7f1d1d; }
+        .features-list { background: #f0f9ff; padding: 20px; border-radius: 8px; border: 1px solid #bae6fd; margin: 24px 0; }
+        .features-list ul { margin: 0; padding-left: 20px; color: #0c4a6e; }
+        .features-list li { margin: 8px 0; }
+        .button { 
+            display: inline-block; 
+            padding: 14px 28px; 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-weight: 600;
+            font-size: 16px;
+            margin: 24px 0;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s;
+        }
+        .button:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+        .footer { padding: 30px 40px; background-color: #f8fafc; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; text-align: center; }
         .text-center { text-align: center; }
+        .feedback-note { background: #fffbeb; padding: 20px; border-radius: 8px; border: 1px solid #fed7aa; margin: 24px 0; color: #92400e; font-style: italic; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">📊 StackBill</div>
+            <div class="logo-container">
+                <div style="width: 40px; height: 40px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);">
+                    <span style="font-size: 20px; font-weight: bold; color: #ffffff;">S</span>
+                </div>
+                <div class="logo-text">StackBill</div>
+            </div>
+            <div style="font-size: 16px; color: #6b7280;">Subscription Management</div>
         </div>
-        
-        <h1>Your subscription has been canceled</h1>
         
         <div class="content">
-            <p>Hi John,</p>
-            <p>We have successfully canceled your StackBill Pro subscription. Here are the details:</p>
+            <h1 class="title">✅ Subscription Canceled</h1>
             
-            <ul>
-                <li><strong>Plan:</strong> StackBill Pro ($4.00/month)</li>
-                <li><strong>Canceled on:</strong> January 14, 2025</li>
-                <li><strong>Access until:</strong> February 14, 2025</li>
-            </ul>
+            <p style="font-size: 16px; line-height: 1.7; color: #4b5563; text-align: center; margin-bottom: 32px;">We have successfully canceled your StackBill Pro subscription.</p>
             
-            <p><strong>What happens next:</strong></p>
-            <ul>
-                <li>You will retain Pro features until February 14, 2025</li>
-                <li>After that, your account will be downgraded to the Free plan</li>
-                <li>Your subscription data will be preserved</li>
-                <li>No further charges will be made</li>
-            </ul>
-        </div>
-        
-        <p>We are sad to see you go! If there is anything we could have done better, please reply to this email and let us know.</p>
-        
-        <div class="text-center">
-            <a href="#" class="button">Reactivate Subscription</a>
+            <div class="details-box">
+                <div class="detail-item">
+                    <span class="detail-label">Plan:</span>
+                    <span class="detail-value">StackBill Pro ($4.00/month)</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Canceled on:</span>
+                    <span class="detail-value">January 14, 2025</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Access until:</span>
+                    <span class="detail-value">February 14, 2025</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value">No further charges</span>
+                </div>
+            </div>
+            
+            <div class="features-list">
+                <h3 style="color: #0c4a6e; margin: 0 0 16px 0; font-size: 18px;">📅 What happens next:</h3>
+                <ul>
+                    <li>You will retain <strong>all Pro features</strong> until February 14, 2025</li>
+                    <li>After that date, your account will be <strong>downgraded to Free plan</strong></li>
+                    <li>Your subscription data will be <strong>preserved and accessible</strong></li>
+                    <li>No further charges will be made to your payment method</li>
+                </ul>
+            </div>
+            
+            <div class="feedback-note">
+                <p style="margin: 0; font-size: 16px;">💬 We are sad to see you go! If there is anything we could have done better, please reply to this email and let us know. Your feedback helps us improve.</p>
+            </div>
+            
+            <div class="text-center">
+                <a href="#" class="button">🔄 Reactivate Subscription</a>
+            </div>
         </div>
         
         <div class="footer">
-            <p>Questions about your cancellation? Reply to this email and we will help you out.</p>
-            <p><strong>The StackBill Team</strong><br>
-            <a href="mailto:hello@stackbill.dev">hello@stackbill.dev</a></p>
+            <p style="margin: 0 0 16px 0;">Questions about your cancellation? Reply to this email and we will help you out.</p>
+            <p style="margin: 0;"><strong>The StackBill Team</strong><br>
+            <a href="mailto:hello@stackbill.dev" style="color: #2563eb; text-decoration: none;">hello@stackbill.dev</a></p>
         </div>
     </div>
 </body>

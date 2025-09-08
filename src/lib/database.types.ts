@@ -906,6 +906,30 @@ export type Database = {
         }
         Relationships: []
       }
+      email_notifications: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          metadata: Json
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          metadata?: Json
+          source: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          metadata?: Json
+          source?: string
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           color: string | null

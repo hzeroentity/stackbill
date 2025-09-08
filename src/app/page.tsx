@@ -1,18 +1,114 @@
 'use client'
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import Image from "next/image"
 import { Check, CreditCard, X, Calendar, Mail, BarChart3, Folder, FolderTree } from "lucide-react"
 import { LandingHeaderButtons } from "@/components/landing-header-buttons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { useLanguage } from "@/contexts/language-context"
+
+function NotifyMeButton() {
+  const [showEmailInput, setShowEmailInput] = useState(false)
+  const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleNotifyMe = () => {
+    setShowEmailInput(true)
+  }
+
+  const handleSubmit = async () => {
+    if (!email || !email.includes('@')) return
+    
+    setIsSubmitting(true)
+    
+    try {
+      const response = await fetch('/api/email-notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          source: 'team-plan',
+          metadata: {
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent
+          }
+        }),
+      })
+
+      if (response.ok) {
+        setIsSubmitted(true)
+      } else {
+        console.error('Failed to submit email')
+        // Could add error state here if needed
+      }
+    } catch (error) {
+      console.error('Error submitting email:', error)
+      // Could add error state here if needed
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="text-center">
+        <div className="text-green-600 dark:text-green-400 text-sm font-medium mb-2">
+          ✓ You&apos;ll be notified when Team plan launches!
+        </div>
+      </div>
+    )
+  }
+
+  if (showEmailInput) {
+    return (
+      <div className="space-y-3">
+        <Input
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full"
+        />
+        <div className="flex space-x-2">
+          <Button 
+            onClick={handleSubmit} 
+            disabled={isSubmitting || !email.includes('@')}
+            className="flex-1"
+          >
+            {isSubmitting ? 'Sending...' : 'Send'}
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={() => setShowEmailInput(false)}
+            className="px-3"
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <Button 
+      onClick={handleNotifyMe}
+      variant="outline" 
+      className="w-full dark:border-slate-600 dark:text-white dark:hover:bg-slate-700"
+    >
+      Notify Me
+    </Button>
+  )
+}
 
 export default function Home() {
-  const { t } = useLanguage()
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-950 dark:to-gray-900">
@@ -114,7 +210,7 @@ See How It Works
             
             <div className="mt-12">
               <p className="text-xl text-slate-600 dark:text-slate-300 font-semibold">
-                That's potentially <span className="text-slate-900 dark:text-white font-bold">$1,000+ per year</span> down the drain
+                That&apos;s potentially <span className="text-slate-900 dark:text-white font-bold">$1,000+ per year</span> down the drain
               </p>
             </div>
           </div>
@@ -241,7 +337,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                       No spending visibility
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      No idea how much you're actually spending.
+                      No idea how much you&apos;re actually spending.
                     </p>
                   </div>
                 </div>
@@ -421,7 +517,7 @@ Group subscriptions per project for granular cost tracking and team insights.
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Free Plan */}
             <Card className="border-2 shadow-lg dark:bg-gray-800 dark:border-gray-700">
               <CardHeader className="text-center pb-8">
@@ -478,7 +574,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="text-4xl font-bold mb-2 dark:text-white">
                   <span className="text-2xl line-through text-slate-400 mr-2">$5</span>$3
                 </div>
-                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-blue-600 font-semibold">$3 at launch</span></p>
+                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-orange-600 font-semibold">Early access</span></p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -515,6 +611,51 @@ Group subscriptions per project for granular cost tracking and team insights.
                       Start with Pro
                     </Button>
                   </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Team Plan */}
+            <Card className="border-2 shadow-lg dark:bg-gray-800 dark:border-gray-700 relative opacity-95">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <Badge className="bg-purple-600 text-white px-4 py-1">Coming Soon</Badge>
+              </div>
+              <CardHeader className="text-center pb-8">
+                <CardTitle className="text-2xl mb-2 dark:text-white">Team</CardTitle>
+                <div className="text-4xl font-bold mb-2 dark:text-white">$12</div>
+                <p className="text-slate-600 dark:text-slate-300">per month • Scale with your team</p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">All Pro plan features included</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Up to 5 team members</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Unlimited subscriptions & projects</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Role-based permissions (Readonly, Editor, Admin)</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Team billing & settings management</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Advanced reporting & analytics</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-green-600" />
+                  <span className="dark:text-slate-300">Priority team support</span>
+                </div>
+                <div className="pt-6" id="team-plan-notify">
+                  <NotifyMeButton />
                 </div>
               </CardContent>
             </Card>
