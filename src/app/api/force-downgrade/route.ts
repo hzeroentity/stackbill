@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Database } from '@/lib/database.types'
 import { PLAN_LIMITS } from '@/lib/plan-limits'
+import { sendCancellationEmail } from '@/lib/resend'
 
 //
 
@@ -192,6 +193,21 @@ export async function POST(request: NextRequest) {
         updated_at: new Date().toISOString()
       })
       return NextResponse.json({ error: 'Failed to update subscription' }, { status: 500 })
+    }
+
+    // Send cancellation confirmation email
+    try {
+      // Get user email to send cancellation confirmation
+      const { data: { user }, error: getUserError } = await supabase.auth.admin.getUserById(userId)
+      
+      if (!getUserError && user?.email) {
+        const userName = user.user_metadata?.full_name || user.user_metadata?.name
+        await sendCancellationEmail(user.email, userName)
+        console.log('Cancellation email sent successfully')
+      }
+    } catch (emailError) {
+      console.error('Error sending cancellation email:', emailError)
+      // Don't fail the downgrade if email fails
     }
 
     return NextResponse.json({ 

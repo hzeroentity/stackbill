@@ -73,6 +73,10 @@ export default function SettingsPage() {
   const [projectDescription, setProjectDescription] = useState('')
   const [projectColor, setProjectColor] = useState('#3B82F6')
   
+  // Delete account form
+  const [deleteConfirmation, setDeleteConfirmation] = useState('')
+  const [deleteAccountLoading, setDeleteAccountLoading] = useState(false)
+  
   // Load currency preference on mount
   useEffect(() => {
     setDefaultCurrencyState(getDefaultCurrency())
@@ -310,6 +314,48 @@ export default function SettingsPage() {
       : [...currentDays, day].sort((a, b) => b - a) // Sort descending
 
     handleEmailPreferenceUpdate({ renewal_reminder_days: newDays })
+  }
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmation !== 'delete my account') {
+      toast.error('Please type "delete my account" to confirm')
+      return
+    }
+
+    if (!user) return
+
+    setDeleteAccountLoading(true)
+    
+    try {
+      const response = await fetch('/api/delete-account', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to delete account')
+      }
+
+      toast.success('Account deleted successfully. Goodbye!')
+      
+      // Sign out and redirect
+      setTimeout(() => {
+        window.location.href = '/'
+      }, 2000)
+
+    } catch (error) {
+      console.error('Error deleting account:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to delete account')
+    } finally {
+      setDeleteAccountLoading(false)
+    }
   }
 
   const openEditProject = (project: Tables<'projects'>) => {
@@ -856,6 +902,73 @@ export default function SettingsPage() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Danger Zone - Delete Account */}
+      <Card className="mt-8 border-red-200 dark:border-red-800">
+        <CardHeader>
+          <CardTitle className="text-red-600 dark:text-red-400">Danger Zone</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Delete Account</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Permanently delete your StackBill account and all associated data. This action cannot be undone.
+              </p>
+              <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 mb-4">
+                <AlertDescription className="text-red-800 dark:text-red-200 text-sm">
+                  ⚠️ <strong>This will permanently delete:</strong> All your subscriptions, projects, settings, and any active Pro subscription. 
+                  We&apos;ll also cancel any ongoing billing.
+                </AlertDescription>
+              </Alert>
+              
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm">
+                    Delete Account
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="my-4">
+                    <Label htmlFor="delete-confirmation" className="text-sm">
+                      Type <strong>&quot;delete my account&quot;</strong> to confirm:
+                    </Label>
+                    <Input
+                      id="delete-confirmation"
+                      placeholder="delete my account"
+                      className="mt-2"
+                      value={deleteConfirmation}
+                      onChange={(e) => setDeleteConfirmation(e.target.value)}
+                      disabled={deleteAccountLoading}
+                    />
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel 
+                      disabled={deleteAccountLoading}
+                      onClick={() => setDeleteConfirmation('')}
+                    >
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction 
+                      className="bg-red-600 hover:bg-red-700"
+                      disabled={deleteConfirmation !== 'delete my account' || deleteAccountLoading}
+                      onClick={handleDeleteAccount}
+                    >
+                      {deleteAccountLoading ? 'Deleting...' : 'Delete Account'}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </CardContent>

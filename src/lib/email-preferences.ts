@@ -32,7 +32,7 @@ export class EmailPreferencesService {
   }
 
   /**
-   * Create default email preferences for a user
+   * Create default email preferences for a user (or get existing ones)
    */
   static async createDefaultPreferences(userId: string): Promise<EmailPreferences> {
     const defaultPrefs = {
@@ -42,9 +42,13 @@ export class EmailPreferencesService {
       renewal_reminder_days: [7, 3, 1] // 7 days, 3 days, 1 day before renewal
     }
 
+    // Use upsert to handle existing records
     const { data, error } = await this.supabase
       .from('email_preferences')
-      .insert([defaultPrefs])
+      .upsert([defaultPrefs], { 
+        onConflict: 'user_id',
+        ignoreDuplicates: false 
+      })
       .select()
       .single()
 

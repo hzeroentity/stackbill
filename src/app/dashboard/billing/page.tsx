@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
+import { Check, History } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -191,6 +191,7 @@ export default function BillingPage() {
     }
   }
 
+
   const handleForceDowngrade = async () => {
     setDowngrading(true)
     try {
@@ -291,16 +292,25 @@ export default function BillingPage() {
                 </div>
               )}
               <div className="pt-4 border-t">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button 
-                    variant="outline" 
-                    className="text-red-600 border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950/20"
-                    onClick={handleDowngradeClick}
-                    disabled={downgrading}
-                  >
-                    {downgrading ? t('dashboard.processing') : t('billing.downgrade')}
-                  </Button>
-                  <p className="text-sm text-muted-foreground flex-1">
+                <div className="flex flex-col gap-3 mb-4">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button 
+                      variant="outline" 
+                      className="text-red-600 border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950/20"
+                      onClick={handleDowngradeClick}
+                      disabled={downgrading}
+                    >
+                      {downgrading ? t('dashboard.processing') : t('billing.downgrade')}
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => window.location.href = '/dashboard/billing/history'}
+                    >
+                      <History className="h-4 w-4 mr-2" />
+                      Billing History
+                    </Button>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
                     Downgrade to the free plan anytime. You&apos;ll keep access until the end of your billing period.
                   </p>
                 </div>
@@ -354,21 +364,33 @@ export default function BillingPage() {
                   ))}
                 </ul>
 
-                <Button 
-                  className="w-full"
-                  variant={isCurrentPlan ? "secondary" : "outline"}
-                  disabled={isCurrentPlan || upgrading}
-                  onClick={() => handleUpgrade(plan.id)}
-                >
-                  {isCurrentPlan 
-                    ? t('billing.currentPlan') 
-                    : upgrading 
-                      ? t('dashboard.processing') 
-                      : plan.id === 'free' 
-                        ? t('billing.getStartedFree') 
-                        : t('billing.upgradeToPro')
-                  }
-                </Button>
+                {/* Only show button if not a downgrade scenario (Pro user looking at Free plan) */}
+                {!(currentPlan === 'pro' && plan.id === 'free') && (
+                  <Button 
+                    className="w-full"
+                    variant={isCurrentPlan ? "secondary" : "outline"}
+                    disabled={isCurrentPlan || upgrading}
+                    onClick={() => handleUpgrade(plan.id)}
+                  >
+                    {isCurrentPlan 
+                      ? t('billing.currentPlan') 
+                      : upgrading 
+                        ? t('dashboard.processing') 
+                        : plan.id === 'free' 
+                          ? t('billing.getStartedFree') 
+                          : t('billing.upgradeToPro')
+                    }
+                  </Button>
+                )}
+                
+                {/* Show downgrade message for Pro users looking at Free plan */}
+                {currentPlan === 'pro' && plan.id === 'free' && (
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Use the downgrade button above to switch to this plan
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )
@@ -376,44 +398,6 @@ export default function BillingPage() {
         </div>
       </div>
 
-      {/* FAQ Section */}
-      <div className="mt-24">
-        <h2 className="text-2xl font-bold text-center mb-8">{t('billing.faq.title')}</h2>
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">{t('billing.faq.q1')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                {t('billing.faq.a1')}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">{t('billing.faq.q2')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                {t('billing.faq.a2')}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">{t('billing.faq.q3')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                {t('billing.faq.a3')}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
 
       {/* Error Dialog */}
       <AlertDialog open={isErrorModalOpen} onOpenChange={setIsErrorModalOpen}>

@@ -398,6 +398,162 @@ export const EmailTemplates = {
       Unsubscribe from summaries: https://stackbill.dev/unsubscribe?type=summaries&email=${encodeURIComponent(userEmail)}
       Manage email preferences: https://stackbill.dev/dashboard/settings
     `
+  }),
+
+  // Cancellation confirmation email template
+  cancellationEmail: (userEmail: string, userName?: string) => ({
+    from: 'StackBill <hello@stackbill.dev>',
+    to: userEmail,
+    subject: 'Your Pro plan has been cancelled - StackBill',
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Plan Cancelled - StackBill</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; margin-bottom: 30px; }
+            .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
+            .button { 
+              display: inline-block; 
+              padding: 12px 24px; 
+              background-color: #2563eb; 
+              color: white; 
+              text-decoration: none; 
+              border-radius: 6px; 
+              font-weight: 500;
+              margin: 20px 0;
+            }
+            .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; }
+            .text-center { text-align: center; }
+            .success-box { background-color: #dcfce7; border: 1px solid #16a34a; border-radius: 8px; padding: 20px; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <div class="logo">📊 StackBill</div>
+            </div>
+            
+            <div class="success-box">
+              <h2 style="color: #16a34a; margin: 0 0 10px 0;">✅ Plan Successfully Cancelled</h2>
+              <p style="margin: 0; color: #15803d;">Your Pro plan has been downgraded to the Free plan. No future charges will be made.</p>
+            </div>
+            
+            <h1>Thanks for using StackBill${userName ? `, ${userName}` : ''}!</h1>
+            
+            <p>We've successfully cancelled your Pro subscription and downgraded your account to our Free plan.</p>
+            
+            <h3>What this means:</h3>
+            <ul>
+              <li>✅ No future billing - your subscription has been cancelled</li>
+              <li>✅ You can still track up to 5 subscriptions</li>
+              <li>✅ You can manage up to 2 projects</li>
+              <li>❌ Email reminders are no longer available</li>
+              <li>❌ Monthly summary emails have been disabled</li>
+            </ul>
+            
+            <p>You can continue using StackBill with the Free plan, or upgrade back to Pro anytime if you need more features.</p>
+            
+            <div class="text-center">
+              <a href="https://stackbill.dev/dashboard" class="button">View Your Dashboard</a>
+            </div>
+            
+            <div class="footer">
+              <p>If you cancelled by mistake, you can easily upgrade back to Pro from your dashboard.</p>
+              <p>We'd love to hear why you cancelled - your feedback helps us improve StackBill for everyone.</p>
+              <p>Questions? Reply to this email and we'll help you out.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `
+  }),
+
+  // Account deletion goodbye email template
+  goodbyeEmail: (userEmail: string, userName?: string) => ({
+    from: 'StackBill <hello@stackbill.dev>',
+    to: userEmail,
+    subject: 'Sorry to see you go - StackBill',
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Account Deleted - StackBill</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; margin-bottom: 30px; }
+            .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
+            .button { 
+              display: inline-block; 
+              padding: 12px 24px; 
+              background-color: #2563eb; 
+              color: white; 
+              text-decoration: none; 
+              border-radius: 6px; 
+              font-weight: 500;
+              margin: 20px 0;
+            }
+            .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; }
+            .text-center { text-align: center; }
+            .goodbye-box { background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <div class="logo">📊 StackBill</div>
+            </div>
+            
+            <div class="goodbye-box">
+              <h2 style="color: #92400e; margin: 0 0 10px 0;">👋 Account Successfully Deleted</h2>
+              <p style="margin: 0; color: #92400e;">Your StackBill account and all associated data have been permanently deleted.</p>
+            </div>
+            
+            <h1>Sorry to see you go${userName ? `, ${userName}` : ''}!</h1>
+            
+            <p>We've successfully deleted your StackBill account as requested. Here's what happened:</p>
+            
+            <h3>What we've done:</h3>
+            <ul>
+              <li>✅ Permanently deleted all your subscriptions and project data</li>
+              <li>✅ Cancelled any active Pro subscriptions (no future charges)</li>
+              <li>✅ Removed your account from all our systems</li>
+              <li>✅ Disabled all email notifications</li>
+            </ul>
+            
+            <h3>We'd love your feedback!</h3>
+            <p>Your feedback is incredibly valuable to us. Could you take just 30 seconds to let us know why you decided to leave? This helps us improve StackBill for future users.</p>
+            
+            <p><strong>What could we have done better?</strong></p>
+            <ul>
+              <li>Missing features you needed?</li>
+              <li>Pricing too high?</li>
+              <li>Found a better alternative?</li>
+              <li>App was too complex?</li>
+              <li>Something else?</li>
+            </ul>
+            
+            <div class="text-center">
+              <a href="https://forms.gle/stackbill-feedback" class="button">Share Quick Feedback</a>
+            </div>
+            
+            <p>If you ever want to come back, you can create a new account anytime at <a href="https://stackbill.dev">stackbill.dev</a>. We'll be here!</p>
+            
+            <div class="footer">
+              <p>Thank you for giving StackBill a try. We hope it helped you get better visibility into your subscription costs.</p>
+              <p>If you have any questions about your account deletion, reply to this email - we're happy to help.</p>
+              <p>Wishing you all the best!</p>
+              <p style="margin-top: 20px;"><strong>- The StackBill Team</strong></p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `
   })
 }
 
@@ -456,6 +612,34 @@ export async function sendMonthlySummaryEmail(
     return { success: true, data: result }
   } catch (error) {
     console.error('Failed to send monthly summary email:', error)
+    return { success: false, error }
+  }
+}
+
+// Utility function to send cancellation confirmation email
+export async function sendCancellationEmail(userEmail: string, userName?: string) {
+  try {
+    const emailData = EmailTemplates.cancellationEmail(userEmail, userName)
+    const result = await resend.emails.send(emailData)
+    
+    console.log('Cancellation email sent successfully:', result)
+    return { success: true, data: result }
+  } catch (error) {
+    console.error('Failed to send cancellation email:', error)
+    return { success: false, error }
+  }
+}
+
+// Utility function to send goodbye email
+export async function sendGoodbyeEmail(userEmail: string, userName?: string) {
+  try {
+    const emailData = EmailTemplates.goodbyeEmail(userEmail, userName)
+    const result = await resend.emails.send(emailData)
+    
+    console.log('Goodbye email sent successfully:', result)
+    return { success: true, data: result }
+  } catch (error) {
+    console.error('Failed to send goodbye email:', error)
     return { success: false, error }
   }
 }

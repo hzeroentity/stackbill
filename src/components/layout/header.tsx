@@ -94,6 +94,11 @@ export function Header() {
                         {t('navigation.settings')}
                       </Button>
                     </Link>
+                    <Link href="/dashboard/support" onClick={closeMobileMenu}>
+                      <Button variant="ghost" className="w-full justify-start">
+                        Support
+                      </Button>
+                    </Link>
                   </div>
                   
                   {/* Separator */}
@@ -159,6 +164,9 @@ export function Header() {
               </Link>
               <Link href="/dashboard/settings">
                 <Button variant="ghost">{t('navigation.settings')}</Button>
+              </Link>
+              <Link href="/dashboard/support">
+                <Button variant="ghost">Support</Button>
               </Link>
             </div>
             
