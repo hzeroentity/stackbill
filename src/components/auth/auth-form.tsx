@@ -132,7 +132,6 @@ export function AuthForm() {
     try {
       if (isSignUp) {
         const processedEmail = email.trim().toLowerCase()
-        console.log('Attempting signup with email:', email)
         
         // Use our custom signup API with Resend
         const response = await fetch('/api/auth/signup', {
@@ -157,19 +156,16 @@ export function AuthForm() {
           setMessage('Please check your email for the confirmation link to complete your account setup!')
         }
       } else {
-        console.log('Attempting signin with email:', email)
         
         const { data, error } = await supabase.auth.signInWithPassword({
           email: email.trim().toLowerCase(),
           password,
         })
         
-        console.log('Signin response:', { data, error })
         
         if (error) throw error
         
         if (data?.user && data?.session) {
-          console.log('Sign in successful with session')
           // Don't redirect manually, let the auth context handle it
         }
       }

@@ -203,7 +203,6 @@ export async function POST(request: NextRequest) {
       if (!getUserError && user?.email) {
         const userName = user.user_metadata?.full_name || user.user_metadata?.name
         await sendCancellationEmail(user.email, userName)
-        console.log('Cancellation email sent successfully')
       }
     } catch (emailError) {
       console.error('Error sending cancellation email:', emailError)

@@ -25,7 +25,6 @@ export class ExchangeRateService {
     // Return cached rate if still valid
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
       if (process.env.NODE_ENV === 'development') {
-        console.log(`Using cached rate for ${cacheKey}: ${cached.rate}`)
       }
       return cached.rate
     }
@@ -39,7 +38,6 @@ export class ExchangeRateService {
     for (const api of apis) {
       try {
         if (process.env.NODE_ENV === 'development') {
-          console.log(`Fetching exchange rates from ${api.name} API: ${api.url}`)
         }
         
         const response = await fetch(api.url)
@@ -52,7 +50,6 @@ export class ExchangeRateService {
 
         const data = await response.json()
         if (process.env.NODE_ENV === 'development') {
-          console.log(`${api.name} API Response for ${fromCurrency}:`, data)
         }
         
         // Handle different response formats
@@ -76,7 +73,6 @@ export class ExchangeRateService {
         }
 
         if (process.env.NODE_ENV === 'development') {
-          console.log(`Found exchange rate ${fromCurrency} -> ${toCurrency} from ${api.name} API: ${rate}`)
         }
 
         // Cache the rate

@@ -563,7 +563,6 @@ export async function sendConfirmationEmail(userEmail: string, confirmationUrl: 
     const emailData = EmailTemplates.confirmationEmail(confirmationUrl, userEmail)
     const result = await resend.emails.send(emailData)
     
-    console.log('Confirmation email sent successfully:', result)
     return { success: true, data: result }
   } catch (error) {
     console.error('Failed to send confirmation email:', error)
@@ -581,7 +580,6 @@ export async function sendRenewalAlertEmail(
     const emailData = EmailTemplates.renewalAlertEmail(userEmail, upcomingRenewals, userName)
     const result = await resend.emails.send(emailData)
     
-    console.log('Renewal alert email sent successfully:', result)
     return { success: true, data: result }
   } catch (error) {
     console.error('Failed to send renewal alert email:', error)
@@ -608,7 +606,6 @@ export async function sendMonthlySummaryEmail(
     const emailData = EmailTemplates.monthlySummaryEmail(userEmail, summaryData, userName)
     const result = await resend.emails.send(emailData)
     
-    console.log('Monthly summary email sent successfully:', result)
     return { success: true, data: result }
   } catch (error) {
     console.error('Failed to send monthly summary email:', error)
@@ -622,7 +619,6 @@ export async function sendCancellationEmail(userEmail: string, userName?: string
     const emailData = EmailTemplates.cancellationEmail(userEmail, userName)
     const result = await resend.emails.send(emailData)
     
-    console.log('Cancellation email sent successfully:', result)
     return { success: true, data: result }
   } catch (error) {
     console.error('Failed to send cancellation email:', error)
@@ -636,7 +632,6 @@ export async function sendGoodbyeEmail(userEmail: string, userName?: string) {
     const emailData = EmailTemplates.goodbyeEmail(userEmail, userName)
     const result = await resend.emails.send(emailData)
     
-    console.log('Goodbye email sent successfully:', result)
     return { success: true, data: result }
   } catch (error) {
     console.error('Failed to send goodbye email:', error)

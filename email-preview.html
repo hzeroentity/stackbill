@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StackBill Email Templates Preview</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .template-section {
+            background: white;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .template-header {
+            background: #2563eb;
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        .template-content {
+            border: 1px solid #e5e7eb;
+            background: white;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .nav-button {
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        .nav-button:hover {
+            background: #1d4ed8;
+        }
+        .template-content iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <h1 style="text-align: center; color: #1f2937; margin-bottom: 10px;">📧 StackBill Email Templates</h1>
+        <p style="text-align: center; color: #6b7280; margin-bottom: 30px;">Preview and test your email templates</p>
+        
+        <div class="nav-buttons">
+            <a href="#confirmation" class="nav-button">Confirmation Email</a>
+            <a href="#renewal" class="nav-button">Renewal Alert</a>
+            <a href="#summary" class="nav-button">Monthly Summary</a>
+            <a href="#cancellation" class="nav-button">Cancellation</a>
+        </div>
+
+        <!-- Confirmation Email -->
+        <div class="template-section" id="confirmation">
+            <div class="template-header">
+                ✅ Account Confirmation Email
+            </div>
+            <div class="template-content">
+                <iframe srcdoc='<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Confirm Your Account - StackBill</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
+        .button { 
+            display: inline-block; 
+            padding: 12px 24px; 
+            background-color: #2563eb; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 6px; 
+            font-weight: 500;
+            margin: 20px 0;
+        }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📊 StackBill</div>
+        </div>
+        
+        <h1>Welcome to StackBill!</h1>
+        
+        <p>Thanks for joining StackBill, the subscription tracker built by developers, for developers.</p>
+        
+        <p>Please confirm your account by clicking the button below:</p>
+        
+        <div class="text-center">
+            <a href="#" class="button">Confirm Your Account</a>
+        </div>
+        
+        <p>If the button above does not work, you can also copy and paste the following link into your browser:</p>
+        <p style="word-break: break-all; color: #2563eb;">https://stackbill.dev/confirm-email?token=example123</p>
+        
+        <p>Once confirmed, you can start tracking your subscriptions and take control of your recurring expenses.</p>
+        
+        <div class="footer">
+            <p>If you did not create this account, you can safely ignore this email.</p>
+            <p><strong>The StackBill Team</strong><br>
+            <a href="mailto:hello@stackbill.dev">hello@stackbill.dev</a></p>
+        </div>
+    </div>
+</body>
+</html>'></iframe>
+            </div>
+        </div>
+
+        <!-- Renewal Alert Email -->
+        <div class="template-section" id="renewal">
+            <div class="template-header">
+                ⏰ Renewal Alert Email
+            </div>
+            <div class="template-content">
+                <iframe srcdoc='<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Subscription Renewals Coming Up - StackBill</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e5e7eb; }
+        .logo { font-size: 24px; font-weight: bold; color: #2563eb; margin-bottom: 8px; }
+        .header-subtitle { color: #6b7280; font-size: 16px; }
+        .alert-urgent { background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .alert-warning { background-color: #fffbeb; border: 1px solid #fed7aa; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .alert-info { background-color: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .subscription-item { border-bottom: 1px solid #f3f4f6; padding: 12px 0; }
+        .subscription-name { font-weight: 600; color: #1f2937; font-size: 16px; }
+        .subscription-meta { color: #6b7280; font-size: 14px; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; margin: 20px 0; }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📊 StackBill</div>
+            <div class="header-subtitle">Subscription Renewal Alerts</div>
+        </div>
+        
+        <h1>📋 Upcoming Renewals</h1>
+        <p>Hi John, you have subscriptions renewing soon:</p>
+        
+        <div class="alert-urgent">
+            <h3 style="color: #dc2626; margin: 0 0 12px 0;">🚨 Renewing Tomorrow (1 day)</h3>
+            <div class="subscription-item">
+                <div class="subscription-name">GitHub Pro</div>
+                <div class="subscription-meta">$4.00/month • Development Tools • Renews Jan 15, 2025</div>
+            </div>
+        </div>
+        
+        <div class="alert-warning">
+            <h3 style="color: #d97706; margin: 0 0 12px 0;">⚠️ Renewing in 3 days</h3>
+            <div class="subscription-item">
+                <div class="subscription-name">Vercel Pro</div>
+                <div class="subscription-meta">$20.00/month • Hosting & Infrastructure • Renews Jan 17, 2025</div>
+            </div>
+        </div>
+        
+        <div class="alert-info">
+            <h3 style="color: #0369a1; margin: 0 0 12px 0;">📅 Renewing in 7 days</h3>
+            <div class="subscription-item">
+                <div class="subscription-name">OpenAI API</div>
+                <div class="subscription-meta">$50.00/month • AI Tools & LLMs • Renews Jan 21, 2025</div>
+            </div>
+            <div class="subscription-item">
+                <div class="subscription-name">Stripe</div>
+                <div class="subscription-meta">$15.00/month • Financial & Accounting • Renews Jan 21, 2025</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="#" class="button">View All Subscriptions</a>
+        </div>
+        
+        <div class="footer">
+            <p><strong>💡 Pro Tip:</strong> Review these subscriptions to see if you still need them!</p>
+            <p>This renewal alert is sent automatically to Pro users. Manage your email preferences in settings.</p>
+            <p><strong>The StackBill Team</strong><br>
+            <a href="mailto:hello@stackbill.dev">hello@stackbill.dev</a></p>
+        </div>
+    </div>
+</body>
+</html>'></iframe>
+            </div>
+        </div>
+
+        <!-- Monthly Summary Email -->
+        <div class="template-section" id="summary">
+            <div class="template-header">
+                📊 Monthly Summary Email
+            </div>
+            <div class="template-content">
+                <iframe srcdoc='<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Your January 2025 Subscription Summary - StackBill</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+        .header { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 40px 20px; text-align: center; }
+        .logo { font-size: 28px; font-weight: bold; margin-bottom: 8px; }
+        .header-subtitle { font-size: 18px; opacity: 0.9; }
+        .content { padding: 30px 20px; }
+        .stats-grid { display: flex; gap: 20px; margin: 30px 0; }
+        .stat-card { flex: 1; background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; }
+        .stat-number { font-size: 24px; font-weight: bold; color: #2563eb; }
+        .stat-label { color: #64748b; font-size: 14px; margin-top: 5px; }
+        .section-title { color: #1f2937; font-size: 22px; font-weight: 600; margin: 30px 0 16px 0; }
+        .category-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+        .category-name { color: #1f2937; font-weight: 500; }
+        .category-amount { color: #2563eb; font-weight: 600; }
+        .subscription-item { display: flex; justify-content: space-between; padding: 8px 0; }
+        .subscription-name { color: #1f2937; }
+        .subscription-cost { color: #6b7280; font-weight: 500; }
+        .button { display: inline-block; background-color: #2563eb; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 500; }
+        .insights { background-color: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 20px; margin: 30px 0; }
+        .footer { border-top: 1px solid #e5e7eb; margin-top: 30px; padding-top: 20px; color: #6b7280; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📊 StackBill</div>
+            <div class="header-subtitle">Your January 2025 Summary</div>
+        </div>
+        
+        <div class="content">
+            <h1>Hey John! 👋</h1>
+            <p>Here is your subscription spending breakdown for <strong>January 2025</strong>:</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">$89.00</div>
+                    <div class="stat-label">Monthly Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Active Subscriptions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$1,068</div>
+                    <div class="stat-label">Annual Projection</div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">💳 Spending by Category</h3>
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+                <div class="category-item">
+                    <span class="category-name">Development Tools</span>
+                    <span class="category-amount">$24.00</span>
+                </div>
+                <div class="category-item">
+                    <span class="category-name">Hosting & Infrastructure</span>
+                    <span class="category-amount">$20.00</span>
+                </div>
+                <div class="category-item">
+                    <span class="category-name">Financial & Accounting</span>
+                    <span class="category-amount">$15.00</span>
+                </div>
+                <div class="category-item">
+                    <span class="category-name">AI Tools & LLMs</span>
+                    <span class="category-amount">$15.00</span>
+                </div>
+                <div class="category-item" style="border-bottom: none;">
+                    <span class="category-name">Design</span>
+                    <span class="category-amount">$15.00</span>
+                </div>
+            </div>
+            
+            <h3 class="section-title">💸 Top Subscriptions</h3>
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+                <div class="subscription-item">
+                    <span class="subscription-name">Vercel Pro</span>
+                    <span class="subscription-cost">$20.00/month</span>
+                </div>
+                <div class="subscription-item">
+                    <span class="subscription-name">Figma Professional</span>
+                    <span class="subscription-cost">$15.00/month</span>
+                </div>
+                <div class="subscription-item">
+                    <span class="subscription-name">OpenAI API</span>
+                    <span class="subscription-cost">$15.00/month</span>
+                </div>
+                <div class="subscription-item">
+                    <span class="subscription-name">Stripe</span>
+                    <span class="subscription-cost">$15.00/month</span>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="#" class="button">View Full Dashboard</a>
+            </div>
+            
+            <div class="insights">
+                <p style="margin: 0; color: #374151; font-size: 16px;"><strong>💡 Insights:</strong> Great job keeping your subscription costs under control!</p>
+            </div>
+            
+            <div class="footer">
+                <p>This monthly summary is generated automatically for Pro users. You can manage your email preferences in your account settings.</p>
+                <p>Questions? Reply to this email and we will help you out.</p>
+                <p style="text-align: center;">
+                    <a href="#" style="color: #6b7280;">Unsubscribe from summaries</a> | 
+                    <a href="#" style="color: #6b7280;">Manage email preferences</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>'></iframe>
+            </div>
+        </div>
+
+        <!-- Cancellation Email -->
+        <div class="template-section" id="cancellation">
+            <div class="template-header">
+                ❌ Subscription Cancellation Email
+            </div>
+            <div class="template-content">
+                <iframe srcdoc='<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Subscription Canceled - StackBill</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
+        .content { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; margin: 20px 0; }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📊 StackBill</div>
+        </div>
+        
+        <h1>Your subscription has been canceled</h1>
+        
+        <div class="content">
+            <p>Hi John,</p>
+            <p>We have successfully canceled your StackBill Pro subscription. Here are the details:</p>
+            
+            <ul>
+                <li><strong>Plan:</strong> StackBill Pro ($4.00/month)</li>
+                <li><strong>Canceled on:</strong> January 14, 2025</li>
+                <li><strong>Access until:</strong> February 14, 2025</li>
+            </ul>
+            
+            <p><strong>What happens next:</strong></p>
+            <ul>
+                <li>You will retain Pro features until February 14, 2025</li>
+                <li>After that, your account will be downgraded to the Free plan</li>
+                <li>Your subscription data will be preserved</li>
+                <li>No further charges will be made</li>
+            </ul>
+        </div>
+        
+        <p>We are sad to see you go! If there is anything we could have done better, please reply to this email and let us know.</p>
+        
+        <div class="text-center">
+            <a href="#" class="button">Reactivate Subscription</a>
+        </div>
+        
+        <div class="footer">
+            <p>Questions about your cancellation? Reply to this email and we will help you out.</p>
+            <p><strong>The StackBill Team</strong><br>
+            <a href="mailto:hello@stackbill.dev">hello@stackbill.dev</a></p>
+        </div>
+    </div>
+</body>
+</html>'></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

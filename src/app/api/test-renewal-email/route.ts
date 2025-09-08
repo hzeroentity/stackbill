@@ -44,7 +44,6 @@ export async function POST(request: NextRequest) {
         }
       } catch {
         // Ignore UUID validation errors for test data
-        console.log('Skipping auth lookup for test userId:', userId)
       }
     }
 

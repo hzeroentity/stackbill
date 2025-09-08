@@ -6,10 +6,6 @@ import Stripe from 'stripe'
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(request: NextRequest) {
-  console.log('=== WEBHOOK RECEIVED ===')
-  console.log('Headers:', Object.fromEntries(request.headers.entries()))
-  console.log('URL:', request.url)
-  console.log('Method:', request.method)
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')!
@@ -18,7 +14,6 @@ export async function POST(request: NextRequest) {
 
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-      console.log('Webhook verified successfully, event type:', event.type)
     } catch (err) {
       console.error('Webhook signature verification failed:', err)
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
@@ -28,7 +23,6 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed':
         const session = event.data.object as Stripe.Checkout.Session
-        console.log('Processing checkout.session.completed:', session.id)
         try {
           await handleCheckoutSessionCompleted(session)
         } catch (error) {
@@ -58,7 +52,6 @@ export async function POST(request: NextRequest) {
         break
 
       default:
-        console.log(`Unhandled event type: ${event.type}`)
         // Remove unreachable code that causes TypeScript error
         break
     }
@@ -75,9 +68,6 @@ export async function POST(request: NextRequest) {
 }
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
-  console.log('Checkout session completed - Session metadata:', session.metadata)
-  console.log('Checkout session completed - Customer ID:', session.customer)
-  console.log('Checkout session completed - Subscription ID:', session.subscription)
   
   const userId = session.metadata?.userId
   if (!userId || !session.subscription) {
@@ -89,16 +79,12 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     return
   }
 
-  console.log(`Processing upgrade for user ${userId}`)
 
   try {
     // Retrieve the subscription to get period information
     const subscriptionResponse = await stripe.subscriptions.retrieve(session.subscription as string)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const subscription = subscriptionResponse as any // Stripe types don't include period fields
-    console.log('Retrieved subscription:', subscription.id, 'status:', subscription.status)
-    console.log('Subscription period start:', subscription.current_period_start)
-    console.log('Subscription period end:', subscription.current_period_end)
     
     // Handle potential null/undefined values for subscription periods
     const periodStart = subscription.current_period_start 
@@ -109,8 +95,6 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       ? new Date(subscription.current_period_end * 1000).toISOString()
       : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // Default to 30 days from now
     
-    console.log('Processed period start:', periodStart)
-    console.log('Processed period end:', periodEnd)
     
     await userSubscriptionService.upgradeUserToPro(
       userId,
@@ -120,7 +104,6 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       periodEnd
     )
 
-    console.log(`User ${userId} upgraded to Pro successfully`)
   } catch (error) {
     console.error(`Error upgrading user ${userId} to Pro:`, error)
     throw error
@@ -143,7 +126,6 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       current_period_end: new Date(sub.current_period_end * 1000).toISOString()
     })
 
-    console.log(`Updated subscription for user ${userId}`)
   }
 }
 
@@ -154,7 +136,6 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     const userId = customer.metadata.userId
     
     await userSubscriptionService.cancelUserSubscription(userId)
-    console.log(`Canceled subscription for user ${userId}`)
   }
 }
 
@@ -174,7 +155,6 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
         status: 'active'
       })
       
-      console.log(`Payment succeeded for user ${userId}`)
     }
   }
 }
@@ -195,7 +175,6 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
         status: 'past_due'
       })
       
-      console.log(`Payment failed for user ${userId}`)
     }
   }
 }
