@@ -236,8 +236,17 @@ See How It Works
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">📝 Add your subscriptions</h3>
-              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-gray-400">📝 Simple form UI placeholder</p>
+              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
+                <video 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  className="w-full h-auto"
+                >
+                  <source src="/add-subscriptions.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
 Quick form for name, cost, currency, billing period, renewal date, category, and project.

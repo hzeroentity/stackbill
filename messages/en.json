@@ -207,8 +207,7 @@
       "subtitle": "Simple, visual tracking in 3 steps",
       "step1": {
         "title": "Add your subscriptions manually",
-        "description": "Quick form to add subscription name, cost, and renewal date",
-        "placeholder": "📝 Simple form UI placeholder"
+        "description": "Quick form to add subscription name, cost, and renewal date"
       },
       "step2": {
         "title": "Set renewal dates & currency", 
