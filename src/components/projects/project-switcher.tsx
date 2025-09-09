@@ -83,7 +83,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
         onValueChange={onProjectChange}
         disabled={loading}
       >
-        <SelectTrigger className="w-32 sm:w-44">
+        <SelectTrigger className="min-w-fit max-w-48">
           <SelectValue placeholder="Select project..." />
         </SelectTrigger>
         <SelectContent>
