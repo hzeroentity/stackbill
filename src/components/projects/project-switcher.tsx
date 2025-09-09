@@ -134,18 +134,18 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
             variant="outline"
             size="sm"
             onClick={() => setIsCreateDialogOpen(true)}
-            className="h-8 px-2"
+            className="h-9 px-2"
           >
-            <Plus className="w-3 h-3 mr-1" />
+            <Plus className="w-4 h-4 mr-1" />
             <span className="hidden sm:inline">Project</span>
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => router.push('/dashboard/settings#projects')}
-            className="h-8 px-2"
+            className="h-9 px-2"
           >
-            <Settings className="w-3 h-3" />
+            <Settings className="w-4 h-4" />
           </Button>
         </>
       ) : (
@@ -153,9 +153,9 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
           variant="outline"
           size="sm"
           onClick={handleUpgradeClick}
-          className="h-8 px-2"
+          className="h-9 px-2"
         >
-          <Lock className="w-3 h-3 mr-1" />
+          <Lock className="w-4 h-4 mr-1" />
           <span className="hidden sm:inline">Upgrade</span>
         </Button>
       )}

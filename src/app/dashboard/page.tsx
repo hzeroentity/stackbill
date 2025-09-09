@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -543,13 +542,7 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 dark:from-blue-950/20 dark:to-blue-900/20 dark:border dark:border-blue-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">{t('dashboard.monthlyTotal')}</CardTitle>
-            <Image 
-              src="/stackbill-creditcard.svg" 
-              alt="Credit Card" 
-              width={32} 
-              height={32} 
-              className="text-blue-600 dark:text-white"
-            />
+            <div className="text-2xl">💳</div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-900 dark:text-white">
@@ -568,13 +561,7 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 dark:from-green-950/20 dark:to-green-900/20 dark:border dark:border-green-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">{t('dashboard.annualTotal')}</CardTitle>
-            <Image 
-              src="/stackbill-moneybag.svg" 
-              alt="Money Bag" 
-              width={32} 
-              height={32} 
-              className="text-green-600 dark:text-white"
-            />
+            <div className="text-2xl">💰</div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-900 dark:text-white">
@@ -593,13 +580,7 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 dark:from-purple-950/20 dark:to-purple-900/20 dark:border dark:border-purple-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">{t('dashboard.activeServices')}</CardTitle>
-            <Image 
-              src="/stackbill-lightning.svg" 
-              alt="Lightning" 
-              width={32} 
-              height={32} 
-              className="text-purple-600 dark:text-white"
-            />
+            <div className="text-2xl">⚡</div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-900 dark:text-white">

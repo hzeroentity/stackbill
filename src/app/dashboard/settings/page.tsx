@@ -533,7 +533,8 @@ export default function SettingsPage() {
                     className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Project
+                    <span className="sm:hidden">+ Add</span>
+                    <span className="hidden sm:inline">Add Project</span>
                     {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
                   </Button>
                 </DialogTrigger>
