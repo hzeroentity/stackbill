@@ -17,8 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://stackbill.dev'),
   title: "StackBill - Professional Subscription Tracker for SaaS Founders",
-  description: "Legitimate business tool for tracking SaaS subscriptions and recurring expenses. Trusted by developers and entrepreneurs worldwide.",
+  description: "Track your SaaS subscriptions and recurring expenses. Simple, powerful tool built by developers for developers and entrepreneurs.",
   keywords: "subscription tracker, SaaS management, recurring expenses, business tools, subscription analytics",
   authors: [{ name: "StackBill Team" }],
   creator: "StackBill",
@@ -33,6 +34,29 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "google-site-verification-code-here", // You'll need to add your actual verification code
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://stackbill.dev',
+    title: 'StackBill - Professional Subscription Tracker for SaaS Founders',
+    description: 'Simple, powerful subscription tracker built by developers for developers and entrepreneurs.',
+    siteName: 'StackBill',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'StackBill - Subscription Tracker Dashboard'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'StackBill - Professional Subscription Tracker',
+    description: 'Simple, powerful subscription tracker built by developers for developers and entrepreneurs.',
+    images: ['/og-image.png'],
+    creator: '@stackbill_dev'
   },
   other: {
     "business-type": "legitimate-saas-application",
