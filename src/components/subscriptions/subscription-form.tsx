@@ -289,6 +289,8 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
                 type="date"
                 value={formData.renewal_date}
                 onChange={(e) => handleInputChange('renewal_date', e.target.value)}
+                className="w-full min-h-[40px]"
+                placeholder="YYYY-MM-DD"
                 required
               />
             </div>
