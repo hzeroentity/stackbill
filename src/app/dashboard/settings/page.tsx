@@ -30,6 +30,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { MoreHorizontal, Plus, Edit, Trash2, Lock } from 'lucide-react'
 import { useAuth } from '@/contexts/auth-context'
 import { useLanguage } from '@/contexts/language-context'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 import { Currency, SUPPORTED_CURRENCIES, getDefaultCurrency, setDefaultCurrency } from '@/lib/currency-preferences'
 import { ProjectsService } from '@/lib/projects'
@@ -44,6 +45,7 @@ const supabase = createClient(
 export default function SettingsPage() {
   const { user } = useAuth()
   const { t } = useLanguage()
+  const router = useRouter()
   const [emailLoading, setEmailLoading] = useState(false)
   const [passwordLoading, setPasswordLoading] = useState(false)
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false)
