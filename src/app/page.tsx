@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import Image from "next/image"
-import { Check, CreditCard, X, Calendar, Mail, BarChart3, Folder, FolderTree } from "lucide-react"
+import { Check, CreditCard, X, Calendar, Mail, BarChart3, Folder, FolderTree, Zap, DollarSign, Trash2, Plus, Bell, PieChart } from "lucide-react"
 import { LandingHeaderButtons } from "@/components/landing-header-buttons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
@@ -182,7 +182,7 @@ See How It Works
       {/* Problem Statement Section */}
       <section className="py-20 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-6">
-          <div className="text-center max-w-5xl mx-auto">
+          <div className="text-center max-w-6xl mx-auto">
             <div className="mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">The Hidden Cost Crisis</h2>
               <p className="text-xl text-slate-600 dark:text-slate-300">Most developers and SaaS founders are hemorrhaging money without realizing it</p>
@@ -190,19 +190,25 @@ See How It Works
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="text-4xl mb-4">⚡</div>
+                <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                </div>
                 <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">62%</div>
                 <p className="text-slate-600 dark:text-slate-300 font-medium">of developers get surprise charges</p>
               </div>
               
               <div className="text-center">
-                <div className="text-4xl mb-4">💸</div>
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
                 <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">$180</div>
                 <p className="text-slate-600 dark:text-slate-300 font-medium">average monthly SaaS spend per founder</p>
               </div>
               
               <div className="text-center">
-                <div className="text-4xl mb-4">🗑️</div>
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
                 <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">73%</div>
                 <p className="text-slate-600 dark:text-slate-300 font-medium">pay for tools they rarely use</p>
               </div>
@@ -229,13 +235,18 @@ See How It Works
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-16 max-w-6xl mx-auto">
             {/* Step 1 */}
             <div className="text-center">
               <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">📝 Add your subscriptions</h3>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center justify-center gap-3 flex-wrap">
+                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span>Add your subscriptions</span>
+              </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
                 <video 
                   autoPlay 
@@ -258,9 +269,16 @@ Quick form for name, cost, currency, billing period, renewal date, category, and
               <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">📁 Get reminders + reports</h3>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center justify-center gap-3 flex-wrap">
+                <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Bell className="w-5 h-5 text-green-600 dark:text-green-400" />
+                </div>
+                <span>Get reminders + reports</span>
+              </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-gray-400">📁 Project categorization view</p>
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto">
+                  <Bell className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                </div>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
 Email alerts before renewals + monthly spending summaries straight to your inbox.
@@ -272,9 +290,16 @@ Email alerts before renewals + monthly spending summaries straight to your inbox
               <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">📊 Organize by projects</h3>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center justify-center gap-3 flex-wrap">
+                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <FolderTree className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <span>Organize by projects</span>
+              </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
-                <p className="text-slate-500 dark:text-gray-400">📊 Dashboard analytics view</p>
+                <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mx-auto">
+                  <PieChart className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                </div>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
 Group subscriptions per project for granular cost tracking and team insights.
