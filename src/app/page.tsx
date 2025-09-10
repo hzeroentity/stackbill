@@ -519,8 +519,8 @@ Group subscriptions per project for granular cost tracking and team insights.
             <p className="text-xl text-slate-600 dark:text-slate-300">
               Start free, upgrade when you&apos;re ready
             </p>
-            <div className="mt-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg px-4 py-2 inline-block">
-              <p className="text-orange-800 dark:text-orange-200 text-sm font-medium">
+            <div className="mt-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg px-4 py-2 inline-block">
+              <p className="text-blue-700 dark:text-blue-300 text-sm font-medium">
                 🚀 Early Access: Lock in $3/month forever for the first 100 customers
               </p>
             </div>
@@ -574,16 +574,16 @@ Group subscriptions per project for granular cost tracking and team insights.
             </Card>
 
             {/* Pro Plan */}
-            <Card className="border-2 border-blue-200 dark:border-blue-600 shadow-xl relative dark:bg-gray-800">
+            <Card className="border-2 border-blue-200 dark:border-blue-600 shadow-xl relative bg-gradient-to-b from-blue-50 to-white dark:bg-gradient-to-b dark:from-blue-900/20 dark:to-gray-800">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-orange-600 text-white px-4 py-1">Limited Time</Badge>
+                <Badge className="bg-blue-600 text-white px-4 py-1 hover:bg-blue-600">Limited Time</Badge>
               </div>
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Pro</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">
                   <span className="text-2xl line-through text-slate-400 mr-2">$5</span>$3
                 </div>
-                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-orange-600 font-semibold">Early access</span></p>
+                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-blue-700 dark:text-blue-300 font-semibold">Early access</span></p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -600,7 +600,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Email renewal reminders (7, 3, 1 day alerts)</span>
+                  <span className="dark:text-slate-300">Email renewal reminders (7 day alerts)</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -627,7 +627,7 @@ Group subscriptions per project for granular cost tracking and team insights.
             {/* Team Plan */}
             <Card className="border-2 shadow-lg dark:bg-gray-800 dark:border-gray-700 relative opacity-95">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-purple-600 text-white px-4 py-1">Coming Soon</Badge>
+                <Badge className="bg-purple-600 text-white px-4 py-1 hover:bg-purple-600">Coming Soon</Badge>
               </div>
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Team</CardTitle>

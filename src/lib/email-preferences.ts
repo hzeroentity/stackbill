@@ -39,7 +39,7 @@ export class EmailPreferencesService {
       user_id: userId,
       monthly_summary_enabled: true,
       renewal_alerts_enabled: true,
-      renewal_reminder_days: [7, 3, 1] // 7 days, 3 days, 1 day before renewal
+      renewal_reminder_days: [7] // 7 days before renewal
     }
 
     // Use upsert to handle existing records

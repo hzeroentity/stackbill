@@ -76,6 +76,7 @@ export default function SettingsPage() {
   // Delete account form
   const [deleteConfirmation, setDeleteConfirmation] = useState('')
   const [deleteAccountLoading, setDeleteAccountLoading] = useState(false)
+  const [isDangerZoneOpen, setIsDangerZoneOpen] = useState(false)
   
   // Load currency preference on mount
   useEffect(() => {
@@ -96,7 +97,7 @@ export default function SettingsPage() {
         const projectsData = await ProjectsService.getProjects(user!.id)
         setProjects(projectsData)
 
-        // Load email preferences for Pro users
+        // Load email preferences for Pro users (free users see disabled preview)
         if (isUserPro) {
           await loadEmailPreferences()
         }
@@ -308,7 +309,7 @@ export default function SettingsPage() {
   const handleReminderDayToggle = (day: number) => {
     if (!emailPreferences) return
 
-    const currentDays = emailPreferences.renewal_reminder_days || [7, 3, 1]
+    const currentDays = emailPreferences.renewal_reminder_days || [7]
     const newDays = currentDays.includes(day) 
       ? currentDays.filter(d => d !== day)
       : [...currentDays, day].sort((a, b) => b - a) // Sort descending
@@ -772,22 +773,23 @@ export default function SettingsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Email Preferences Card (Pro users only) */}
-      {isPro && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              Email Preferences
-              <Badge variant="secondary" className="text-xs">Pro</Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {emailPreferencesLoading ? (
-              <div className="flex items-center justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            ) : emailPreferences ? (
-              <div className="space-y-6">
+      {/* Email Preferences Card (All users) */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            Email Preferences
+            <Badge variant="secondary" className="text-xs">Pro</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {!isPro ? (
+            /* Free user - show upgrade prompt */
+            <div className="relative">
+              {/* Overlay for disabled state */}
+              <div className="absolute inset-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-[1px] z-10 rounded-lg"></div>
+              
+              {/* Disabled preview content */}
+              <div className="space-y-6 opacity-60 pointer-events-none">
                 {/* Monthly Summary Toggle */}
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
@@ -796,12 +798,7 @@ export default function SettingsPage() {
                       Receive a monthly summary of your subscription expenses and insights
                     </p>
                   </div>
-                  <Switch
-                    checked={emailPreferences.monthly_summary_enabled ?? false}
-                    onCheckedChange={(checked) => 
-                      handleEmailPreferenceUpdate({ monthly_summary_enabled: checked })
-                    }
-                  />
+                  <Switch checked={false} disabled />
                 </div>
 
                 <div className="border-t pt-6">
@@ -813,71 +810,130 @@ export default function SettingsPage() {
                         Get notified before your subscriptions renew
                       </p>
                     </div>
+                    <Switch checked={false} disabled />
+                  </div>
+
+                  {/* Reminder Days Preview */}
+                  <div className="pl-4 border-l-2 border-muted space-y-3">
+                    <Label className="text-sm font-medium text-muted-foreground">Reminder Schedule</Label>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="outline" className="opacity-50">7 days before</Badge>
+                      <Badge variant="outline" className="opacity-50">3 days before</Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Simple upgrade prompt */}
+              <div className="absolute inset-0 flex items-center justify-center z-20">
+                <div className="text-center bg-white dark:bg-gray-800 p-4 rounded-lg border border-blue-200 dark:border-blue-600 shadow-sm">
+                  <p className="text-sm font-medium mb-3">Upgrade to Pro for email reminders</p>
+                  <Button onClick={() => router.push('/billing')} size="sm">
+                    Upgrade - $3/month
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Pro user - show working email preferences */
+            <>
+              {emailPreferencesLoading ? (
+                <div className="flex items-center justify-center p-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+              ) : emailPreferences ? (
+                <div className="space-y-6">
+                  {/* Monthly Summary Toggle */}
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Label className="text-base font-medium">Monthly Summary Emails</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Receive a monthly summary of your subscription expenses and insights
+                      </p>
+                    </div>
                     <Switch
-                      checked={emailPreferences.renewal_alerts_enabled ?? false}
+                      checked={emailPreferences.monthly_summary_enabled ?? false}
                       onCheckedChange={(checked) => 
-                        handleEmailPreferenceUpdate({ renewal_alerts_enabled: checked })
+                        handleEmailPreferenceUpdate({ monthly_summary_enabled: checked })
                       }
                     />
                   </div>
 
-                  {/* Reminder Days Selection */}
-                  {(emailPreferences.renewal_alerts_enabled ?? false) && (
-                    <div className="pl-4 border-l-2 border-muted space-y-3">
-                      <Label className="text-sm font-medium text-muted-foreground">Reminder Schedule</Label>
-                      <p className="text-xs text-muted-foreground mb-3">
-                        Choose when you want to receive renewal reminders (you can select multiple)
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {[14, 7, 3, 1].map((day) => (
-                          <Badge
-                            key={day}
-                            variant={(emailPreferences.renewal_reminder_days ?? []).includes(day) ? "default" : "outline"}
-                            className={`cursor-pointer transition-colors ${
-                              (emailPreferences.renewal_reminder_days ?? []).includes(day) 
-                                ? "bg-primary text-primary-foreground hover:bg-primary/90" 
-                                : "hover:bg-muted"
-                            }`}
-                            onClick={() => handleReminderDayToggle(day)}
-                          >
-                            {day} day{day !== 1 ? 's' : ''} before
-                          </Badge>
-                        ))}
+                  <div className="border-t pt-6">
+                    {/* Renewal Alerts Toggle */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="space-y-1">
+                        <Label className="text-base font-medium">Renewal Alert Emails</Label>
+                        <p className="text-sm text-muted-foreground">
+                          Get notified before your subscriptions renew
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Currently selected: {(emailPreferences.renewal_reminder_days ?? [])
-                          .sort((a, b) => b - a)
-                          .map(d => `${d} day${d !== 1 ? 's' : ''}`)
-                          .join(', ') || 'None'}
-                      </p>
+                      <Switch
+                        checked={emailPreferences.renewal_alerts_enabled ?? false}
+                        onCheckedChange={(checked) => 
+                          handleEmailPreferenceUpdate({ renewal_alerts_enabled: checked })
+                        }
+                      />
                     </div>
-                  )}
-                </div>
 
-                {/* Anti-spam Notice */}
-                <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
-                  <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
-                    📧 <strong>Smart Delivery:</strong> We&apos;ll never spam you. Monthly summaries are sent once per month, 
-                    and renewal alerts are limited to once per day maximum to avoid overwhelming your inbox.
-                  </AlertDescription>
-                </Alert>
-              </div>
-            ) : (
-              <div className="text-center p-8 text-muted-foreground">
-                <p>Failed to load email preferences</p>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="mt-2"
-                  onClick={loadEmailPreferences}
-                >
-                  Retry
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
+                    {/* Reminder Days Selection */}
+                    {(emailPreferences.renewal_alerts_enabled ?? false) && (
+                      <div className="pl-4 border-l-2 border-muted space-y-3">
+                        <Label className="text-sm font-medium text-muted-foreground">Reminder Schedule</Label>
+                        <p className="text-xs text-muted-foreground mb-3">
+                          Choose when to receive renewal reminders. Default is 7 days before renewal (you can select multiple options)
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {[7, 3].map((day) => (
+                            <Badge
+                              key={day}
+                              variant="outline"
+                              className={`cursor-pointer transition-colors border-2 ${
+                                (emailPreferences.renewal_reminder_days ?? []).includes(day) 
+                                  ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700" 
+                                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                              }`}
+                              onClick={() => handleReminderDayToggle(day)}
+                            >
+                              {day} day{day !== 1 ? 's' : ''} before
+                            </Badge>
+                          ))}
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Selected: {(emailPreferences.renewal_reminder_days ?? [])
+                            .sort((a, b) => b - a)
+                            .map(d => `${d} day${d !== 1 ? 's' : ''}`)
+                            .join(', ') || 'None'} before renewal
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Anti-spam Notice */}
+                  <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+                    <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
+                      📧 <strong>Smart Delivery:</strong> We&apos;ll never spam you. Monthly summaries are sent once per month, 
+                      and renewal alerts are limited to once per day maximum to avoid overwhelming your inbox.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              ) : (
+                <div className="text-center p-8 text-muted-foreground">
+                  <p>Failed to load email preferences</p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-2"
+                    onClick={loadEmailPreferences}
+                  >
+                    Retry
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Currency Preferences Card */}
       <Card>
@@ -908,71 +964,84 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Danger Zone - Delete Account */}
+      {/* Danger Zone - Collapsible */}
       <Card className="mt-8 border-red-200 dark:border-red-800">
         <CardHeader>
-          <CardTitle className="text-red-600 dark:text-red-400">Danger Zone</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Delete Account</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Permanently delete your StackBill account and all associated data. This action cannot be undone.
-              </p>
-              <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 mb-4">
-                <AlertDescription className="text-red-800 dark:text-red-200 text-sm">
-                  ⚠️ <strong>This will permanently delete:</strong> All your subscriptions, projects, settings, and any active Pro subscription. 
-                  We&apos;ll also cancel any ongoing billing.
-                </AlertDescription>
-              </Alert>
-              
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm">
-                    Delete Account
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <div className="my-4">
-                    <Label htmlFor="delete-confirmation" className="text-sm">
-                      Type <strong>&quot;delete my account&quot;</strong> to confirm:
-                    </Label>
-                    <Input
-                      id="delete-confirmation"
-                      placeholder="delete my account"
-                      className="mt-2"
-                      value={deleteConfirmation}
-                      onChange={(e) => setDeleteConfirmation(e.target.value)}
-                      disabled={deleteAccountLoading}
-                    />
-                  </div>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel 
-                      disabled={deleteAccountLoading}
-                      onClick={() => setDeleteConfirmation('')}
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction 
-                      className="bg-red-600 hover:bg-red-700"
-                      disabled={deleteConfirmation !== 'delete my account' || deleteAccountLoading}
-                      onClick={handleDeleteAccount}
-                    >
-                      {deleteAccountLoading ? 'Deleting...' : 'Delete Account'}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-red-600 dark:text-red-400">Danger Zone</CardTitle>
+            <Button 
+              variant="destructive" 
+              size="sm"
+              onClick={() => setIsDangerZoneOpen(!isDangerZoneOpen)}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {isDangerZoneOpen ? 'Close Danger Zone' : 'Open Danger Zone'}
+            </Button>
           </div>
-        </CardContent>
+        </CardHeader>
+        
+        {isDangerZoneOpen && (
+          <CardContent className="space-y-6 border-t border-red-200 dark:border-red-800">
+            <div className="space-y-4 pt-6">
+              <div>
+                <h4 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Delete Account</h4>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Permanently delete your StackBill account and all associated data. This action cannot be undone.
+                </p>
+                <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 mb-4">
+                  <AlertDescription className="text-red-800 dark:text-red-200 text-sm">
+                    ⚠️ <strong>This will permanently delete:</strong> All your subscriptions, projects, settings, and any active Pro subscription. 
+                    We&apos;ll also cancel any ongoing billing.
+                  </AlertDescription>
+                </Alert>
+                
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm">
+                      Delete Account
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="my-4">
+                      <Label htmlFor="delete-confirmation" className="text-sm">
+                        Type <strong>&quot;delete my account&quot;</strong> to confirm:
+                      </Label>
+                      <Input
+                        id="delete-confirmation"
+                        placeholder="delete my account"
+                        className="mt-2"
+                        value={deleteConfirmation}
+                        onChange={(e) => setDeleteConfirmation(e.target.value)}
+                        disabled={deleteAccountLoading}
+                      />
+                    </div>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel 
+                        disabled={deleteAccountLoading}
+                        onClick={() => setDeleteConfirmation('')}
+                      >
+                        Cancel
+                      </AlertDialogCancel>
+                      <AlertDialogAction 
+                        className="bg-red-600 hover:bg-red-700"
+                        disabled={deleteConfirmation !== 'delete my account' || deleteAccountLoading}
+                        onClick={handleDeleteAccount}
+                      >
+                        {deleteAccountLoading ? 'Deleting...' : 'Delete Account'}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </div>
+          </CardContent>
+        )}
       </Card>
     </div>
   )

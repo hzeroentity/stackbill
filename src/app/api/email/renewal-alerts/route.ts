@@ -57,7 +57,7 @@ export async function POST() {
 
         // Get user's email preferences to know their preferred reminder days
         const emailPrefs = await EmailPreferencesService.getUserPreferences(userSub.user_id)
-        const reminderDays = emailPrefs.renewal_reminder_days || [7, 3, 1]
+        const reminderDays = emailPrefs.renewal_reminder_days || [7]
 
         // Get user's subscriptions
         const { data: subscriptions, error: subsError } = await supabase

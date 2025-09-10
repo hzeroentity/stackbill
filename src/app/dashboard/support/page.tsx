@@ -45,7 +45,7 @@ export default function SupportPage() {
                   className="w-full sm:w-auto"
                 >
                   <Mail className="h-4 w-4 mr-2" />
-                  Email hello@stackbill.dev
+                  hello@stackbill.dev
                 </Button>
                 <p className="text-xs text-muted-foreground mt-2">
                   Include your account email and describe your issue for faster assistance
