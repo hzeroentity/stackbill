@@ -12,7 +12,7 @@
     "password": "Password"
   },
   "auth": {
-    "signIn": "Sign In",
+    "signIn": "Log In",
     "signUp": "Sign Up", 
     "signOut": "Sign Out",
     "createAccount": "Create Account",
@@ -168,7 +168,7 @@
       "subtitle": "Manual SaaS tracking with reminders and smart summaries — so you don't get surprise charges ever again.",
       "cta": "Start Free",
       "howItWorks": "How it works",
-      "signIn": "Sign In",
+      "signIn": "Log In",
       "dashboardPreview": "📊 Dashboard Screenshot Placeholder",
       "dashboardSubtext": "(Spending summary + email preview)"
     },

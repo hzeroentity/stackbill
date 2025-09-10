@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'
 import { useLanguage } from '@/contexts/language-context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Eye, EyeOff, Github, Check, X, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
 import { Progress } from '@/components/ui/progress'
@@ -35,9 +35,9 @@ export function AuthForm() {
     
     // Handle confirmation messages
     if (message === 'confirmed') {
-      setMessage('Email confirmed successfully! You can now sign in.')
+      setMessage('Email confirmed successfully! You can now log in.')
     } else if (message === 'already_confirmed') {
-      setMessage('Email already confirmed. You can sign in.')
+      setMessage('Email already confirmed. You can log in.')
     }
     
     // Handle confirmation errors
@@ -67,7 +67,7 @@ export function AuthForm() {
       // OAuth will redirect, so we don't need to handle success here
     } catch (error: unknown) {
       console.error('GitHub auth error:', error)
-      setMessage(error instanceof Error ? error.message : 'Failed to sign in with GitHub. Please try again.')
+      setMessage(error instanceof Error ? error.message : 'Failed to log in with GitHub. Please try again.')
       setSocialLoading(false)
     }
   }
@@ -180,16 +180,6 @@ export function AuthForm() {
   return (
     <Card className="w-full max-w-md mx-auto shadow-xl border-0">
       <CardHeader className="space-y-2 pb-6">
-        {/* Security & Legitimacy Notice */}
-        <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-300 text-sm font-medium">
-            <CheckCircle className="w-4 h-4" />
-            Secure Business Application
-          </div>
-          <p className="text-center text-xs text-green-600 dark:text-green-400 mt-1">
-            StackBill is a legitimate SaaS productivity tool trusted by developers worldwide
-          </p>
-        </div>
 
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Image
@@ -201,9 +191,6 @@ export function AuthForm() {
           />
           <span className="text-2xl font-bold">StackBill</span>
         </div>
-        <CardTitle className="text-center text-2xl">
-          {isSignUp ? t('auth.createAccount') : t('auth.welcome')}
-        </CardTitle>
         <p className="text-center text-sm text-muted-foreground">
           {isSignUp 
             ? 'Start tracking your SaaS costs for free' 
@@ -242,7 +229,7 @@ export function AuthForm() {
                 }}
                 className="w-full"
               >
-                Back to Sign In
+                Back to Log In
               </Button>
             </div>
           </div>

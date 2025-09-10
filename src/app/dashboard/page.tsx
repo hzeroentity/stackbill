@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
+import { CreditCard, DollarSign, Zap, MoreHorizontal, Edit, Trash2, X, RotateCcw, Search } from 'lucide-react'
 import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { Tables } from '@/lib/database.types'
@@ -542,7 +543,7 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 dark:from-blue-950/20 dark:to-blue-900/20 dark:border dark:border-blue-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">{t('dashboard.monthlyTotal')}</CardTitle>
-            <div className="text-2xl">💳</div>
+            <CreditCard className="h-4 w-4 text-blue-600 dark:text-blue-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-900 dark:text-white">
@@ -561,7 +562,7 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 dark:from-green-950/20 dark:to-green-900/20 dark:border dark:border-green-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">{t('dashboard.annualTotal')}</CardTitle>
-            <div className="text-2xl">💰</div>
+            <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-900 dark:text-white">
@@ -580,7 +581,7 @@ export default function DashboardPage() {
         <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 dark:from-purple-950/20 dark:to-purple-900/20 dark:border dark:border-purple-600/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0">
             <CardTitle className="text-sm font-medium">{t('dashboard.activeServices')}</CardTitle>
-            <div className="text-2xl">⚡</div>
+            <Zap className="h-4 w-4 text-purple-600 dark:text-purple-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-900 dark:text-white">
@@ -685,9 +686,7 @@ export default function DashboardPage() {
                         onClick={() => scrollToSubscription(mostExpensiveId)}
                         className="h-6 w-6 p-0 hover:bg-red-200 dark:hover:bg-red-800 cursor-pointer"
                       >
-                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                        <Search className="h-3 w-3" />
                       </Button>
                     )}
                   </div>
@@ -709,9 +708,7 @@ export default function DashboardPage() {
                         onClick={() => scrollToSubscription(leastExpensiveId)}
                         className="h-6 w-6 p-0 hover:bg-yellow-200 dark:hover:bg-yellow-800 cursor-pointer"
                       >
-                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                        <Search className="h-3 w-3" />
                       </Button>
                     )}
                   </div>
@@ -835,27 +832,21 @@ export default function DashboardPage() {
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="sm" className="h-8 w-8 p-0 flex-shrink-0">
                               <span className="sr-only">Open menu</span>
-                              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                              </svg>
+                              <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             {subscription.id !== 'stackbill-pro' && (
                               <>
                                 <DropdownMenuItem onClick={() => handleEdit(subscription)} className="cursor-pointer flex items-center gap-2">
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
+                                  <Edit className="h-4 w-4" />
                                   {t('dashboard.edit')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   onClick={() => handleCancel(subscription)}
                                   className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
                                 >
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
+                                  <X className="h-4 w-4" />
                                   Cancel
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
@@ -863,9 +854,7 @@ export default function DashboardPage() {
                                   className="text-red-600 dark:text-red-400 cursor-pointer flex items-center gap-2"
                                   disabled={deletingId === subscription.id}
                                 >
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
+                                  <Trash2 className="h-4 w-4" />
                                   {t('dashboard.delete')}
                                 </DropdownMenuItem>
                               </>
@@ -925,27 +914,21 @@ export default function DashboardPage() {
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="sm" className="h-8 w-8 p-0 flex-shrink-0">
                               <span className="sr-only">Open menu</span>
-                              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                              </svg>
+                              <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             {subscription.id !== 'stackbill-pro' && (
                               <>
                                 <DropdownMenuItem onClick={() => handleEdit(subscription)} className="cursor-pointer flex items-center gap-2">
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
+                                  <Edit className="h-4 w-4" />
                                   {t('dashboard.edit')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   onClick={() => handleCancel(subscription)}
                                   className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
                                 >
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
+                                  <X className="h-4 w-4" />
                                   Cancel
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
@@ -953,9 +936,7 @@ export default function DashboardPage() {
                                   className="text-red-600 dark:text-red-400 cursor-pointer flex items-center gap-2"
                                   disabled={deletingId === subscription.id}
                                 >
-                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
+                                  <Trash2 className="h-4 w-4" />
                                   {t('dashboard.delete')}
                                 </DropdownMenuItem>
                               </>
@@ -1053,8 +1034,9 @@ export default function DashboardPage() {
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem 
                                 onClick={() => handleReactivate(subscription)}
-                                className="text-green-600 dark:text-green-400 cursor-pointer"
+                                className="text-green-600 dark:text-green-400 cursor-pointer flex items-center gap-2"
                               >
+                                <RotateCcw className="h-4 w-4" />
                                 Reactivate
                               </DropdownMenuItem>
                               <DropdownMenuItem 
@@ -1120,8 +1102,9 @@ export default function DashboardPage() {
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem 
                                 onClick={() => handleReactivate(subscription)}
-                                className="text-green-600 dark:text-green-400 cursor-pointer"
+                                className="text-green-600 dark:text-green-400 cursor-pointer flex items-center gap-2"
                               >
+                                <RotateCcw className="h-4 w-4" />
                                 Reactivate
                               </DropdownMenuItem>
                               <DropdownMenuItem 

@@ -20,12 +20,15 @@ export function LandingHeaderButtons() {
 
   // Show sign-in buttons by default (both during loading and when not authenticated)
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-2 sm:space-x-4">
       <Link href="/login">
-        <Button variant="ghost">Sign In</Button>
+        <Button variant="ghost">Log In</Button>
       </Link>
       <Link href="/login?mode=signup">
-        <Button>Get Started Free</Button>
+        <Button>
+          <span className="sm:hidden">Start Free</span>
+          <span className="hidden sm:inline">Get Started Free</span>
+        </Button>
       </Link>
     </div>
   )

@@ -7,10 +7,11 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import Image from "next/image"
-import { Check, CreditCard, X, Calendar, Mail, BarChart3, Folder, FolderTree, Zap, DollarSign, Trash2, Plus, Bell, PieChart } from "lucide-react"
+import { Check, CreditCard, X, Calendar, Mail, BarChart3, Folder, FolderTree, Zap, DollarSign, Trash2, Plus, Bell, PieChart, Menu } from "lucide-react"
 import { LandingHeaderButtons } from "@/components/landing-header-buttons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 function NotifyMeButton() {
   const [showEmailInput, setShowEmailInput] = useState(false)
@@ -109,13 +110,90 @@ function NotifyMeButton() {
 }
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const closeMenu = () => {
+    setIsMenuOpen(false)
+  }
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-950 dark:to-gray-900">
       {/* Header */}
       <header className="border-b bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+          {/* Mobile Layout */}
+          <div className="flex justify-between items-center sm:hidden">
+            {/* Left: Logo + StackBill */}
+            <div className="flex items-center space-x-2">
+              <Image
+                src="/stackbill-logo.svg"
+                alt="StackBill Logo"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+              <span className="text-xl font-bold">StackBill</span>
+            </div>
+            
+            {/* Right: Theme Toggle + Burger Menu */}
+            <div className="flex items-center space-x-2">
+              <ModeToggle />
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Menu className="h-4 w-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <div className="mt-6 space-y-4">
+                    {/* Navigation Links */}
+                    <div className="space-y-2">
+                      <a href="#how-it-works" onClick={closeMenu}>
+                        <Button variant="ghost" className="w-full justify-start">
+                          How It Works
+                        </Button>
+                      </a>
+                      <a href="#features" onClick={closeMenu}>
+                        <Button variant="ghost" className="w-full justify-start">
+                          Features
+                        </Button>
+                      </a>
+                      <a href="#pricing" onClick={closeMenu}>
+                        <Button variant="ghost" className="w-full justify-start">
+                          Pricing
+                        </Button>
+                      </a>
+                      <a href="#testimonials" onClick={closeMenu}>
+                        <Button variant="ghost" className="w-full justify-start">
+                          Testimonials
+                        </Button>
+                      </a>
+                    </div>
+                    
+                    {/* Separator */}
+                    <div className="border-t border-muted my-4"></div>
+                    
+                    {/* Auth Buttons */}
+                    <div className="space-y-3">
+                      <Link href="/login" onClick={closeMenu} className="block">
+                        <Button variant="outline" className="w-full justify-center">
+                          Log In
+                        </Button>
+                      </Link>
+                      <Link href="/login?mode=signup" onClick={closeMenu} className="block">
+                        <Button className="w-full justify-center">
+                          Start Free
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden sm:flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Image
                 src="/stackbill-logo.svg"
@@ -535,7 +613,7 @@ Group subscriptions per project for granular cost tracking and team insights.
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 bg-white dark:bg-gray-800">
+      <section id="pricing" className="py-20 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
@@ -698,7 +776,7 @@ Group subscriptions per project for granular cost tracking and team insights.
       </section>
 
       {/* Social Proof Section */}
-      <section className="py-20 bg-slate-50 dark:bg-gray-900/50 overflow-hidden">
+      <section id="testimonials" className="py-20 bg-slate-50 dark:bg-gray-900/50 overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
