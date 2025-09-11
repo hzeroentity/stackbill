@@ -370,10 +370,14 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6">
-      <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold">{t('settings.title')}</h1>
-        <p className="text-muted-foreground mt-2">{t('settings.accountSettings')}</p>
+    <div className="container mx-auto p-4 sm:p-6 pt-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold">{t('settings.title')}</h1>
+        </div>
+      </div>
+      <div className="mb-6">
+        <p className="text-muted-foreground">{t('settings.accountSettings')}</p>
       </div>
 
 
@@ -831,7 +835,7 @@ export default function SettingsPage() {
                 <div className="text-center bg-white dark:bg-gray-800 p-4 rounded-lg border border-blue-200 dark:border-blue-600 shadow-sm">
                   <p className="text-sm font-medium mb-3">Upgrade to Pro for email reminders</p>
                   <Button onClick={() => router.push('/billing')} size="sm">
-                    Upgrade - $3/month
+                    Upgrade - $4/month
                   </Button>
                 </div>
               </div>

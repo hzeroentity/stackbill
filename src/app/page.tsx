@@ -624,7 +624,7 @@ Group subscriptions per project for granular cost tracking and team insights.
             </p>
             <div className="mt-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg px-4 py-2 inline-block">
               <p className="text-blue-700 dark:text-blue-300 text-sm font-medium">
-                🚀 Early Access: Lock in $3/month forever for the first 100 customers
+                🚀 Early Access: Lock in $4/month forever for the first 100 customers
               </p>
             </div>
           </div>
@@ -684,7 +684,7 @@ Group subscriptions per project for granular cost tracking and team insights.
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Pro</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">
-                  <span className="text-2xl line-through text-slate-400 mr-2">$5</span>$3
+                  <span className="text-2xl line-through text-slate-400 mr-2">$6</span>$4
                 </div>
                 <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-blue-700 dark:text-blue-300 font-semibold">Early access</span></p>
               </CardHeader>
@@ -734,7 +734,7 @@ Group subscriptions per project for granular cost tracking and team insights.
               </div>
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">Team</CardTitle>
-                <div className="text-4xl font-bold mb-2 dark:text-white">$12</div>
+                <div className="text-4xl font-bold mb-2 dark:text-white">$10</div>
                 <p className="text-slate-600 dark:text-slate-300">per month • Scale with your team</p>
               </CardHeader>
               <CardContent className="space-y-4">
