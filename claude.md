@@ -1,8 +1,10 @@
 # StackBill - SaaS Subscription Tracker
 
-## ⚠️ CRITICAL DEVELOPMENT RULE ⚠️
+## ⚠️ CRITICAL DEVELOPMENT RULES ⚠️
 
 **🚨 DATABASE PROTECTION:** DO NOT EDIT the database structure in any way. Only interact with Supabase via MCP for READ operations. Any database schema changes must be explicitly requested and approved by the user first.
+
+**🚨 GIT WORKFLOW PROTECTION:** DO NOT run any git commands unless explicitly requested by the user. This includes commits, pushes, pulls, branch switches, merges, or any other git operations. Always wait for explicit user instructions before performing any git actions.
 
 ## Project Overview
 

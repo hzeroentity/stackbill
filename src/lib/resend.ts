@@ -271,8 +271,7 @@ export const EmailTemplates = {
       topSubscriptions: { name: string; monthlyAmount: number; currency: string }[];
       month: string;
       year: number;
-    },
-    userName?: string
+    }
   ) => ({
     from: 'StackBill <hello@stackbill.dev>',
     to: userEmail,
@@ -443,7 +442,7 @@ export const EmailTemplates = {
   }),
 
   // Cancellation confirmation email template
-  cancellationEmail: (userEmail: string, userName?: string) => ({
+  cancellationEmail: (userEmail: string) => ({
     from: 'StackBill <hello@stackbill.dev>',
     to: userEmail,
     subject: 'Your Pro plan has been cancelled - StackBill',
@@ -537,7 +536,7 @@ export const EmailTemplates = {
   }),
 
   // Account deletion goodbye email template
-  goodbyeEmail: (userEmail: string, userName?: string) => ({
+  goodbyeEmail: (userEmail: string) => ({
     from: 'StackBill <hello@stackbill.dev>',
     to: userEmail,
     subject: 'Sorry to see you go - StackBill',
@@ -684,11 +683,10 @@ export async function sendMonthlySummaryEmail(
     topSubscriptions: { name: string; monthlyAmount: number; currency: string }[];
     month: string;
     year: number;
-  },
-  userName?: string
+  }
 ) {
   try {
-    const emailData = EmailTemplates.monthlySummaryEmail(userEmail, summaryData, userName)
+    const emailData = EmailTemplates.monthlySummaryEmail(userEmail, summaryData)
     const result = await resend.emails.send(emailData)
     
     return { success: true, data: result }
@@ -699,9 +697,9 @@ export async function sendMonthlySummaryEmail(
 }
 
 // Utility function to send cancellation confirmation email
-export async function sendCancellationEmail(userEmail: string, userName?: string) {
+export async function sendCancellationEmail(userEmail: string) {
   try {
-    const emailData = EmailTemplates.cancellationEmail(userEmail, userName)
+    const emailData = EmailTemplates.cancellationEmail(userEmail)
     const result = await resend.emails.send(emailData)
     
     return { success: true, data: result }
@@ -712,9 +710,9 @@ export async function sendCancellationEmail(userEmail: string, userName?: string
 }
 
 // Utility function to send goodbye email
-export async function sendGoodbyeEmail(userEmail: string, userName?: string) {
+export async function sendGoodbyeEmail(userEmail: string) {
   try {
-    const emailData = EmailTemplates.goodbyeEmail(userEmail, userName)
+    const emailData = EmailTemplates.goodbyeEmail(userEmail)
     const result = await resend.emails.send(emailData)
     
     return { success: true, data: result }

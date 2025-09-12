@@ -126,11 +126,6 @@ export async function POST() {
         // Sort by monthly amount descending
         topSubscriptions.sort((a, b) => b.monthlyAmount - a.monthlyAmount)
 
-        // Extract user name from metadata
-        const userName = user.user_metadata?.name || 
-                        user.user_metadata?.full_name ||
-                        user.email?.split('@')[0] || 'Unknown'
-
         // Prepare summary data
         const summaryData = {
           monthlyTotal,
@@ -146,8 +141,7 @@ export async function POST() {
         // Send monthly summary email
         const emailResult = await sendMonthlySummaryEmail(
           user.email || 'unknown@email.com',
-          summaryData,
-          userName
+          summaryData
         )
 
         if (emailResult.success) {

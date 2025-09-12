@@ -241,7 +241,7 @@ export default function BillingPage() {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p>Loading billing information...</p>
+            <p>{t('billing.loadingBilling')}</p>
           </div>
         </div>
       </div>
@@ -268,7 +268,7 @@ export default function BillingPage() {
         <div className="mb-12">
           <Card>
             <CardHeader>
-              <CardTitle>Current Subscription</CardTitle>
+              <CardTitle>{t('billing.currentSubscription')}</CardTitle>
               <CardDescription>{t('billing.manageBilling')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -286,7 +286,7 @@ export default function BillingPage() {
                       : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
                 }`}>
                   {userSubscription.status === 'active' ? t('billing.active') : 
-                   userSubscription.status === 'past_due' ? 'Past Due' : 'Canceled'}
+                   userSubscription.status === 'past_due' ? t('billing.pastDue') : t('billing.canceled')}
                 </span>
               </div>
               {userSubscription.current_period_end && (
@@ -311,11 +311,11 @@ export default function BillingPage() {
                       onClick={() => window.location.href = '/dashboard/billing/history'}
                     >
                       <History className="h-4 w-4 mr-2" />
-                      Billing History
+                      {t('billing.billingHistory')}
                     </Button>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Downgrade to the free plan anytime. You&apos;ll keep access until the end of your billing period.
+                    {t('billing.downgradeNotice')}
                   </p>
                 </div>
               </div>
@@ -351,7 +351,7 @@ export default function BillingPage() {
               {plan.id === 'pro' && !isCurrentPlan && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Limited Time
+                    {t('billing.limitedTime')}
                   </div>
                 </div>
               )}
@@ -367,7 +367,7 @@ export default function BillingPage() {
                         <span className="text-lg font-normal text-muted-foreground">/month</span>
                       </div>
                       <p className="text-blue-700 dark:text-blue-300 text-sm font-medium mt-2">
-                        🚀 Early Access: Lock in $4/month forever
+                        {t('billing.earlyAccessOffer')}
                       </p>
                     </>
                   ) : (
@@ -407,7 +407,7 @@ export default function BillingPage() {
                         ? t('dashboard.processing') 
                         : plan.id === 'free' 
                           ? t('billing.getStartedFree') 
-                          : '✨ Upgrade to Pro - Start Saving!'
+                          : t('billing.upgradeToProCta')
                     }
                   </Button>
                 )}
@@ -416,7 +416,7 @@ export default function BillingPage() {
                 {currentPlan === 'pro' && plan.id === 'free' && (
                   <div className="text-center">
                     <p className="text-sm text-muted-foreground mb-2">
-                      Use the downgrade button above to switch to this plan
+                      {t('billing.downgradeButtonNotice')}
                     </p>
                   </div>
                 )}
@@ -429,20 +429,20 @@ export default function BillingPage() {
         <Card className="relative opacity-95">
           <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
             <div className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-              Coming Soon
+              {t('billing.comingSoon')}
             </div>
           </div>
           
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl">Team</CardTitle>
-            <CardDescription>Scale with your team</CardDescription>
+            <CardTitle className="text-2xl">{t('billing.teamPlan')}</CardTitle>
+            <CardDescription>{t('billing.teamPlanDescription')}</CardDescription>
             <div className="text-center py-4">
               <div className="text-4xl font-bold">
                 $10
                 <span className="text-lg font-normal text-muted-foreground">/month</span>
               </div>
               <p className="text-purple-700 dark:text-purple-300 text-sm font-medium mt-2">
-                Perfect for growing teams
+                {t('billing.teamPlanSubtitle')}
               </p>
             </div>
           </CardHeader>
@@ -451,31 +451,31 @@ export default function BillingPage() {
             <ul className="space-y-3 mb-6">
               <li className="flex items-center">
                 <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                <span className="text-sm">All Pro plan features included</span>
+                <span className="text-sm">{t('billing.allProFeaturesIncluded')}</span>
               </li>
               <li className="flex items-center">
                 <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                <span className="text-sm">Up to 5 team members</span>
+                <span className="text-sm">{t('billing.upToTeamMembers')}</span>
               </li>
               <li className="flex items-center">
                 <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                <span className="text-sm">Unlimited subscriptions</span>
+                <span className="text-sm">{t('billing.unlimitedSubscriptions')}</span>
               </li>
               <li className="flex items-center">
                 <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                <span className="text-sm">Unlimited projects</span>
+                <span className="text-sm">{t('billing.unlimitedProjects')}</span>
               </li>
               <li className="flex items-center">
                 <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                <span className="text-sm">Team collaboration features</span>
+                <span className="text-sm">{t('billing.teamCollaboration')}</span>
               </li>
               <li className="flex items-center">
                 <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                <span className="text-sm">Advanced analytics & reporting</span>
+                <span className="text-sm">{t('billing.advancedAnalytics')}</span>
               </li>
               <li className="flex items-center">
                 <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                <span className="text-sm">Priority support</span>
+                <span className="text-sm">{t('billing.prioritySupport')}</span>
               </li>
             </ul>
 
@@ -484,7 +484,7 @@ export default function BillingPage() {
               variant="outline"
               onClick={() => window.open('mailto:hello@stackbill.dev?subject=Teams Plan Interest&body=Hi! I\'m interested in being notified when the Teams plan becomes available.', '_blank')}
             >
-              🚀 Notify Me When Available
+              {t('billing.notifyWhenAvailable')}
             </Button>
           </CardContent>
         </Card>
@@ -492,24 +492,24 @@ export default function BillingPage() {
         
         {/* Billing Reassurance */}
         <div className="mt-12 text-center max-w-2xl mx-auto">
-          <h3 className="text-lg font-semibold mb-6">💳 Flexible Billing</h3>
+          <h3 className="text-lg font-semibold mb-6">{t('billing.flexibleBilling')}</h3>
           <div className="space-y-4 text-sm text-muted-foreground">
             <p>
-              ✅ <strong>Cancel anytime</strong> - No long-term commitments or hidden fees
+              {t('billing.cancelAnytime')}
             </p>
             <p>
-              ✅ <strong>Instant upgrades</strong> - Access new features immediately after upgrading
+              {t('billing.instantUpgrades')}
             </p>
             <p>
-              ✅ <strong>Prorated billing</strong> - Only pay for what you use when switching plans
+              {t('billing.proratedBilling')}
             </p>
             <p>
-              ✅ <strong>Secure payments</strong> - All transactions protected by Stripe's enterprise-grade security
+              {t('billing.securePayments')}
             </p>
           </div>
           <div className="mt-6">
             <p className="text-xs text-muted-foreground">
-              Questions about billing? Contact us at{' '}
+              {t('billing.billingQuestions')}{' '}
               <a href="mailto:hello@stackbill.dev" className="text-blue-600 hover:underline">
                 hello@stackbill.dev
               </a>
@@ -540,11 +540,9 @@ export default function BillingPage() {
       <AlertDialog open={isDowngradeModalOpen} onOpenChange={setIsDowngradeModalOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('billing.downgrade')} Plan</AlertDialogTitle>
+            <AlertDialogTitle>{t('billing.downgradePlanTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to downgrade to the free plan? You&apos;ll lose access to Pro features, including unlimited subscription tracking. 
-              <br /><br />
-              Your subscription will be canceled immediately, but you&apos;ll keep Pro access until your next billing date.
+              {t('billing.downgradeConfirmation')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -569,20 +567,20 @@ export default function BillingPage() {
       <AlertDialog open={isLimitExceededModalOpen} onOpenChange={setIsLimitExceededModalOpen}>
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
-            <AlertDialogTitle>Cannot Downgrade to Free Plan</AlertDialogTitle>
+            <AlertDialogTitle>{t('billing.cannotDowngradeTitle')}</AlertDialogTitle>
             <div className="text-sm text-muted-foreground space-y-3">
-              <p>You currently exceed the free plan limits:</p>
+              <p>{t('billing.exceedsFreeLimits')}</p>
               <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg space-y-1 text-sm">
                 {userStats && (
                   <>
                     <div className="flex justify-between">
-                      <span>Active Subscriptions:</span>
+                      <span>{t('billing.activeSubscriptionsLimit')}</span>
                       <span className={userStats.activeSubscriptions > PLAN_LIMITS.free.subscriptions ? 'text-red-600 font-medium' : ''}>
                         {userStats.activeSubscriptions}/{PLAN_LIMITS.free.subscriptions}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Projects:</span>
+                      <span>{t('billing.projectsLimit')}</span>
                       <span className={userStats.projects > PLAN_LIMITS.free.projects ? 'text-red-600 font-medium' : ''}>
                         {userStats.projects}/{PLAN_LIMITS.free.projects}
                       </span>
@@ -591,8 +589,7 @@ export default function BillingPage() {
                 )}
               </div>
               <p>
-                Please delete some subscriptions and/or projects from your Settings page, 
-                then try downgrading again.
+                {t('billing.deleteToDowngrade')}
               </p>
             </div>
           </AlertDialogHeader>
@@ -601,7 +598,7 @@ export default function BillingPage() {
               onClick={() => setIsLimitExceededModalOpen(false)}
               className="w-full"
             >
-              Got it
+              {t('billing.gotIt')}
             </AlertDialogAction>
             <Button
               variant="destructive"
@@ -611,7 +608,7 @@ export default function BillingPage() {
               }}
               className="w-full bg-red-600 hover:bg-red-700 text-white"
             >
-              Force Downgrade Anyway
+              {t('billing.forceDowngradeAnyway')}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -621,28 +618,28 @@ export default function BillingPage() {
       <AlertDialog open={isForceDowngradeModalOpen} onOpenChange={setIsForceDowngradeModalOpen}>
         <AlertDialogContent className="max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-red-600">⚠️ Force Downgrade Warning</AlertDialogTitle>
+            <AlertDialogTitle className="text-red-600">{t('billing.forceDowngradeWarning')}</AlertDialogTitle>
             <div className="text-sm text-muted-foreground space-y-4">
               <p className="font-medium text-amber-700 dark:text-amber-400">
-                This will permanently delete your data!
+                {t('billing.permanentDataDeletion')}
               </p>
               
               {userStats && (
                 <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg space-y-2 text-sm">
-                  <p className="font-medium text-red-800 dark:text-red-400">The following will be deleted:</p>
+                  <p className="font-medium text-red-800 dark:text-red-400">{t('billing.followingWillBeDeleted')}</p>
                   {userStats.activeSubscriptions > PLAN_LIMITS.free.subscriptions && (
                     <div className="flex justify-between items-center">
-                      <span>Most recent subscriptions:</span>
+                      <span>{t('billing.mostRecentSubscriptions')}</span>
                       <span className="font-bold text-red-600">
-                        {userStats.activeSubscriptions - PLAN_LIMITS.free.subscriptions} deleted
+                        {userStats.activeSubscriptions - PLAN_LIMITS.free.subscriptions} {t('billing.deleted')}
                       </span>
                     </div>
                   )}
                   {userStats.projects > PLAN_LIMITS.free.projects && (
                     <div className="flex justify-between items-center">
-                      <span>Most recent projects:</span>
+                      <span>{t('billing.mostRecentProjects')}</span>
                       <span className="font-bold text-red-600">
-                        {userStats.projects - PLAN_LIMITS.free.projects} deleted
+                        {userStats.projects - PLAN_LIMITS.free.projects} {t('billing.deleted')}
                       </span>
                     </div>
                   )}
@@ -650,14 +647,12 @@ export default function BillingPage() {
               )}
               
               <p className="text-sm text-muted-foreground">
-                <strong>What will happen:</strong>
-                <br />• Your most recently created subscriptions and projects will be permanently removed
-                <br />• You&apos;ll be downgraded to the Free plan immediately  
-                <br />• This action cannot be undone
+                <strong>{t('billing.whatWillHappen')}</strong>
+                <br />{t('billing.dataWillBeRemoved')}
               </p>
               
               <p className="text-sm font-medium text-red-600">
-                Are you absolutely sure you want to proceed?
+                {t('billing.absolutelySurePrompt')}
               </p>
             </div>
           </AlertDialogHeader>
@@ -666,14 +661,14 @@ export default function BillingPage() {
               onClick={() => setIsForceDowngradeModalOpen(false)}
               disabled={downgrading}
             >
-              Cancel
+              {t('common.cancel')}
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleForceDowngrade}
               disabled={downgrading}
               className="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
             >
-              {downgrading ? 'Processing...' : 'Yes, Delete and Downgrade'}
+              {downgrading ? t('dashboard.processing') : t('billing.yesDeleteAndDowngrade')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -1037,7 +1037,7 @@ Group subscriptions per project for granular cost tracking and team insights.
             </div>
             <div className="mt-6 pt-6 border-t border-slate-800">
               <p className="text-sm text-slate-500">
-                © 2025 StackBill. All rights reserved.
+                © {new Date().getFullYear()} StackBill. All rights reserved.
               </p>
             </div>
           </div>

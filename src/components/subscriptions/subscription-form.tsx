@@ -33,23 +33,23 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
   const [loadingProjects, setLoadingProjects] = useState(true)
   const [isFree, setIsFree] = useState(subscription?.amount === 0)
   
-  // Predefined categories for better organization
-  const categories: SubscriptionCategory[] = [
-    'Cloud & Hosting',
-    'Analytics & Monitoring',
-    'AI Tools & LLMs',
-    'Database & Storage', 
-    'Developer Tools',
-    'Communication',
-    'Design & Creative',
-    'Marketing & SEO',
-    'Security',
-    'Media & Content',
-    'Productivity',
-    'Financial & Accounting',
-    'CRM & Sales',
-    'Legal & Compliance',
-    'Other'
+  // Predefined categories with translation keys
+  const categoryMappings = [
+    { value: 'Cloud & Hosting', key: 'cloud' },
+    { value: 'Analytics & Monitoring', key: 'analytics' },
+    { value: 'AI Tools & LLMs', key: 'ai' },
+    { value: 'Database & Storage', key: 'database' },
+    { value: 'Developer Tools', key: 'developer' },
+    { value: 'Communication', key: 'communication' },
+    { value: 'Design & Creative', key: 'design' },
+    { value: 'Marketing & SEO', key: 'marketing' },
+    { value: 'Security', key: 'security' },
+    { value: 'Media & Content', key: 'media' },
+    { value: 'Productivity', key: 'productivity' },
+    { value: 'Financial & Accounting', key: 'financial' },
+    { value: 'CRM & Sales', key: 'crm' },
+    { value: 'Legal & Compliance', key: 'legal' },
+    { value: 'Other', key: 'other' }
   ]
   
   const [formData, setFormData] = useState({
@@ -121,13 +121,13 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
     try {
       // Validate that at least one project is selected
       if (selectedProjects.length === 0) {
-        throw new Error('Please assign this subscription to at least one project')
+        throw new Error(t('subscriptionForm.projectAssignmentRequired'))
       }
 
       // Validate amount is positive (allow 0 for free subscriptions)
       const amount = parseFloat(formData.amount)
       if (isNaN(amount) || amount < 0) {
-        throw new Error('Amount must be a positive number or 0 for free subscriptions')
+        throw new Error(t('subscriptionForm.positiveAmountRequired'))
       }
 
       // Validate renewal date is today or in the future
@@ -136,7 +136,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
       const renewalDate = new Date(formData.renewal_date)
       
       if (renewalDate < today) {
-        throw new Error('Renewal date must be today or in the future')
+        throw new Error(t('subscriptionForm.futureDateRequired'))
       }
 
       const subscriptionData: Omit<SubscriptionInsert, 'user_id'> = {
@@ -198,7 +198,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle>
-          {subscription ? 'Edit Subscription' : 'Add New Subscription'}
+          {subscription ? t('subscriptionForm.editTitle') : t('subscriptionForm.addTitle')}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -207,7 +207,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
             <Label htmlFor="name">{t('subscriptions.service')}</Label>
             <Input
               id="name"
-              placeholder="e.g., Vercel, Supabase, PostHog, etc."
+              placeholder={t('subscriptionForm.servicePlaceholder')}
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
               required
@@ -216,7 +216,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="amount">Amount</Label>
+              <Label htmlFor="amount">{t('subscriptionForm.amount')}</Label>
               <Input
                 id="amount"
                 type="number"
@@ -230,7 +230,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="currency">Currency</Label>
+              <Label htmlFor="currency">{t('subscriptionForm.currency')}</Label>
               <Select 
                 value={formData.currency} 
                 onValueChange={(value) => handleInputChange('currency', value)}
@@ -260,13 +260,13 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
               htmlFor="free-subscription" 
               className="text-sm font-medium cursor-pointer"
             >
-              This subscription is free
+              {t('subscriptionForm.freeSubscription')}
             </Label>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="billing_period">Billing Period</Label>
+              <Label htmlFor="billing_period">{t('subscriptionForm.billingPeriod')}</Label>
               <Select 
                 value={formData.billing_period} 
                 onValueChange={(value) => handleInputChange('billing_period', value)}
@@ -275,15 +275,15 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="quarterly">Quarterly</SelectItem>
-                  <SelectItem value="yearly">Yearly</SelectItem>
+                  <SelectItem value="weekly">{t('subscriptionForm.weekly')}</SelectItem>
+                  <SelectItem value="monthly">{t('subscriptionForm.monthly')}</SelectItem>
+                  <SelectItem value="quarterly">{t('subscriptionForm.quarterly')}</SelectItem>
+                  <SelectItem value="yearly">{t('subscriptionForm.yearly')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="renewal_date">Next Renewal Date</Label>
+              <Label htmlFor="renewal_date">{t('subscriptionForm.nextRenewalDate')}</Label>
               <Input
                 id="renewal_date"
                 type="date"
@@ -297,15 +297,15 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category">Category</Label>
+            <Label htmlFor="category">{t('subscriptionForm.category')}</Label>
             <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
+                {categoryMappings.map((mapping) => (
+                  <SelectItem key={mapping.value} value={mapping.value}>
+                    {t(`categories.${mapping.key}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -328,11 +328,11 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
 
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <Button type="submit" disabled={isLoading} className="flex-1">
-              {isLoading ? 'Saving...' : subscription ? 'Update' : 'Add'} Subscription
+              {isLoading ? t('subscriptionForm.saving') : subscription ? t('subscriptionForm.update') : t('subscriptionForm.add')} {t('subscriptionForm.subscription')}
             </Button>
             {onCancel && (
               <Button type="button" variant="outline" onClick={onCancel} className="sm:w-auto">
-                Cancel
+                {t('common.cancel')}
               </Button>
             )}
           </div>

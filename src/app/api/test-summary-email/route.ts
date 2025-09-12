@@ -33,7 +33,6 @@ export async function POST(request: NextRequest) {
 
     // For testing, use a fallback email if profile email not found
     let userEmail = profile?.user?.email || 'test@example.com' // Hardcoded for testing
-    let userName = profile?.user?.user_metadata?.name || profile?.user?.user_metadata?.full_name
     
     // Only try auth lookup if userId looks like a UUID and email isn't hardcoded
     if (!userEmail || (userEmail === 'test@example.com' && userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))) {
@@ -41,7 +40,6 @@ export async function POST(request: NextRequest) {
         const { data: authUser } = await supabaseUntyped.auth.admin.getUserById(userId)
         if (authUser.user?.email) {
           userEmail = authUser.user.email
-          userName = authUser.user?.user_metadata?.name || authUser.user?.user_metadata?.full_name
         }
       } catch {
         // Ignore UUID validation errors for test data
@@ -75,10 +73,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Use fallback name if not already set
-    if (!userName) {
-      userName = userEmail.split('@')[0]
-    }
 
     // Force mock data for test users or if no subscriptions
     if (!subscriptions || subscriptions.length === 0 || userId === 'test123') {
@@ -109,8 +103,7 @@ export async function POST(request: NextRequest) {
       // Send test monthly summary email
       const emailResult = await sendMonthlySummaryEmail(
         userEmail,
-        mockSummaryData,
-        userName
+        mockSummaryData
       )
 
       return NextResponse.json({
@@ -175,8 +168,7 @@ export async function POST(request: NextRequest) {
     // Send monthly summary email
     const emailResult = await sendMonthlySummaryEmail(
       userEmail,
-      summaryData,
-      userName
+      summaryData
     )
 
     return NextResponse.json({

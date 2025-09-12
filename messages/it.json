@@ -11,29 +11,12 @@
     "email": "Email",
     "password": "Password"
   },
-  "auth": {
-    "signIn": "Accedi",
-    "signUp": "Registrati", 
-    "signOut": "Disconnetti",
-    "createAccount": "Crea Account",
-    "alreadyHaveAccount": "Hai già un account?",
-    "noAccount": "Non hai un account?",
-    "forgotPassword": "Password dimenticata?",
-    "withGithub": "Continua con GitHub",
-    "enterEmail": "Inserisci la tua email",
-    "enterPassword": "Inserisci la tua password",
-    "confirmPassword": "Conferma password",
-    "passwordsMatch": "Le password corrispondono",
-    "passwordsDontMatch": "Le password non corrispondono",
-    "signingIn": "Accesso in corso...",
-    "signingUp": "Registrazione in corso...",
-    "welcome": "Benvenuto su StackBill"
-  },
   "navigation": {
     "dashboard": "Dashboard",
     "billing": "Fatturazione",
     "settings": "Impostazioni",
-    "account": "Account"
+    "account": "Account",
+    "support": "Supporto"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -71,31 +54,58 @@
   "subscriptions": {
     "service": "Nome Abbonamento",
     "amount": "Importo",
-    "billingPeriod": "Periodo di Fatturazione",
+    "billingPeriod": "Periodo Fatturazione",
     "renewalDate": "Data di Rinnovo",
+    "nextRenewalDate": "Prossima Data di Rinnovo",
     "category": "Categoria",
     "addNew": "Aggiungi Nuovo Abbonamento",
+    "addNewSubscription": "Aggiungi Nuovo Abbonamento",
     "editSubscription": "Modifica Abbonamento",
     "deleteSubscription": "Elimina Abbonamento",
-    "confirmDelete": "Sei sicuro di voler eliminare questo abbonamento?",
+    "confirmDelete": "Sei sicuro di voler eliminare \"{name}\"? Questa azione non può essere annullata.",
+    "deleteConfirmation": "Sei sicuro di voler eliminare questo abbonamento? Questa azione non può essere annullata.",
+    "deleting": "Eliminazione...",
     "monthly": "Mensile",
     "yearly": "Annuale",
+    "weekly": "Settimanale",
+    "quarterly": "Trimestrale",
     "dueIn": "Scadenza tra {days} giorni",
     "overdue": "In ritardo di {days} giorni",
-    "currency": "Valuta"
+    "currency": "Valuta",
+    "serviceExamples": "es., Vercel, Supabase, PostHog, ecc.",
+    "freeSubscription": "Questo abbonamento è gratuito",
+    "saving": "Salvando...",
+    "update": "Aggiorna",
+    "add": "Aggiungi",
+    "assignToProject": "Per favore assegna questo abbonamento ad almeno un progetto",
+    "positiveAmount": "L'importo deve essere un numero positivo o 0 per abbonamenti gratuiti",
+    "futureRenewalDate": "La data di rinnovo deve essere oggi o nel futuro",
+    "noSubscriptionsYet": "Nessun abbonamento ancora",
+    "addFirstSubscription": "Aggiungi il tuo primo abbonamento per iniziare a tracciare le tue spese.",
+    "renewsOn": "Si rinnova il",
+    "editTitle": "Modifica Abbonamento",
+    "addTitle": "Aggiungi Nuovo Abbonamento",
+    "servicePlaceholder": "es., Vercel, Supabase, PostHog, ecc.",
+    "subscription": "Abbonamento",
+    "projectAssignmentRequired": "Assegna questo abbonamento ad almeno un progetto",
+    "positiveAmountRequired": "L'importo deve essere un numero positivo o 0 per abbonamenti gratuiti",
+    "futureDateRequired": "La data di rinnovo deve essere oggi o nel futuro"
   },
   "categories": {
     "cloud": "Cloud e Hosting",
-    "analytics": "Analytics e Tracking",
-    "ai": "AI e Machine Learning",
+    "analytics": "Analytics e Monitoraggio",
+    "ai": "Strumenti AI",
     "database": "Database e Storage",
     "developer": "Strumenti Sviluppatore", 
     "communication": "Comunicazione",
     "design": "Design e Creatività",
     "marketing": "Marketing e SEO",
     "security": "Sicurezza",
-    "entertainment": "Intrattenimento",
+    "media": "Media e Contenuti",
     "productivity": "Produttività",
+    "financial": "Finanze e Contabilità",
+    "crm": "CRM e Vendite",
+    "legal": "Legale e Conformità",
     "other": "Altro"
   },
   "billing": {
@@ -138,7 +148,54 @@
       "a2": "Il piano gratuito ti permette di tracciare fino a 3 abbonamenti. Una volta raggiunto questo limite, ti verrà chiesto di fare l'upgrade a Pro per il tracciamento illimitato degli abbonamenti.",
       "q3": "Le mie informazioni di pagamento sono sicure?",
       "a3": "Assolutamente! Usiamo Stripe per l'elaborazione dei pagamenti, che è fidato da milioni di aziende in tutto il mondo. Non conserviamo mai le tue informazioni di pagamento sui nostri server."
-    }
+    },
+    "loadingBilling": "Caricamento informazioni di fatturazione...",
+    "currentSubscription": "Abbonamento Corrente",
+    "pastDue": "Scaduto",
+    "canceled": "Cancellato",
+    "billingHistory": "Cronologia Fatturazione",
+    "downgradeNotice": "Fai downgrade al piano gratuito in qualsiasi momento. Manterrai l'accesso fino alla fine del tuo periodo di fatturazione.",
+    "limitedTime": "Tempo Limitato",
+    "earlyAccessOffer": "🚀 Accesso Anticipato: Blocca $4/mese per sempre",
+    "upgradeToProCta": "✨ Upgrade a Pro - Inizia a Risparmiare!",
+    "downgradeButtonNotice": "Usa il pulsante downgrade sopra per passare a questo piano",
+    "comingSoon": "In Arrivo",
+    "teamPlan": "Team",
+    "teamPlanDescription": "Scala con il tuo team",
+    "teamPlanSubtitle": "Perfetto per team in crescita",
+    "allProFeaturesIncluded": "Tutte le funzionalità del piano Pro incluse",
+    "upToTeamMembers": "Fino a 5 membri del team",
+    "unlimitedSubscriptions": "Abbonamenti illimitati",
+    "unlimitedProjects": "Progetti illimitati",
+    "teamCollaboration": "Funzionalità di collaborazione team",
+    "advancedAnalytics": "Analytics e reportistica avanzata",
+    "prioritySupport": "Supporto prioritario",
+    "notifyWhenAvailable": "🚀 Avvisami Quando Disponibile",
+    "flexibleBilling": "💳 Fatturazione Flessibile",
+    "cancelAnytime": "✅ Cancella in qualsiasi momento - Nessun impegno a lungo termine o costi nascosti",
+    "instantUpgrades": "✅ Upgrade istantanei - Accedi alle nuove funzionalità immediatamente dopo l'upgrade",
+    "proratedBilling": "✅ Fatturazione proporzionale - Paga solo per quello che usi quando cambi piano",
+    "securePayments": "✅ Pagamenti sicuri - Tutte le transazioni protette dalla sicurezza di livello enterprise di Stripe",
+    "billingQuestions": "Domande sulla fatturazione? Contattaci a",
+    "downgradePlanTitle": "Downgrade Piano",
+    "downgradeConfirmation": "Sei sicuro di voler fare downgrade al piano gratuito? Perderai l'accesso alle funzionalità Pro, incluso il tracciamento illimitato degli abbonamenti.\n\nIl tuo abbonamento verrà cancellato immediatamente, ma manterrai l'accesso Pro fino alla tua prossima data di fatturazione.",
+    "cannotDowngradeTitle": "Non È Possibile Fare Downgrade al Piano Gratuito",
+    "exceedsFreeLimits": "Attualmente superi i limiti del piano gratuito:",
+    "activeSubscriptionsLimit": "Abbonamenti Attivi:",
+    "projectsLimit": "Progetti:",
+    "deleteToDowngrade": "Elimina alcuni abbonamenti e/o progetti dalla tua pagina Impostazioni, quindi prova a fare downgrade di nuovo.",
+    "gotIt": "Capito",
+    "forceDowngradeAnyway": "Forza Downgrade Comunque",
+    "forceDowngradeWarning": "⚠️ Avviso Downgrade Forzato",
+    "permanentDataDeletion": "Questo eliminerà permanentemente i tuoi dati!",
+    "followingWillBeDeleted": "I seguenti verranno eliminati:",
+    "mostRecentSubscriptions": "Abbonamenti più recenti:",
+    "mostRecentProjects": "Progetti più recenti:",
+    "deleted": "eliminato",
+    "whatWillHappen": "Cosa succederà:",
+    "dataWillBeRemoved": "• I tuoi abbonamenti e progetti creati più di recente verranno eliminati permanentemente\n• Verrai declassato al piano Gratuito immediatamente\n• Questa azione non può essere annullata",
+    "absolutelySurePrompt": "Sei assolutamente sicuro di voler procedere?",
+    "yesDeleteAndDowngrade": "Sì, Elimina e Fai Downgrade"
   },
   "settings": {
     "title": "Impostazioni",
@@ -166,7 +223,10 @@
       "title": "Monitora i costi del tuo stack SaaS",
       "subtitle": "Tracciamento semplice degli abbonamenti per team che costruiscono. Monitora il tuo burn rate mensile e mantieni sotto controllo i costi di sviluppo.",
       "cta": "Inizia Gratis",
-      "signIn": "Accedi"
+      "howItWorks": "Come funziona",
+      "signIn": "Accedi",
+      "dashboardPreview": "📊 Screenshot della dashboard",
+      "dashboardSubtext": "(Riepilogo spese + anteprima email)"
     },
     "features": {
       "title": "Tutto quello che ti serve per tracciare gli abbonamenti SaaS",
@@ -199,6 +259,96 @@
       "title": "Prezzi semplici e trasparenti",
       "subtitle": "Inizia gratis, aggiorna quando hai bisogno di più abbonamenti"
     },
+    "problems": {
+      "title": "I fogli di calcolo non inviano promemoria.",
+      "subtitle": "StackBill ti offre chiarezza, controllo e promemoria — in una dashboard pulita.",
+      "withoutStackbill": "Senza StackBill",
+      "withStackbill": "Con StackBill",
+      "surpriseCharges": {
+        "title": "Addebiti a sorpresa",
+        "description": "Hai dimenticato che uno strumento da $29 si stava ancora rinnovando e hai ricevuto addebiti inaspettati"
+      },
+      "doublePayments": {
+        "title": "Pagamenti doppi",
+        "description": "Hai pagato due volte per lo stesso abbonamento perché hai perso traccia dei rinnovi"
+      },
+      "noVisibility": {
+        "title": "Nessuna visibilità sulle spese",
+        "description": "Nessuna idea di quanto spendi ogni mese per i tuoi strumenti di sviluppo"
+      },
+      "neverMiss": {
+        "title": "Non perdere mai un rinnovo",
+        "description": "Ricevi promemoria email prima dei rinnovi così puoi disdire o prepararti per gli addebiti"
+      },
+      "completeOverview": {
+        "title": "Panoramica completa",
+        "description": "Vedi tutti i tuoi abbonamenti in un posto, organizzati e facili da gestire"
+      },
+      "clearInsights": {
+        "title": "Informazioni chiare sulle spese",
+        "description": "Sappi esattamente quanto spendi mensilmente e annualmente con analisi intelligenti"
+      }
+    },
+    "howItWorks": {
+      "title": "Come Funziona",
+      "subtitle": "Tracciamento semplice e visivo in 3 passaggi",
+      "step1": {
+        "title": "Aggiungi i tuoi abbonamenti manualmente",
+        "description": "Modulo rapido per aggiungere nome abbonamento, costo e data di rinnovo"
+      },
+      "step2": {
+        "title": "Imposta date di rinnovo e valuta",
+        "description": "Scegli tra più di 10 valute con conversione automatica",
+        "placeholder": "💰 Screenshot selettore valuta"
+      },
+      "step3": {
+        "title": "Ricevi notifiche prima dei rinnovi",
+        "description": "Promemoria email così non sarai mai più sorpreso",
+        "placeholder": "📧 Anteprima email di esempio"
+      },
+      "optionalStep": "Passo opzionale 4: Passa a Pro per tracciare più strumenti e ricevere riepiloghi mensili."
+    },
+    "testimonials": {
+      "title": "Cosa dicono gli sviluppatori",
+      "subtitle": "Unisciti ai beta tester che stanno ottenendo un miglior controllo dei loro costi SaaS",
+      "reviews": [
+        {
+          "quote": "Molto meglio della mia pagina Notion disordinata. Adoro i promemoria.",
+          "author": "@mikeDeveloper",
+          "role": "Sviluppatore Full-stack"
+        },
+        {
+          "quote": "Finalmente ho smesso di ricevere addebiti sorpresa da $99 per strumenti che avevo dimenticato.",
+          "author": "@sarahCodes",
+          "role": "Fondatrice SaaS"
+        },
+        {
+          "quote": "Interfaccia semplice e pulita. Esattamente quello che mi serviva per tracciare i miei strumenti dev.",
+          "author": "@alexBuilds",
+          "role": "Indie Hacker"
+        },
+        {
+          "quote": "La funzione di conversione valuta è perfetta per i miei abbonamenti internazionali.",
+          "author": "@lucasDev",
+          "role": "Tech Lead"
+        },
+        {
+          "quote": "Mi ha fatto risparmiare più di $200 questo mese individuando abbonamenti inutilizzati!",
+          "author": "@rachelTech",
+          "role": "Sviluppatrice Frontend"
+        },
+        {
+          "quote": "Design pulito, niente bloatware. Traccia solo quello che ho bisogno di sapere.",
+          "author": "@jakeCode",
+          "role": "Ingegnere DevOps"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Smetti di pagare per strumenti che hai dimenticato.",
+      "subtitle": "Inizia a tracciare il tuo stack in 60 secondi.",
+      "button": "Inizia Gratis"
+    },
     "cta": {
       "title": "Pronto a prendere controllo dei tuoi costi SaaS?",
       "subtitle": "Unisciti ai fondatori SaaS e team di sviluppo che si affidano a StackBill per tracciare le loro spese di abbonamento.",
@@ -206,10 +356,10 @@
     },
     "footer": {
       "tagline": "Tracciamento semplice dei costi SaaS per fondatori e team di sviluppo.",
-      "privacy": "Privacy",
-      "terms": "Termini",
+      "privacy": "Politica sulla Privacy",
+      "terms": "Termini di Servizio",
       "support": "Supporto",
-      "copyright": "© 2024 StackBill. Tutti i diritti riservati."
+      "copyright": "© {year} StackBill. Tutti i diritti riservati."
     }
   },
   "theme": {
@@ -218,10 +368,232 @@
     "system": "Sistema",
     "toggle": "Cambia tema"
   },
+  "notFound": {
+    "title": "Pagina Non Trovata",
+    "description": "La pagina che stai cercando non esiste o è stata spostata.",
+    "goHome": "Vai alla Home",
+    "goBack": "Torna Indietro",
+    "helpText": "Hai bisogno di aiuto? Contattaci su"
+  },
   "language": {
     "english": "English",
     "italian": "Italiano",
     "spanish": "Español",
     "switchLanguage": "Cambia lingua"
+  },
+  "colors": {
+    "blue": "Blu",
+    "green": "Verde",
+    "yellow": "Giallo",
+    "red": "Rosso",
+    "purple": "Viola",
+    "cyan": "Ciano",
+    "orange": "Arancione",
+    "lime": "Lime",
+    "pink": "Rosa",
+    "gray": "Grigio"
+  },
+  "projects": {
+    "projects": "Progetti",
+    "allProjects": "Tutti i Progetti",
+    "general": "Generale",
+    "project": "Progetto",
+    "subs": "abb",
+    "selectProject": "Seleziona progetto...",
+    "createNewProject": "Crea Nuovo Progetto",
+    "projectName": "Nome del Progetto",
+    "enterProjectName": "Inserisci il nome del progetto",
+    "descriptionOptional": "Descrizione (Opzionale)",
+    "enterProjectDescription": "Inserisci la descrizione del progetto",
+    "color": "Colore",
+    "selectColor": "Seleziona un colore...",
+    "creating": "Creazione...",
+    "createProject": "Crea Progetto",
+    "editProject": "Modifica Progetto",
+    "updating": "Aggiornamento...",
+    "updateProject": "Aggiorna Progetto",
+    "deleteProject": "Elimina Progetto",
+    "deleteProjectConfirm": "Sei sicuro di voler eliminare questo progetto? Tutti gli abbonamenti in questo progetto saranno spostati in Generale.",
+    "projectNameRequired": "Il nome del progetto è obbligatorio",
+    "noAvailableColors": "Nessun colore disponibile. Modifica un progetto esistente per liberare un colore.",
+    "allColorsInUse": "Tutti i colori sono in uso",
+    "createProjectTooltip": "Crea nuovi progetti nella dashboard usando il pulsante \"+ Progetto\"",
+    "addProject": "Aggiungi un progetto...",
+    "allProjectsSelected": "Tutti i progetti selezionati",
+    "upgradeForMoreProjects": "Aggiorna per più progetti",
+    "createTitle": "Crea Nuovo Progetto",
+    "editTitle": "Modifica Progetto",
+    "nameRequired": "Il nome del progetto è obbligatorio",
+    "maxProjectsReached": "Massimo di {limit} progetti consentiti per il piano {plan}",
+    "userNotAuthenticated": "Utente non autenticato",
+    "cancel": "Annulla"
+  },
+  "settings": {
+    "projectManagement": "Gestione Progetti",
+    "projectDescription": "Crea e gestisci progetti per organizzare i tuoi abbonamenti",
+    "freePlanProjectLimit": "Piano gratuito: fino a 2 progetti",
+    "upgradePro": "Passa a Pro per fino a 10 progetti",
+    "addProject": "Aggiungi Progetto",
+    "projectLimitReached": "Hai raggiunto il limite del piano gratuito (2 progetti). Passa a Pro per fino a 10 progetti",
+    "noProjectsYet": "Nessun progetto ancora. Crea il tuo primo progetto per organizzare gli abbonamenti!",
+    "emailPreferences": "Preferenze Email",
+    "monthlySummaryEmails": "Email Riassunto Mensile",
+    "monthlySummaryDescription": "Ricevi un riassunto mensile delle tue spese di abbonamento e informazioni",
+    "renewalAlertEmails": "Email Avviso Rinnovo",
+    "renewalAlertDescription": "Ricevi notifiche prima che i tuoi abbonamenti si rinnovino",
+    "reminderSchedule": "Pianificazione Promemoria",
+    "daysBeforeRenewal": "{days} giorni prima",
+    "upgradeForEmailReminders": "Passa a Pro per promemoria email",
+    "upgradeProPrice": "Aggiorna - $4/mese",
+    "dangerZone": "Zona di Pericolo",
+    "closeDangerZone": "Chiudi Zona di Pericolo",
+    "openDangerZone": "Apri Zona di Pericolo",
+    "deleteAccount": "Elimina Account",
+    "deleteAccountWarning": "Elimina permanentemente il tuo account StackBill e tutti i dati associati. Questa azione non può essere annullata.",
+    "deleteAccountDetails": "Questo eliminerà permanentemente: Tutti i tuoi abbonamenti, progetti, impostazioni, cronologia fatturazione e dati personali.",
+    "deleteAccountConfirmTitle": "Sei assolutamente sicuro?",
+    "deleteAccountConfirmText": "Questa azione non può essere annullata. Il tuo account e tutti i dati saranno eliminati permanentemente.",
+    "deleteAccountConfirmPrompt": "Digita \"elimina il mio account\" per confermare:",
+    "deleteAccountConfirmPhrase": "elimina il mio account",
+    "deleting": "Eliminazione...",
+    "passwordMinLength": "La password deve avere almeno 6 caratteri",
+    "validEmailRequired": "Inserisci un indirizzo email valido",
+    "emailUpdateFailed": "Errore nell'aggiornamento dell'email",
+    "passwordUpdateFailed": "Errore nell'aggiornamento della password",
+    "projectNameRequired": "Il nome del progetto è obbligatorio",
+    "maxProjectsReached": "Massimo di {count} progetti consentiti{planNote}",
+    "noAvailableColors": "Nessun colore disponibile. Modifica un progetto esistente per cambiare il suo colore prima.",
+    "projectCreatedSuccess": "Progetto creato con successo!",
+    "projectCreateFailed": "Errore nella creazione del progetto",
+    "projectUpdatedSuccess": "Progetto aggiornato con successo!",
+    "projectUpdateFailed": "Errore nell'aggiornamento del progetto",
+    "projectDeletedSuccess": "Progetto eliminato con successo!",
+    "projectDeleteFailed": "Errore nell'eliminazione del progetto",
+    "emailPreferencesUpdateSuccess": "Preferenze email aggiornate con successo!",
+    "emailPreferencesUpdateFailed": "Errore nell'aggiornamento delle preferenze email",
+    "emailPreferencesLoadFailed": "Errore nel caricamento delle preferenze email",
+    "retry": "Riprova",
+    "deleteAccountSuccess": "Account eliminato con successo. Addio!",
+    "deleteAccountFailed": "Errore nell'eliminazione dell'account",
+    "deleteAccountConfirmationError": "Scrivi \"elimina il mio account\" per confermare",
+    "allColorsInUse": "Tutti i colori sono in uso",
+    "sevenDaysBefore": "7 giorni prima",
+    "threeDaysBefore": "3 giorni prima",
+    "smartDeliveryNotice": "📧 Consegna Intelligente: Non ti invieremo mai spam. I riepiloghi mensili vengono inviati una volta al mese, e gli avvisi di rinnovo sono limitati a un massimo di uno al giorno per evitare di intasare la tua casella di posta.",
+    "reminderScheduleNote": "Scegli quando ricevere promemoria di rinnovo. Il default è 7 giorni prima del rinnovo (puoi selezionare opzioni multiple)",
+    "selectedReminders": "Selezionato: {reminders} prima del rinnovo",
+    "none": "Nessuno"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signUp": "Registrati", 
+    "signOut": "Disconnetti",
+    "createAccount": "Crea Account",
+    "alreadyHaveAccount": "Hai già un account?",
+    "noAccount": "Non hai un account?",
+    "forgotPassword": "Password dimenticata?",
+    "withGithub": "Continua con GitHub",
+    "enterEmail": "Inserisci la tua email",
+    "enterPassword": "Inserisci la tua password",
+    "confirmPassword": "Conferma password",
+    "passwordsMatch": "Le password corrispondono",
+    "passwordsDontMatch": "Le password non corrispondono",
+    "signingIn": "Accedendo...",
+    "signingUp": "Registrando...",
+    "welcome": "Benvenuto su StackBill",
+    "signupTagline": "Inizia a tracciare i tuoi costi SaaS gratuitamente",
+    "signinTagline": "Accedi alla tua dashboard",
+    "checkEmailTitle": "Controlla la tua Email!",
+    "checkEmailMessage": "Abbiamo inviato un link di verifica al tuo indirizzo email. Clicca sul link per completare la registrazione.",
+    "backToLogin": "Torna al Login",
+    "orContinueWithEmail": "O continua con email",
+    "confirmEmailAddress": "Conferma indirizzo email",
+    "emailMismatch": "Gli indirizzi email non corrispondono",
+    "passwordStrength": "Forza della password",
+    "pleaseWait": "Per favore attendi..."
+  },
+  "support": {
+    "title": "Supporto",
+    "subtitle": "Ottieni aiuto con il tuo account StackBill e trova risposte alle domande comuni",
+    "contactSupport": "Contatta il Supporto",
+    "personalizedHelp": "Hai bisogno di aiuto personalizzato? Il nostro team è qui per assisterti.",
+    "emailSupport": "Supporto Email",
+    "emailSupportDescription": "Ottieni aiuto via email",
+    "responseTime": "Risposta in 24h",
+    "emailInstructions": "Includi l'email del tuo account e descrivi il tuo problema per assistenza più veloce",
+    "faq": {
+      "title": "Domande Frequenti",
+      "proPlanFeatures": {
+        "question": "Cosa include il piano Pro?",
+        "answer": "Il piano Pro include tutto ciò di cui hai bisogno per gestire i tuoi abbonamenti SaaS professionalmente:",
+        "features": [
+          "Traccia fino a 30 abbonamenti (vs 5 gratuito)",
+          "Organizza in 10 progetti (vs 2 gratuito)",
+          "Avvisi di rinnovo via email (avvisi a 7, 3 e 1 giorno)",
+          "Email riassunto mensile spese",
+          "Cronologia fatturazione completa",
+          "Supporto prioritario"
+        ]
+      },
+      "billingWork": {
+        "question": "Come funziona la fatturazione?",
+        "answer": "StackBill Pro viene fatturato mensilmente a €4/mese tramite Stripe. Il tuo abbonamento si rinnova automaticamente ogni mese fino alla cancellazione. Puoi fare downgrade in qualsiasi momento e mantenere l'accesso Pro fino alla fine del periodo di fatturazione corrente. Tutta la fatturazione è sicura e conforme PCI tramite Stripe."
+      },
+      "cancelDowngrade": {
+        "question": "Posso cancellare o fare downgrade in qualsiasi momento?",
+        "answer": "Sì! Puoi cancellare il tuo abbonamento Pro in qualsiasi momento senza penalità. Quando fai downgrade, il tuo abbonamento viene cancellato immediatamente ma mantieni l'accesso Pro fino alla fine del periodo di fatturazione corrente. Dopo di che, verrai spostato automaticamente al piano gratuito."
+      },
+      "dataOnDowngrade": {
+        "question": "Cosa succede ai miei dati se faccio downgrade?",
+        "answer": "Se hai più abbonamenti o progetti di quelli consentiti dal piano gratuito quando fai downgrade:",
+        "details": [
+          "Manterremo i tuoi abbonamenti e progetti più recenti",
+          "I dati in eccesso più vecchi verranno eliminati automaticamente",
+          "Riceverai un'email di conferma con i dettagli",
+          "Tutta la rimozione dei dati è permanente e non può essere annullata"
+        ]
+      },
+      "emailNotifications": {
+        "question": "Come funzionano le notifiche email?",
+        "answer": "Gli utenti Pro ricevono notifiche email automatiche per aiutare a gestire i loro abbonamenti. Riceverai avvisi di rinnovo 7, 3 e 1 giorno prima che gli abbonamenti si rinnovino, più email riassuntive mensili con informazioni sulle spese. Tutte le email includono opzioni di annullamento iscrizione e puoi personalizzare le preferenze nelle tue impostazioni."
+      },
+      "paymentSecurity": {
+        "question": "Le mie informazioni di pagamento sono sicure?",
+        "answer": "Assolutamente. Tutti i pagamenti vengono elaborati tramite Stripe, uno dei processori di pagamento più fidati al mondo. Non memorizziamo mai le informazioni della tua carta di credito sui nostri server. Stripe è certificato PCI DSS Level 1 ed è utilizzato da milioni di aziende in tutto il mondo, incluse Twitter, Lyft e Shopify."
+      },
+      "deleteAccount": {
+        "question": "Posso eliminare completamente il mio account?",
+        "answer": "Sì, puoi eliminare permanentemente il tuo account StackBill in qualsiasi momento dalla tua pagina impostazioni. Questo cancellerà immediatamente qualsiasi abbonamento attivo, eliminerà tutti i tuoi dati dai nostri server, e ti invierà un'email di addio. L'eliminazione dell'account è permanente e non può essere annullata."
+      },
+      "refunds": {
+        "question": "Offrite rimborsi?",
+        "answer": "Dato che StackBill Pro è un servizio mensile a basso costo, generalmente non offriamo rimborsi. Tuttavia, se stai riscontrando problemi tecnici o hai preoccupazioni riguardo alla fatturazione, contatta il nostro team di supporto a hello@stackbill.dev e lavoreremo con te per trovare una soluzione."
+      },
+      "organizeProjects": {
+        "question": "Come organizzo gli abbonamenti con i progetti?",
+        "answer": "I progetti ti aiutano a organizzare gli abbonamenti per team, cliente o scopo:",
+        "steps": [
+          "Crea progetti in Impostazioni > Gestione Progetti",
+          "Assegna abbonamenti ai progetti quando li aggiungi",
+          "Cambia tra progetti usando il menu a tendina nella dashboard",
+          "Usa il progetto 'Generale' per abbonamenti personali o non organizzati",
+          "Gli utenti gratuiti ottengono 2 progetti, gli utenti Pro ottengono 10 progetti"
+        ]
+      },
+      "currencies": {
+        "question": "Quali valute supporta StackBill?",
+        "answer": "StackBill supporta 10 valute principali con tassi di conversione in tempo reale:",
+        "currencies": [
+          "USD (Dollaro USA), EUR (Euro), GBP (Sterlina Britannica)",
+          "CAD (Dollaro Canadese), AUD (Dollaro Australiano)",
+          "JPY (Yen Giapponese), CHF (Franco Svizzero)",
+          "SEK (Corona Svedese), NOK (Corona Norvegese), DKK (Corona Danese)"
+        ],
+        "note": "Tutti gli importi vengono automaticamente convertiti nella tua valuta di visualizzazione preferita usando tassi di cambio in tempo reale."
+      }
+    },
+    "stillNeedHelp": "Hai ancora bisogno di aiuto?",
+    "cantFind": "Non riesci a trovare quello che cerchi? Siamo qui per aiutare.",
+    "manageAccount": "Gestisci Account"
   }
 }

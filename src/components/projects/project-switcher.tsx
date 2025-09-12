@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import { ProjectCreateDialog } from './project-create-dialog'
 import { canAddProject } from '@/lib/plans'
+import { useLanguage } from '@/contexts/language-context'
 
 interface ProjectSwitcherProps {
   selectedProject: string
@@ -26,6 +27,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const { user } = useAuth()
   const router = useRouter()
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (!user?.id) return
@@ -84,17 +86,17 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
         disabled={loading}
       >
         <SelectTrigger className="min-w-fit max-w-48">
-          <SelectValue placeholder="Select project..." />
+          <SelectValue placeholder={t('projects.selectProject')} />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={ALL_PROJECTS_ID}>
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
-                All Projects
+                {t('projects.allProjects')}
               </div>
               <span className="text-xs text-muted-foreground ml-2">
-                {getProjectCount(ALL_PROJECTS_ID)} subs
+                {getProjectCount(ALL_PROJECTS_ID)} {t('projects.subs')}
               </span>
             </div>
           </SelectItem>
@@ -102,10 +104,10 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-gray-500" />
-                General
+                {t('projects.general')}
               </div>
               <span className="text-xs text-muted-foreground ml-2">
-                {getProjectCount(GENERAL_PROJECT_ID)} subs
+                {getProjectCount(GENERAL_PROJECT_ID)} {t('projects.subs')}
               </span>
             </div>
           </SelectItem>
@@ -120,7 +122,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
                   {project.name}
                 </div>
                 <span className="text-xs text-muted-foreground ml-2">
-                  {getProjectCount(project.id)} subs
+                  {getProjectCount(project.id)} {t('projects.subs')}
                 </span>
               </div>
             </SelectItem>
@@ -137,7 +139,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
             className="h-9 px-2"
           >
             <Plus className="w-4 h-4 mr-1" />
-            <span className="hidden sm:inline">Project</span>
+            <span className="hidden sm:inline">{t('projects.project')}</span>
           </Button>
           <Button
             variant="outline"
@@ -156,7 +158,7 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
           className="h-9 px-2"
         >
           <Lock className="w-4 h-4 mr-1" />
-          <span className="hidden sm:inline">Upgrade</span>
+          <span className="hidden sm:inline">{t('projects.upgradeForMoreProjects')}</span>
         </Button>
       )}
       

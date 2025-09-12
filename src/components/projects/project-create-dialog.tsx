@@ -10,19 +10,20 @@ import { ProjectsService } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
 import { canAddProject, getProjectLimit } from '@/lib/plans'
 import { PlanType } from '@/lib/database.types'
+import { useLanguage } from '@/contexts/language-context'
 
 // Predefined color options
 const PREDEFINED_COLORS = [
-  { value: '#3B82F6', name: 'Blue', bg: 'bg-blue-500' },
-  { value: '#10B981', name: 'Green', bg: 'bg-emerald-500' },
-  { value: '#F59E0B', name: 'Yellow', bg: 'bg-amber-500' },
-  { value: '#EF4444', name: 'Red', bg: 'bg-red-500' },
-  { value: '#8B5CF6', name: 'Purple', bg: 'bg-violet-500' },
-  { value: '#06B6D4', name: 'Cyan', bg: 'bg-cyan-500' },
-  { value: '#F97316', name: 'Orange', bg: 'bg-orange-500' },
-  { value: '#84CC16', name: 'Lime', bg: 'bg-lime-500' },
-  { value: '#EC4899', name: 'Pink', bg: 'bg-pink-500' },
-  { value: '#6B7280', name: 'Gray', bg: 'bg-gray-500' }
+  { value: '#3B82F6', nameKey: 'blue', bg: 'bg-blue-500' },
+  { value: '#10B981', nameKey: 'green', bg: 'bg-emerald-500' },
+  { value: '#F59E0B', nameKey: 'yellow', bg: 'bg-amber-500' },
+  { value: '#EF4444', nameKey: 'red', bg: 'bg-red-500' },
+  { value: '#8B5CF6', nameKey: 'purple', bg: 'bg-violet-500' },
+  { value: '#06B6D4', nameKey: 'cyan', bg: 'bg-cyan-500' },
+  { value: '#F97316', nameKey: 'orange', bg: 'bg-orange-500' },
+  { value: '#84CC16', nameKey: 'lime', bg: 'bg-lime-500' },
+  { value: '#EC4899', nameKey: 'pink', bg: 'bg-pink-500' },
+  { value: '#6B7280', nameKey: 'gray', bg: 'bg-gray-500' }
 ]
 
 interface ProjectCreateDialogProps {
@@ -36,6 +37,7 @@ interface ProjectCreateDialogProps {
 
 export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, existingProjectCount = 0, userPlan = 'free', existingProjects = [] }: ProjectCreateDialogProps) {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
@@ -71,23 +73,23 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
     e.preventDefault()
     
     if (!projectName.trim()) {
-      setError('Project name is required')
+      setError(t('projectDialog.nameRequired'))
       return
     }
 
     if (!canAddProject(existingProjectCount, userPlan)) {
       const limit = getProjectLimit(userPlan)
-      setError(`Maximum of ${limit} projects allowed for ${userPlan} plan`)
+      setError(t('projectDialog.maxProjectsReached', { limit, plan: userPlan }))
       return
     }
 
     if (availableColors.length === 0) {
-      setError('No available colors. Please edit an existing project to free up a color.')
+      setError(t('projectDialog.noAvailableColors'))
       return
     }
 
     if (!user?.id) {
-      setError('User not authenticated')
+      setError(t('projectDialog.userNotAuthenticated'))
       return
     }
 
@@ -128,14 +130,14 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Project</DialogTitle>
+          <DialogTitle>{t('projectDialog.createTitle')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="project-name">Project Name</Label>
+            <Label htmlFor="project-name">{t('projectDialog.projectName')}</Label>
             <Input
               id="project-name"
-              placeholder="Enter project name"
+              placeholder={t('projectDialog.enterProjectName')}
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               disabled={loading}
@@ -144,10 +146,10 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="project-description">Description (Optional)</Label>
+            <Label htmlFor="project-description">{t('projectDialog.descriptionOptional')}</Label>
             <Input
               id="project-description"
-              placeholder="Enter project description"
+              placeholder={t('projectDialog.enterProjectDescription')}
               value={projectDescription}
               onChange={(e) => setProjectDescription(e.target.value)}
               disabled={loading}
@@ -155,10 +157,10 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="project-color">Color</Label>
+            <Label htmlFor="project-color">{t('projectDialog.color')}</Label>
             <Select value={projectColor} onValueChange={setProjectColor} disabled={loading}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a color..." />
+                <SelectValue placeholder={t('projectDialog.selectColor')} />
               </SelectTrigger>
               <SelectContent>
                 {availableColors.length > 0 ? availableColors.map((color) => (
@@ -168,12 +170,12 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
                         className="w-4 h-4 rounded-full border border-gray-300"
                         style={{ backgroundColor: color.value }}
                       />
-                      <span>{color.name}</span>
+                      <span>{t(`colors.${color.nameKey}`)}</span>
                     </div>
                   </SelectItem>
                 )) : (
                   <SelectItem value="no-colors" disabled>
-                    <span className="text-muted-foreground">All colors are in use</span>
+                    <span className="text-muted-foreground">{t('projectDialog.allColorsInUse')}</span>
                   </SelectItem>
                 )}
               </SelectContent>
@@ -193,10 +195,10 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
               onClick={() => handleOpenChange(false)}
               disabled={loading}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button type="submit" disabled={loading || !projectName.trim()}>
-              {loading ? 'Creating...' : 'Create Project'}
+              {loading ? t('projectDialog.creating') : t('projectDialog.createProject')}
             </Button>
           </div>
         </form>

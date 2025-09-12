@@ -4,18 +4,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Mail, MessageCircle, Clock, CheckCircle } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function SupportPage() {
+  const { t } = useLanguage()
   return (
     <div className="container mx-auto p-4 sm:p-6 pt-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl sm:text-3xl font-bold">Support</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t('support.title')}</h1>
         </div>
       </div>
       <div className="mb-6">
         <p className="text-muted-foreground">
-          Get help with your StackBill account and find answers to common questions
+          {t('support.subtitle')}
         </p>
       </div>
 
@@ -25,22 +27,22 @@ export default function SupportPage() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Mail className="h-5 w-5 text-blue-600" />
-              <CardTitle>Contact Support</CardTitle>
+              <CardTitle>{t('support.contactSupport')}</CardTitle>
             </div>
             <CardDescription>
-              Need personalized help? Our team is here to assist you.
+              {t('support.personalizedHelp')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">Email Support</p>
-                  <p className="text-sm text-muted-foreground">Get help via email</p>
+                  <p className="font-medium">{t('support.emailSupport')}</p>
+                  <p className="text-sm text-muted-foreground">{t('support.emailSupportDescription')}</p>
                 </div>
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  24h response
+                  {t('support.responseTime')}
                 </Badge>
               </div>
               <div className="pt-2">
@@ -52,7 +54,7 @@ export default function SupportPage() {
                   hello@stackbill.dev
                 </Button>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Include your account email and describe your issue for faster assistance
+                  {t('support.emailInstructions')}
                 </p>
               </div>
             </div>
@@ -64,7 +66,7 @@ export default function SupportPage() {
       <div className="mb-12">
         <div className="flex items-center gap-2 mb-8">
           <MessageCircle className="h-5 w-5" />
-          <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold">{t('support.faq.title')}</h2>
         </div>
         
         <div className="grid gap-6">
@@ -72,20 +74,23 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                What&apos;s included in the Pro plan?
+                {t('support.faq.proPlanFeatures.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-3">
-                The Pro plan includes everything you need to manage your SaaS subscriptions professionally:
+                {t('support.faq.proPlanFeatures.answer')}
               </p>
               <ul className="text-sm text-muted-foreground space-y-2 ml-4">
-                <li>• Track up to 30 subscriptions (vs 5 on free)</li>
-                <li>• Organize across 10 projects (vs 2 on free)</li>
-                <li>• Email renewal alerts (7, 3, and 1 day warnings)</li>
-                <li>• Monthly spending summary emails</li>
-                <li>• Complete billing history</li>
-                <li>• Priority support</li>
+                {(() => {
+                  const features = t('support.faq.proPlanFeatures.features', { returnObjects: true })
+                  if (Array.isArray(features)) {
+                    return features.map((feature, index) => (
+                      <li key={index}>• {feature}</li>
+                    ))
+                  }
+                  return null
+                })()}
               </ul>
             </CardContent>
           </Card>
@@ -94,14 +99,12 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                How does billing work?
+                {t('support.faq.billingWork.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                StackBill Pro is billed monthly at €4/month via Stripe. Your subscription automatically renews each month 
-                until you cancel. You can downgrade anytime and keep Pro access until your current billing period ends. 
-                All billing is secure and PCI-compliant through Stripe.
+                {t('support.faq.billingWork.answer')}
               </p>
             </CardContent>
           </Card>
@@ -110,14 +113,12 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                Can I cancel or downgrade anytime?
+                {t('support.faq.cancelDowngrade.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Yes! You can cancel your Pro subscription anytime with no penalty. When you downgrade, your subscription 
-                is immediately canceled but you keep Pro access until the end of your current billing period. After that, 
-                you&apos;ll be moved to the free plan automatically.
+                {t('support.faq.cancelDowngrade.answer')}
               </p>
             </CardContent>
           </Card>
@@ -126,18 +127,23 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                What happens to my data if I downgrade?
+                {t('support.faq.dataOnDowngrade.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-3">
-                If you have more subscriptions or projects than the free plan allows when you downgrade:
+                {t('support.faq.dataOnDowngrade.answer')}
               </p>
               <ul className="text-sm text-muted-foreground space-y-2 ml-4">
-                <li>• We&apos;ll keep your most recent subscriptions and projects</li>
-                <li>• Older excess data will be automatically deleted</li>
-                <li>• You&apos;ll receive a confirmation email with details</li>
-                <li>• All data removal is permanent and cannot be undone</li>
+                {(() => {
+                  const details = t('support.faq.dataOnDowngrade.details', { returnObjects: true })
+                  if (Array.isArray(details)) {
+                    return details.map((detail, index) => (
+                      <li key={index}>• {detail}</li>
+                    ))
+                  }
+                  return null
+                })()}
               </ul>
             </CardContent>
           </Card>
@@ -146,14 +152,12 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                How do email notifications work?
+                {t('support.faq.emailNotifications.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Pro users receive automatic email notifications to help manage their subscriptions. You&apos;ll get renewal 
-                alerts 7, 3, and 1 days before subscriptions renew, plus monthly summary emails with spending insights. 
-                All emails include unsubscribe options and you can customize preferences in your settings.
+                {t('support.faq.emailNotifications.answer')}
               </p>
             </CardContent>
           </Card>
@@ -162,14 +166,12 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                Is my payment information secure?
+                {t('support.faq.paymentSecurity.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Absolutely. All payments are processed through Stripe, one of the world&apos;s most trusted payment processors. 
-                We never store your credit card information on our servers. Stripe is PCI DSS Level 1 certified and used 
-                by millions of businesses worldwide, including Twitter, Lyft, and Shopify.
+                {t('support.faq.paymentSecurity.answer')}
               </p>
             </CardContent>
           </Card>
@@ -178,14 +180,12 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                Can I delete my account completely?
+                {t('support.faq.deleteAccount.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Yes, you can permanently delete your StackBill account anytime from your settings page. This will 
-                immediately cancel any active subscription, delete all your data from our servers, and send you a 
-                farewell email. Account deletion is permanent and cannot be undone.
+                {t('support.faq.deleteAccount.answer')}
               </p>
             </CardContent>
           </Card>
@@ -194,14 +194,12 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                Do you offer refunds?
+                {t('support.faq.refunds.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Since StackBill Pro is a low-cost monthly service, we generally don&apos;t offer refunds. However, 
-                if you&apos;re experiencing technical issues or have concerns about your billing, please contact our 
-                support team at hello@stackbill.dev and we&apos;ll work with you to find a solution.
+                {t('support.faq.refunds.answer')}
               </p>
             </CardContent>
           </Card>
@@ -210,19 +208,23 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                How do I organize subscriptions with projects?
+                {t('support.faq.organizeProjects.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-3">
-                Projects help you organize subscriptions by team, client, or purpose:
+                {t('support.faq.organizeProjects.answer')}
               </p>
               <ul className="text-sm text-muted-foreground space-y-2 ml-4">
-                <li>• Create projects in Settings &gt; Project Management</li>
-                <li>• Assign subscriptions to projects when adding them</li>
-                <li>• Switch between projects using the dropdown in the dashboard</li>
-                <li>• Use the &quot;General&quot; project for personal or unorganized subscriptions</li>
-                <li>• Free users get 2 projects, Pro users get 10 projects</li>
+                {(() => {
+                  const steps = t('support.faq.organizeProjects.steps', { returnObjects: true })
+                  if (Array.isArray(steps)) {
+                    return steps.map((step, index) => (
+                      <li key={index}>• {step}</li>
+                    ))
+                  }
+                  return null
+                })()}
               </ul>
             </CardContent>
           </Card>
@@ -231,21 +233,26 @@ export default function SupportPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-start gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                What currencies does StackBill support?
+                {t('support.faq.currencies.question')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-3">
-                StackBill supports 10 major currencies with live conversion rates:
+                {t('support.faq.currencies.answer')}
               </p>
               <ul className="text-sm text-muted-foreground space-y-2 ml-4">
-                <li>• USD (US Dollar), EUR (Euro), GBP (British Pound)</li>
-                <li>• CAD (Canadian Dollar), AUD (Australian Dollar)</li>
-                <li>• JPY (Japanese Yen), CHF (Swiss Franc)</li>
-                <li>• SEK (Swedish Krona), NOK (Norwegian Krone), DKK (Danish Krone)</li>
+                {(() => {
+                  const currencies = t('support.faq.currencies.currencies', { returnObjects: true })
+                  if (Array.isArray(currencies)) {
+                    return currencies.map((currency, index) => (
+                      <li key={index}>• {currency}</li>
+                    ))
+                  }
+                  return null
+                })()}
               </ul>
               <p className="text-sm text-muted-foreground mt-3">
-                All amounts are automatically converted to your preferred display currency using live exchange rates.
+                {t('support.faq.currencies.note')}
               </p>
             </CardContent>
           </Card>
@@ -255,9 +262,9 @@ export default function SupportPage() {
       {/* Still Need Help Section */}
       <Card className="bg-muted/50">
         <CardHeader>
-          <CardTitle>Still need help?</CardTitle>
+          <CardTitle>{t('support.stillNeedHelp')}</CardTitle>
           <CardDescription>
-            Can&apos;t find what you&apos;re looking for? We&apos;re here to help.
+            {t('support.cantFind')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -267,13 +274,13 @@ export default function SupportPage() {
               className="flex items-center gap-2"
             >
               <Mail className="h-4 w-4" />
-              Contact Support
+              {t('support.contactSupport')}
             </Button>
             <Button 
               variant="outline"
               onClick={() => window.location.href = '/dashboard/settings'}
             >
-              Manage Account
+              {t('support.manageAccount')}
             </Button>
           </div>
         </CardContent>

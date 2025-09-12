@@ -201,8 +201,7 @@ export async function POST(request: NextRequest) {
       const { data: { user }, error: getUserError } = await supabase.auth.admin.getUserById(userId)
       
       if (!getUserError && user?.email) {
-        const userName = user.user_metadata?.full_name || user.user_metadata?.name
-        await sendCancellationEmail(user.email, userName)
+        await sendCancellationEmail(user.email)
       }
     } catch (emailError) {
       console.error('Error sending cancellation email:', emailError)

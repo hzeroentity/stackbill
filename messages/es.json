@@ -11,29 +11,12 @@
     "email": "Correo electrónico",
     "password": "Contraseña"
   },
-  "auth": {
-    "signIn": "Iniciar Sesión",
-    "signUp": "Registrarse", 
-    "signOut": "Cerrar Sesión",
-    "createAccount": "Crear Cuenta",
-    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
-    "noAccount": "¿No tienes una cuenta?",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
-    "withGithub": "Continuar con GitHub",
-    "enterEmail": "Ingresa tu correo electrónico",
-    "enterPassword": "Ingresa tu contraseña",
-    "confirmPassword": "Confirmar contraseña",
-    "passwordsMatch": "Las contraseñas coinciden",
-    "passwordsDontMatch": "Las contraseñas no coinciden",
-    "signingIn": "Iniciando sesión...",
-    "signingUp": "Registrándose...",
-    "welcome": "Bienvenido a StackBill"
-  },
   "navigation": {
     "dashboard": "Panel",
     "billing": "Facturación",
     "settings": "Configuración",
-    "account": "Cuenta"
+    "account": "Cuenta",
+    "support": "Soporte"
   },
   "dashboard": {
     "title": "Panel",
@@ -73,30 +56,53 @@
     "amount": "Monto",
     "billingPeriod": "Período de Facturación",
     "renewalDate": "Fecha de Renovación",
+    "nextRenewalDate": "Próxima Fecha de Renovación",
     "category": "Categoría",
     "addNew": "Añadir Nueva Suscripción",
+    "addNewSubscription": "Añadir Nueva Suscripción",
     "editSubscription": "Editar Suscripción",
     "deleteSubscription": "Eliminar Suscripción",
-    "confirmDelete": "¿Estás seguro de que quieres eliminar esta suscripción?",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
+    "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta suscripción? Esta acción no se puede deshacer.",
+    "deleting": "Eliminando...",
     "monthly": "Mensual",
     "yearly": "Anual",
+    "weekly": "Semanal",
+    "quarterly": "Trimestral",
     "dueIn": "Vence en {days} días",
     "overdue": "Vencido hace {days} días",
-    "currency": "Moneda"
+    "currency": "Moneda",
+    "saving": "Guardando...",
+    "update": "Actualizar",
+    "add": "Añadir",
+    "serviceExamples": "ej., Vercel, Supabase, PostHog, etc.",
+    "servicePlaceholder": "ej., Vercel, Supabase, PostHog, etc.",
+    "freeSubscription": "Esta suscripción es gratuita",
+    "assignToProject": "Por favor asigna esta suscripción a al menos un proyecto",
+    "positiveAmount": "La cantidad debe ser un número positivo o 0 para suscripciones gratuitas",
+    "futureRenewalDate": "La fecha de renovación debe ser hoy o en el futuro",
+    "noSubscriptionsYet": "Aún no hay suscripciones",
+    "addFirstSubscription": "Añade tu primera suscripción para empezar a rastrear tus gastos.",
+    "renewsOn": "Se renueva el",
+    "editTitle": "Editar Suscripción",
+    "addTitle": "Añadir Nueva Suscripción"
   },
   "categories": {
     "cloud": "Cloud y Hosting",
-    "analytics": "Analytics y Seguimiento",
-    "ai": "IA y Machine Learning",
+    "analytics": "Analítica y Monitoreo",
+    "ai": "Herramientas de IA",
     "database": "Base de Datos y Almacenamiento",
     "developer": "Herramientas de Desarrollo", 
     "communication": "Comunicación",
     "design": "Diseño y Creatividad",
     "marketing": "Marketing y SEO",
     "security": "Seguridad",
-    "entertainment": "Entretenimiento",
+    "media": "Medios y Contenido",
     "productivity": "Productividad",
-    "other": "Otro"
+    "financial": "Finanzas y Contabilidad",
+    "crm": "CRM y Ventas",
+    "legal": "Legal y Cumplimiento",
+    "other": "Otros"
   },
   "billing": {
     "title": "Facturación y Planes",
@@ -138,7 +144,54 @@
       "a2": "El plan gratuito te permite rastrear hasta 3 suscripciones. Una vez que alcances este límite, se te pedirá actualizar a Pro para seguimiento ilimitado de suscripciones.",
       "q3": "¿Está segura mi información de pago?",
       "a3": "¡Absolutamente! Usamos Stripe para el procesamiento de pagos, el cual es confiado por millones de empresas en todo el mundo. Nunca almacenamos tu información de pago en nuestros servidores."
-    }
+    },
+    "loadingBilling": "Cargando información de facturación...",
+    "currentSubscription": "Suscripción Actual",
+    "pastDue": "Vencido",
+    "canceled": "Cancelado",
+    "billingHistory": "Historial de Facturación",
+    "downgradeNotice": "Degrada al plan gratuito en cualquier momento. Mantendrás acceso hasta el final de tu período de facturación.",
+    "limitedTime": "Tiempo Limitado",
+    "earlyAccessOffer": "🚀 Acceso Temprano: Bloquea $4/mes para siempre",
+    "upgradeToProCta": "✨ Actualizar a Pro - ¡Comienza a Ahorrar!",
+    "downgradeButtonNotice": "Usa el botón degradar arriba para cambiar a este plan",
+    "comingSoon": "Próximamente",
+    "teamPlan": "Equipo",
+    "teamPlanDescription": "Escala con tu equipo",
+    "teamPlanSubtitle": "Perfecto para equipos en crecimiento",
+    "allProFeaturesIncluded": "Todas las funciones del plan Pro incluidas",
+    "upToTeamMembers": "Hasta 5 miembros del equipo",
+    "unlimitedSubscriptions": "Suscripciones ilimitadas",
+    "unlimitedProjects": "Proyectos ilimitados",
+    "teamCollaboration": "Funciones de colaboración en equipo",
+    "advancedAnalytics": "Analytics y reportes avanzados",
+    "prioritySupport": "Soporte prioritario",
+    "notifyWhenAvailable": "🚀 Notificarme Cuando Esté Disponible",
+    "flexibleBilling": "💳 Facturación Flexible",
+    "cancelAnytime": "✅ Cancela en cualquier momento - Sin compromisos a largo plazo o tarifas ocultas",
+    "instantUpgrades": "✅ Actualizaciones instantáneas - Accede a nuevas funciones inmediatamente después de actualizar",
+    "proratedBilling": "✅ Facturación prorrateada - Solo paga por lo que uses al cambiar de plan",
+    "securePayments": "✅ Pagos seguros - Todas las transacciones protegidas por la seguridad de nivel empresarial de Stripe",
+    "billingQuestions": "¿Preguntas sobre facturación? Contáctanos en",
+    "downgradePlanTitle": "Degradar Plan",
+    "downgradeConfirmation": "¿Estás seguro de que quieres degradar al plan gratuito? Perderás acceso a las funciones Pro, incluyendo seguimiento ilimitado de suscripciones.\n\nTu suscripción será cancelada inmediatamente, pero mantendrás acceso Pro hasta tu próxima fecha de facturación.",
+    "cannotDowngradeTitle": "No Se Puede Degradar al Plan Gratuito",
+    "exceedsFreeLimits": "Actualmente excedes los límites del plan gratuito:",
+    "activeSubscriptionsLimit": "Suscripciones Activas:",
+    "projectsLimit": "Proyectos:",
+    "deleteToDowngrade": "Por favor elimina algunas suscripciones y/o proyectos desde tu página de Configuración, luego intenta degradar nuevamente.",
+    "gotIt": "Entendido",
+    "forceDowngradeAnyway": "Forzar Degradación De Todos Modos",
+    "forceDowngradeWarning": "⚠️ Advertencia de Degradación Forzada",
+    "permanentDataDeletion": "¡Esto eliminará permanentemente tus datos!",
+    "followingWillBeDeleted": "Lo siguiente será eliminado:",
+    "mostRecentSubscriptions": "Suscripciones más recientes:",
+    "mostRecentProjects": "Proyectos más recientes:",
+    "deleted": "eliminado",
+    "whatWillHappen": "Qué pasará:",
+    "dataWillBeRemoved": "• Tus suscripciones y proyectos creados más recientemente serán eliminados permanentemente\n• Serás degradado al plan Gratuito inmediatamente\n• Esta acción no se puede deshacer",
+    "absolutelySurePrompt": "¿Estás absolutamente seguro de que quieres continuar?",
+    "yesDeleteAndDowngrade": "Sí, Eliminar y Degradar"
   },
   "settings": {
     "title": "Configuración",
@@ -166,7 +219,10 @@
       "title": "Rastrea los costos de tu stack SaaS",
       "subtitle": "Seguimiento simple de suscripciones para equipos que construyen. Monitorea tu tasa de quema mensual y mantén los costos de desarrollo bajo control.",
       "cta": "Comenzar Gratis",
-      "signIn": "Iniciar Sesión"
+      "howItWorks": "Cómo funciona",
+      "signIn": "Iniciar Sesión",
+      "dashboardPreview": "📊 Captura de pantalla del panel de control",
+      "dashboardSubtext": "(Resumen de gastos + vista previa del email)"
     },
     "features": {
       "title": "Todo lo que necesitas para rastrear suscripciones SaaS",
@@ -199,6 +255,96 @@
       "title": "Precios simples y transparentes",
       "subtitle": "Comienza gratis, actualiza cuando necesites más suscripciones"
     },
+    "problems": {
+      "title": "Las hojas de cálculo no envían recordatorios.",
+      "subtitle": "StackBill te da claridad, control y recordatorios — en un panel limpio.",
+      "withoutStackbill": "Sin StackBill",
+      "withStackbill": "Con StackBill",
+      "surpriseCharges": {
+        "title": "Cargos sorpresa",
+        "description": "Olvidaste que una herramienta de $29 seguía renovándose y recibiste cargos inesperados"
+      },
+      "doublePayments": {
+        "title": "Pagos duplicados",
+        "description": "Pagaste dos veces por la misma suscripción porque perdiste el control de las renovaciones"
+      },
+      "noVisibility": {
+        "title": "Sin visibilidad del gasto",
+        "description": "Sin idea de cuánto gastas cada mes en tus herramientas de desarrollo"
+      },
+      "neverMiss": {
+        "title": "Nunca pierdas una renovación",
+        "description": "Recibe recordatorios por email antes de las renovaciones para que puedas cancelar o prepararte para los cargos"
+      },
+      "completeOverview": {
+        "title": "Visión completa",
+        "description": "Ve todas tus suscripciones en un lugar, organizadas y fáciles de gestionar"
+      },
+      "clearInsights": {
+        "title": "Información clara de gastos",
+        "description": "Sabe exactamente cuánto gastas mensual y anualmente con desgloses inteligentes"
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "subtitle": "Seguimiento simple y visual en 3 pasos",
+      "step1": {
+        "title": "Añade tus suscripciones manualmente",
+        "description": "Formulario rápido para añadir nombre de suscripción, costo y fecha de renovación"
+      },
+      "step2": {
+        "title": "Configura fechas de renovación y moneda",
+        "description": "Elige entre más de 10 monedas con conversión automática",
+        "placeholder": "💰 Captura de pantalla del selector de moneda"
+      },
+      "step3": {
+        "title": "Recibe notificaciones antes de las renovaciones",
+        "description": "Recordatorios por email para que nunca vuelvas a ser sorprendido",
+        "placeholder": "📧 Vista previa del email de ejemplo"
+      },
+      "optionalStep": "Paso opcional 4: Actualiza a Pro para rastrear más herramientas y recibir resúmenes mensuales."
+    },
+    "testimonials": {
+      "title": "Lo que dicen los desarrolladores",
+      "subtitle": "Únete a los probadores tempranos que obtienen mejor control de sus costos SaaS",
+      "reviews": [
+        {
+          "quote": "Mucho mejor que mi página desordenada de Notion. Me encantan los recordatorios.",
+          "author": "@mikeDeveloper",
+          "role": "Desarrollador Full-stack"
+        },
+        {
+          "quote": "Finalmente dejé de recibir cargos sorpresa de $99 de herramientas que olvidé.",
+          "author": "@sarahCodes",
+          "role": "Fundadora SaaS"
+        },
+        {
+          "quote": "Interfaz simple y limpia. Exactamente lo que necesitaba para rastrear mis herramientas dev.",
+          "author": "@alexBuilds",
+          "role": "Indie Hacker"
+        },
+        {
+          "quote": "La función de conversión de moneda es perfecta para mis suscripciones internacionales.",
+          "author": "@lucasDev",
+          "role": "Tech Lead"
+        },
+        {
+          "quote": "¡Me ahorró más de $200 este mes detectando suscripciones sin usar!",
+          "author": "@rachelTech",
+          "role": "Desarrolladora Frontend"
+        },
+        {
+          "quote": "Diseño limpio, sin bloatware. Solo rastrea lo que necesito saber.",
+          "author": "@jakeCode",
+          "role": "Ingeniero DevOps"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Deja de pagar por herramientas que olvidaste.",
+      "subtitle": "Comienza a rastrear tu stack en 60 segundos.",
+      "button": "Comenzar Gratis"
+    },
     "cta": {
       "title": "¿Listo para tomar control de tus costos SaaS?",
       "subtitle": "Únete a fundadores SaaS y equipos de desarrollo que confían en StackBill para rastrear sus gastos de suscripción.",
@@ -206,10 +352,10 @@
     },
     "footer": {
       "tagline": "Seguimiento simple de costos SaaS para fundadores y equipos de desarrollo.",
-      "privacy": "Privacidad",
-      "terms": "Términos",
+      "privacy": "Política de Privacidad",
+      "terms": "Términos de Servicio",
       "support": "Soporte",
-      "copyright": "© 2024 StackBill. Todos los derechos reservados."
+      "copyright": "© {year} StackBill. Todos los derechos reservados."
     }
   },
   "theme": {
@@ -218,10 +364,232 @@
     "system": "Sistema",
     "toggle": "Cambiar tema"
   },
+  "notFound": {
+    "title": "Página No Encontrada",
+    "description": "La página que buscas no existe o ha sido movida.",
+    "goHome": "Ir al Inicio",
+    "goBack": "Volver",
+    "helpText": "¿Necesitas ayuda? Contáctanos en"
+  },
   "language": {
     "english": "English",
     "italian": "Italiano",
     "spanish": "Español",
     "switchLanguage": "Cambiar idioma"
+  },
+  "colors": {
+    "blue": "Azul",
+    "green": "Verde",
+    "yellow": "Amarillo",
+    "red": "Rojo",
+    "purple": "Morado",
+    "cyan": "Cian",
+    "orange": "Naranja",
+    "lime": "Lima",
+    "pink": "Rosa",
+    "gray": "Gris"
+  },
+  "projects": {
+    "projects": "Proyectos",
+    "allProjects": "Todos los Proyectos",
+    "general": "General",
+    "project": "Proyecto",
+    "subs": "subs",
+    "selectProject": "Seleccionar proyecto...",
+    "createNewProject": "Crear Nuevo Proyecto",
+    "createTitle": "Crear Nuevo Proyecto",
+    "editTitle": "Editar Proyecto",
+    "projectName": "Nombre del Proyecto",
+    "enterProjectName": "Ingresa el nombre del proyecto",
+    "descriptionOptional": "Descripción (Opcional)",
+    "enterProjectDescription": "Ingresa la descripción del proyecto",
+    "color": "Color",
+    "selectColor": "Selecciona un color...",
+    "creating": "Creando...",
+    "createProject": "Crear Proyecto",
+    "editProject": "Editar Proyecto",
+    "updating": "Actualizando...",
+    "updateProject": "Actualizar Proyecto",
+    "deleteProject": "Eliminar Proyecto",
+    "deleteProjectConfirm": "¿Estás seguro de que quieres eliminar este proyecto? Todas las suscripciones en este proyecto se moverán a General.",
+    "projectNameRequired": "El nombre del proyecto es obligatorio",
+    "nameRequired": "El nombre del proyecto es obligatorio",
+    "noAvailableColors": "No hay colores disponibles. Edita un proyecto existente para liberar un color.",
+    "allColorsInUse": "Todos los colores están en uso",
+    "createProjectTooltip": "Crea nuevos proyectos en el panel usando el botón \"+ Proyecto\"",
+    "addProject": "Añadir un proyecto...",
+    "allProjectsSelected": "Todos los proyectos seleccionados",
+    "upgradeForMoreProjects": "Actualizar para más proyectos",
+    "maxProjectsReached": "Máximo de {limit} proyectos permitidos para el plan {plan}",
+    "userNotAuthenticated": "Usuario no autenticado",
+    "cancel": "Cancelar"
+  },
+  "settings": {
+    "projectManagement": "Gestión de Proyectos",
+    "projectDescription": "Crea y gestiona proyectos para organizar tus suscripciones",
+    "freePlanProjectLimit": "Plan gratuito: hasta 2 proyectos",
+    "upgradePro": "Actualiza a Pro para hasta 10 proyectos",
+    "addProject": "Añadir Proyecto",
+    "projectLimitReached": "Has alcanzado el límite del plan gratuito (2 proyectos). Actualiza a Pro para hasta 10 proyectos",
+    "noProjectsYet": "Aún no hay proyectos. ¡Crea tu primer proyecto para organizar las suscripciones!",
+    "emailPreferences": "Preferencias de Email",
+    "monthlySummaryEmails": "Emails de Resumen Mensual",
+    "monthlySummaryDescription": "Recibe un resumen mensual de tus gastos de suscripción e información",
+    "renewalAlertEmails": "Emails de Alerta de Renovación",
+    "renewalAlertDescription": "Recibe notificaciones antes de que se renueven tus suscripciones",
+    "reminderSchedule": "Programación de Recordatorios",
+    "daysBeforeRenewal": "{days} días antes",
+    "upgradeForEmailReminders": "Actualiza a Pro para recordatorios por email",
+    "upgradeProPrice": "Actualizar - $4/mes",
+    "dangerZone": "Zona de Peligro",
+    "closeDangerZone": "Cerrar Zona de Peligro",
+    "openDangerZone": "Abrir Zona de Peligro",
+    "deleteAccount": "Eliminar Cuenta",
+    "deleteAccountWarning": "Elimina permanentemente tu cuenta de StackBill y todos los datos asociados. Esta acción no se puede deshacer.",
+    "deleteAccountDetails": "Esto eliminará permanentemente: Todas tus suscripciones, proyectos, configuraciones, historial de facturación y datos personales.",
+    "deleteAccountConfirmTitle": "¿Estás absolutamente seguro?",
+    "deleteAccountConfirmText": "Esta acción no se puede deshacer. Tu cuenta y todos los datos serán eliminados permanentemente.",
+    "deleteAccountConfirmPrompt": "Escribe \"eliminar mi cuenta\" para confirmar:",
+    "deleteAccountConfirmPhrase": "eliminar mi cuenta",
+    "deleting": "Eliminando...",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "validEmailRequired": "Por favor ingresa una dirección de correo válida",
+    "emailUpdateFailed": "Error al actualizar el correo",
+    "passwordUpdateFailed": "Error al actualizar la contraseña",
+    "projectNameRequired": "El nombre del proyecto es obligatorio",
+    "maxProjectsReached": "Máximo de {count} proyectos permitidos{planNote}",
+    "noAvailableColors": "Sin colores disponibles. Por favor edita un proyecto existente para cambiar su color primero.",
+    "projectCreatedSuccess": "¡Proyecto creado exitosamente!",
+    "projectCreateFailed": "Error al crear proyecto",
+    "projectUpdatedSuccess": "¡Proyecto actualizado exitosamente!",
+    "projectUpdateFailed": "Error al actualizar proyecto",
+    "projectDeletedSuccess": "¡Proyecto eliminado exitosamente!",
+    "projectDeleteFailed": "Error al eliminar proyecto",
+    "emailPreferencesUpdateSuccess": "¡Preferencias de email actualizadas exitosamente!",
+    "emailPreferencesUpdateFailed": "Error al actualizar las preferencias de email",
+    "emailPreferencesLoadFailed": "Error al cargar las preferencias de email",
+    "retry": "Reintentar",
+    "deleteAccountSuccess": "Cuenta eliminada exitosamente. ¡Adiós!",
+    "deleteAccountFailed": "Error al eliminar cuenta",
+    "deleteAccountConfirmationError": "Por favor escribe \"eliminar mi cuenta\" para confirmar",
+    "allColorsInUse": "Todos los colores están en uso",
+    "sevenDaysBefore": "7 días antes",
+    "threeDaysBefore": "3 días antes",
+    "smartDeliveryNotice": "📧 Entrega Inteligente: Nunca te haremos spam. Los resúmenes mensuales se envían una vez por mes, y las alertas de renovación están limitadas a un máximo de una por día para evitar saturar tu bandeja de entrada.",
+    "reminderScheduleNote": "Elige cuándo recibir recordatorios de renovación. Por defecto es 7 días antes de la renovación (puedes seleccionar múltiples opciones)",
+    "selectedReminders": "Seleccionado: {reminders} antes de la renovación",
+    "none": "Ninguno"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse", 
+    "signOut": "Cerrar Sesión",
+    "createAccount": "Crear Cuenta",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "noAccount": "¿No tienes una cuenta?",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "withGithub": "Continuar con GitHub",
+    "enterEmail": "Ingresa tu correo electrónico",
+    "enterPassword": "Ingresa tu contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "passwordsMatch": "Las contraseñas coinciden",
+    "passwordsDontMatch": "Las contraseñas no coinciden",
+    "signingIn": "Iniciando sesión...",
+    "signingUp": "Registrándose...",
+    "welcome": "Bienvenido a StackBill",
+    "signupTagline": "Comienza a rastrear tus costos SaaS gratis",
+    "signinTagline": "Inicia sesión en tu panel",
+    "checkEmailTitle": "¡Revisa tu Email!",
+    "checkEmailMessage": "Hemos enviado un enlace de verificación a tu dirección de email. Haz clic en el enlace para completar tu registro.",
+    "backToLogin": "Volver al Inicio de Sesión",
+    "orContinueWithEmail": "O continuar con email",
+    "confirmEmailAddress": "Confirmar dirección de email",
+    "emailMismatch": "Las direcciones de email no coinciden",
+    "passwordStrength": "Fuerza de la contraseña",
+    "pleaseWait": "Por favor espera..."
+  },
+  "support": {
+    "title": "Soporte",
+    "subtitle": "Obtén ayuda con tu cuenta de StackBill y encuentra respuestas a preguntas comunes",
+    "contactSupport": "Contactar Soporte",
+    "personalizedHelp": "¿Necesitas ayuda personalizada? Nuestro equipo está aquí para asistirte.",
+    "emailSupport": "Soporte por Email",
+    "emailSupportDescription": "Obtén ayuda por email",
+    "responseTime": "Respuesta en 24h",
+    "emailInstructions": "Incluye el email de tu cuenta y describe tu problema para asistencia más rápida",
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "proPlanFeatures": {
+        "question": "¿Qué incluye el plan Pro?",
+        "answer": "El plan Pro incluye todo lo que necesitas para gestionar tus suscripciones SaaS profesionalmente:",
+        "features": [
+          "Rastrea hasta 30 suscripciones (vs 5 en gratuito)",
+          "Organiza en 10 proyectos (vs 2 en gratuito)",
+          "Alertas de renovación por email (avisos de 7, 3 y 1 día)",
+          "Emails de resumen mensual de gastos",
+          "Historial de facturación completo",
+          "Soporte prioritario"
+        ]
+      },
+      "billingWork": {
+        "question": "¿Cómo funciona la facturación?",
+        "answer": "StackBill Pro se factura mensualmente a €4/mes vía Stripe. Tu suscripción se renueva automáticamente cada mes hasta que canceles. Puedes degradar en cualquier momento y mantener acceso Pro hasta que termine tu período de facturación actual. Toda la facturación es segura y cumple con PCI a través de Stripe."
+      },
+      "cancelDowngrade": {
+        "question": "¿Puedo cancelar o degradar en cualquier momento?",
+        "answer": "¡Sí! Puedes cancelar tu suscripción Pro en cualquier momento sin penalización. Cuando degradas, tu suscripción se cancela inmediatamente pero mantienes acceso Pro hasta el final de tu período de facturación actual. Después de eso, serás movido al plan gratuito automáticamente."
+      },
+      "dataOnDowngrade": {
+        "question": "¿Qué pasa con mis datos si degrado?",
+        "answer": "Si tienes más suscripciones o proyectos de los que permite el plan gratuito cuando degradas:",
+        "details": [
+          "Mantendremos tus suscripciones y proyectos más recientes",
+          "Los datos excedentes más antiguos serán eliminados automáticamente",
+          "Recibirás un email de confirmación con detalles",
+          "Toda eliminación de datos es permanente y no se puede deshacer"
+        ]
+      },
+      "emailNotifications": {
+        "question": "¿Cómo funcionan las notificaciones por email?",
+        "answer": "Los usuarios Pro reciben notificaciones automáticas por email para ayudar a gestionar sus suscripciones. Recibirás alertas de renovación 7, 3 y 1 días antes de que se renueven las suscripciones, más emails de resumen mensual con información de gastos. Todos los emails incluyen opciones para cancelar suscripción y puedes personalizar preferencias en tu configuración."
+      },
+      "paymentSecurity": {
+        "question": "¿Está segura mi información de pago?",
+        "answer": "Absolutamente. Todos los pagos se procesan a través de Stripe, uno de los procesadores de pagos más confiables del mundo. Nunca almacenamos la información de tu tarjeta de crédito en nuestros servidores. Stripe está certificado PCI DSS Nivel 1 y es usado por millones de empresas en todo el mundo, incluyendo Twitter, Lyft y Shopify."
+      },
+      "deleteAccount": {
+        "question": "¿Puedo eliminar mi cuenta completamente?",
+        "answer": "Sí, puedes eliminar permanentemente tu cuenta de StackBill en cualquier momento desde tu página de configuración. Esto cancelará inmediatamente cualquier suscripción activa, eliminará todos tus datos de nuestros servidores, y te enviará un email de despedida. La eliminación de cuenta es permanente y no se puede deshacer."
+      },
+      "refunds": {
+        "question": "¿Ofrecen reembolsos?",
+        "answer": "Dado que StackBill Pro es un servicio mensual de bajo costo, generalmente no ofrecemos reembolsos. Sin embargo, si estás experimentando problemas técnicos o tienes preocupaciones sobre tu facturación, por favor contacta nuestro equipo de soporte en hello@stackbill.dev y trabajaremos contigo para encontrar una solución."
+      },
+      "organizeProjects": {
+        "question": "¿Cómo organizo suscripciones con proyectos?",
+        "answer": "Los proyectos te ayudan a organizar suscripciones por equipo, cliente o propósito:",
+        "steps": [
+          "Crea proyectos en Configuración > Gestión de Proyectos",
+          "Asigna suscripciones a proyectos al añadirlas",
+          "Cambia entre proyectos usando el menú desplegable en el panel",
+          "Usa el proyecto 'General' para suscripciones personales o no organizadas",
+          "Usuarios gratuitos obtienen 2 proyectos, usuarios Pro obtienen 10 proyectos"
+        ]
+      },
+      "currencies": {
+        "question": "¿Qué monedas soporta StackBill?",
+        "answer": "StackBill soporta 10 monedas principales con tasas de conversión en vivo:",
+        "currencies": [
+          "USD (Dólar Estadounidense), EUR (Euro), GBP (Libra Británica)",
+          "CAD (Dólar Canadiense), AUD (Dólar Australiano)",
+          "JPY (Yen Japonés), CHF (Franco Suizo)",
+          "SEK (Corona Sueca), NOK (Corona Noruega), DKK (Corona Danesa)"
+        ],
+        "note": "Todas las cantidades se convierten automáticamente a tu moneda de visualización preferida usando tasas de cambio en vivo."
+      }
+    },
+    "stillNeedHelp": "¿Aún necesitas ayuda?",
+    "cantFind": "¿No puedes encontrar lo que buscas? Estamos aquí para ayudar.",
+    "manageAccount": "Gestionar Cuenta"
   }
 }

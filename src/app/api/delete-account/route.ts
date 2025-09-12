@@ -32,7 +32,6 @@ export async function DELETE(request: NextRequest) {
 
     // Step 1: Get user info for goodbye email
     const userEmail = user.email
-    const userName = user.user_metadata?.full_name || user.user_metadata?.name
 
     // Step 2: Cancel Stripe subscription if exists
     try {
@@ -116,7 +115,7 @@ export async function DELETE(request: NextRequest) {
     // Step 5: Send goodbye email (do this last in case it fails)
     if (userEmail) {
       try {
-        await sendGoodbyeEmail(userEmail, userName)
+        await sendGoodbyeEmail(userEmail)
         console.log('Goodbye email sent successfully')
       } catch (emailError) {
         console.error('Error sending goodbye email:', emailError)

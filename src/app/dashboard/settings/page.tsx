@@ -15,16 +15,16 @@ import { Badge } from "@/components/ui/badge"
 
 // Predefined color options
 const PREDEFINED_COLORS = [
-  { value: '#3B82F6', name: 'Blue' },
-  { value: '#10B981', name: 'Green' },
-  { value: '#F59E0B', name: 'Yellow' },
-  { value: '#EF4444', name: 'Red' },
-  { value: '#8B5CF6', name: 'Purple' },
-  { value: '#06B6D4', name: 'Cyan' },
-  { value: '#F97316', name: 'Orange' },
-  { value: '#84CC16', name: 'Lime' },
-  { value: '#EC4899', name: 'Pink' },
-  { value: '#6B7280', name: 'Gray' }
+  { value: '#3B82F6', nameKey: 'blue' },
+  { value: '#10B981', nameKey: 'green' },
+  { value: '#F59E0B', nameKey: 'yellow' },
+  { value: '#EF4444', nameKey: 'red' },
+  { value: '#8B5CF6', nameKey: 'purple' },
+  { value: '#06B6D4', nameKey: 'cyan' },
+  { value: '#F97316', nameKey: 'orange' },
+  { value: '#84CC16', nameKey: 'lime' },
+  { value: '#EC4899', nameKey: 'pink' },
+  { value: '#6B7280', nameKey: 'gray' }
 ]
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, Plus, Edit, Trash2, Lock } from 'lucide-react'
@@ -121,7 +121,7 @@ export default function SettingsPage() {
       setEmailPreferences(preferences)
     } catch (error) {
       console.error('Error loading email preferences:', error)
-      toast.error('Failed to load email preferences')
+      toast.error(t('settings.emailPreferencesLoadFailed'))
     } finally {
       setEmailPreferencesLoading(false)
     }
@@ -142,7 +142,7 @@ export default function SettingsPage() {
     }
     
     if (newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters')
+      toast.error(t('settings.passwordMinLength'))
       return
     }
     
@@ -160,7 +160,7 @@ export default function SettingsPage() {
       setConfirmPassword('')
       setIsPasswordDialogOpen(false)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update password')
+      toast.error(error instanceof Error ? error.message : t('settings.passwordUpdateFailed'))
     } finally {
       setPasswordLoading(false)
     }
@@ -170,7 +170,7 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (!newEmail || !newEmail.includes('@')) {
-      toast.error('Please enter a valid email address')
+      toast.error(t('settings.validEmailRequired'))
       return
     }
     
@@ -187,7 +187,7 @@ export default function SettingsPage() {
       setNewEmail('')
       setIsEmailDialogOpen(false)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update email')
+      toast.error(error instanceof Error ? error.message : t('settings.emailUpdateFailed'))
     } finally {
       setEmailLoading(false)
     }
@@ -213,13 +213,13 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (!projectName.trim()) {
-      toast.error('Project name is required')
+      toast.error(t('settings.projectNameRequired'))
       return
     }
 
     const maxProjects = isPro ? 10 : 2
     if (projects.length >= maxProjects) {
-      toast.error(`Maximum of ${maxProjects} projects allowed${!isPro ? ' on free plan. Upgrade to Pro for up to 10 projects.' : ''}`)
+      toast.error(t('settings.maxProjectsReached', { count: maxProjects, planNote: !isPro ? ' on free plan. Upgrade to Pro for up to 10 projects.' : '' }))
       return
     }
 
@@ -227,7 +227,7 @@ export default function SettingsPage() {
     const usedColors = projects.map(p => p.color)
     const availableColors = PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
     if (availableColors.length === 0) {
-      toast.error('No available colors. Please edit an existing project to change its color first.')
+      toast.error(t('settings.noAvailableColors'))
       return
     }
 
@@ -244,9 +244,9 @@ export default function SettingsPage() {
       setProjects(prev => [...prev, newProject])
       resetProjectForm()
       setIsCreateProjectDialogOpen(false)
-      toast.success('Project created successfully!')
+      toast.success(t('settings.projectCreatedSuccess'))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to create project')
+      toast.error(error instanceof Error ? error.message : t('settings.projectCreateFailed'))
     } finally {
       setProjectActionLoading(false)
     }
@@ -256,7 +256,7 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (!editingProject || !projectName.trim()) {
-      toast.error('Project name is required')
+      toast.error(t('settings.projectNameRequired'))
       return
     }
 
@@ -274,9 +274,9 @@ export default function SettingsPage() {
       )
       resetProjectForm()
       setIsEditProjectDialogOpen(false)
-      toast.success('Project updated successfully!')
+      toast.success(t('settings.projectUpdatedSuccess'))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update project')
+      toast.error(error instanceof Error ? error.message : t('settings.projectUpdateFailed'))
     } finally {
       setProjectActionLoading(false)
     }
@@ -287,9 +287,9 @@ export default function SettingsPage() {
     try {
       await ProjectsService.deleteProject(projectId, user!.id)
       setProjects(prev => prev.filter(p => p.id !== projectId))
-      toast.success('Project deleted successfully!')
+      toast.success(t('settings.projectDeletedSuccess'))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete project')
+      toast.error(error instanceof Error ? error.message : t('settings.projectDeleteFailed'))
     }
   }
 
@@ -302,9 +302,9 @@ export default function SettingsPage() {
     try {
       const updatedPreferences = await EmailPreferencesService.updatePreferences(user.id, updates)
       setEmailPreferences(updatedPreferences)
-      toast.success('Email preferences updated successfully!')
+      toast.success(t('settings.emailPreferencesUpdateSuccess'))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to update email preferences')
+      toast.error(error instanceof Error ? error.message : t('settings.emailPreferencesUpdateFailed'))
     }
   }
 
@@ -321,7 +321,7 @@ export default function SettingsPage() {
 
   const handleDeleteAccount = async () => {
     if (deleteConfirmation !== 'delete my account') {
-      toast.error('Please type "delete my account" to confirm')
+      toast.error(t('settings.deleteAccountConfirmationError'))
       return
     }
 
@@ -346,7 +346,7 @@ export default function SettingsPage() {
         throw new Error(result.error || 'Failed to delete account')
       }
 
-      toast.success('Account deleted successfully. Goodbye!')
+      toast.success(t('settings.deleteAccountSuccess'))
       
       // Sign out and redirect
       setTimeout(() => {
@@ -355,7 +355,7 @@ export default function SettingsPage() {
 
     } catch (error) {
       console.error('Error deleting account:', error)
-      toast.error(error instanceof Error ? error.message : 'Failed to delete account')
+      toast.error(error instanceof Error ? error.message : t('settings.deleteAccountFailed'))
     } finally {
       setDeleteAccountLoading(false)
     }
@@ -509,7 +509,7 @@ export default function SettingsPage() {
       <Card className="mb-6" id="projects">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            Project Management
+            {t('settings.projectManagement')}
             <span className="text-sm font-normal text-muted-foreground">({projects.length}/{isPro ? '10' : '2'})</span>
           </CardTitle>
         </CardHeader>
@@ -518,15 +518,15 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">
-                  Create and manage projects to organize your subscriptions
+                  {t('settings.projectDescription')}
                 </p>
                 {!isPro && (
                   <p className="text-xs text-muted-foreground">
-                    Free plan: up to 2 projects • <button 
+                    {t('settings.freePlanProjectLimit')} • <button 
                       onClick={() => window.location.href = '/dashboard/billing'}
                       className="text-purple-600 hover:text-purple-700 underline"
                     >
-                      Upgrade to Pro for up to 10 projects
+                      {t('settings.upgradeProProjectsMsg')}
                     </button>
                   </p>
                 )}
@@ -540,21 +540,21 @@ export default function SettingsPage() {
                     className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    <span className="sm:hidden">+ Add</span>
-                    <span className="hidden sm:inline">Add Project</span>
+                    <span className="sm:hidden">{t('projects.addProject')}</span>
+                    <span className="hidden sm:inline">{t('settings.addProject')}</span>
                     {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Create New Project</DialogTitle>
+                    <DialogTitle>{t('settings.createNewProject')}</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleCreateProject} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="project-name">Project Name</Label>
+                      <Label htmlFor="project-name">{t('projects.projectName')}</Label>
                       <Input
                         id="project-name"
-                        placeholder="Enter project name"
+                        placeholder={t('settings.enterProjectName')}
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
                         disabled={projectActionLoading}
@@ -562,20 +562,20 @@ export default function SettingsPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="project-description">Description (Optional)</Label>
+                      <Label htmlFor="project-description">{t('projects.descriptionOptional')}</Label>
                       <Input
                         id="project-description"
-                        placeholder="Enter project description"
+                        placeholder={t('settings.enterProjectDescription')}
                         value={projectDescription}
                         onChange={(e) => setProjectDescription(e.target.value)}
                         disabled={projectActionLoading}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="project-color">Color</Label>
+                      <Label htmlFor="project-color">{t('projects.color')}</Label>
                       <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a color..." />
+                          <SelectValue placeholder={t('settings.selectColor')} />
                         </SelectTrigger>
                         <SelectContent>
                           {(() => {
@@ -588,12 +588,12 @@ export default function SettingsPage() {
                                     className="w-4 h-4 rounded-full border border-gray-300"
                                     style={{ backgroundColor: color.value }}
                                   />
-                                  <span>{color.name}</span>
+                                  <span>{t(`colors.${color.nameKey}`)}</span>
                                 </div>
                               </SelectItem>
                             )) : (
                               <SelectItem value="no-colors" disabled>
-                                <span className="text-muted-foreground">All colors are in use</span>
+                                <span className="text-muted-foreground">{t('settings.allColorsInUse')}</span>
                               </SelectItem>
                             )
                           })()} 
@@ -607,10 +607,10 @@ export default function SettingsPage() {
                         onClick={() => setIsCreateProjectDialogOpen(false)}
                         disabled={projectActionLoading}
                       >
-                        Cancel
+                        {t('common.cancel')}
                       </Button>
                       <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                        {projectActionLoading ? 'Creating...' : 'Create Project'}
+                        {projectActionLoading ? t('settings.creating') : t('settings.createProject')}
                       </Button>
                     </div>
                   </form>
@@ -623,14 +623,14 @@ export default function SettingsPage() {
               <Alert className="border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-900/20">
                 <Lock className="h-4 w-4 text-purple-600" />
                 <AlertDescription className="text-purple-800 dark:text-purple-200">
-                  You&apos;ve reached the free plan limit (2 projects). 
+                  {t('settings.youveReachedLimit')} 
                   <Button 
                     variant="link" 
                     size="sm"
                     className="text-purple-600 dark:text-purple-400 p-0 ml-1 h-auto"
                     onClick={() => window.location.href = '/dashboard/billing'}
                   >
-                    Upgrade to Pro for up to 10 projects
+                    {t('settings.upgradeToProForProjects')}
                   </Button>
                 </AlertDescription>
               </Alert>
@@ -642,7 +642,7 @@ export default function SettingsPage() {
               </div>
             ) : projects.length === 0 ? (
               <div className="text-center p-8 text-muted-foreground">
-                <p>No projects yet. Create your first project to organize subscriptions!</p>
+                <p>{t('settings.noProjectsYet')}</p>
               </div>
             ) : (
               <div className="grid gap-3">
@@ -669,30 +669,29 @@ export default function SettingsPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openEditProject(project)}>
                           <Edit className="h-4 w-4 mr-2" />
-                          Edit
+                          {t('settings.edit')}
                         </DropdownMenuItem>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
+                              {t('settings.delete')}
                             </DropdownMenuItem>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Delete Project</AlertDialogTitle>
+                              <AlertDialogTitle>{t('settings.deleteProject')}</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Are you sure you want to delete &quot;{project.name}&quot;? This action cannot be undone. 
-                                All subscriptions in this project will be moved to General.
+                                {t('settings.deleteProjectConfirm', { name: project.name })}
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                               <AlertDialogAction 
                                 onClick={() => handleDeleteProject(project.id)}
                                 className="bg-red-600 hover:bg-red-700"
                               >
-                                Delete Project
+                                {t('settings.deleteProjectButton')}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
@@ -711,14 +710,14 @@ export default function SettingsPage() {
       <Dialog open={isEditProjectDialogOpen} onOpenChange={setIsEditProjectDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Project</DialogTitle>
+            <DialogTitle>{t('settings.editProject')}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleEditProject} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-project-name">Project Name</Label>
+              <Label htmlFor="edit-project-name">{t('projects.projectName')}</Label>
               <Input
                 id="edit-project-name"
-                placeholder="Enter project name"
+                placeholder={t('settings.enterProjectName')}
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 disabled={projectActionLoading}
@@ -726,20 +725,20 @@ export default function SettingsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-project-description">Description (Optional)</Label>
+              <Label htmlFor="edit-project-description">{t('projects.descriptionOptional')}</Label>
               <Input
                 id="edit-project-description"
-                placeholder="Enter project description"
+                placeholder={t('settings.enterProjectDescription')}
                 value={projectDescription}
                 onChange={(e) => setProjectDescription(e.target.value)}
                 disabled={projectActionLoading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-project-color">Color</Label>
+              <Label htmlFor="edit-project-color">{t('projects.color')}</Label>
               <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a color..." />
+                  <SelectValue placeholder={t('settings.selectColor')} />
                 </SelectTrigger>
                 <SelectContent>
                   {(() => {
@@ -754,7 +753,7 @@ export default function SettingsPage() {
                             className="w-4 h-4 rounded-full border border-gray-300"
                             style={{ backgroundColor: color.value }}
                           />
-                          <span>{color.name}</span>
+                          <span>{t(`colors.${color.nameKey}`)}</span>
                         </div>
                       </SelectItem>
                     ))
@@ -769,10 +768,10 @@ export default function SettingsPage() {
                 onClick={() => setIsEditProjectDialogOpen(false)}
                 disabled={projectActionLoading}
               >
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                {projectActionLoading ? 'Updating...' : 'Update Project'}
+                {projectActionLoading ? t('settings.updating') : t('settings.updateProject')}
               </Button>
             </div>
           </form>
@@ -783,7 +782,7 @@ export default function SettingsPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            Email Preferences
+            {t('settings.emailPreferences')}
             <Badge variant="secondary" className="text-xs">Pro</Badge>
           </CardTitle>
         </CardHeader>
@@ -799,9 +798,9 @@ export default function SettingsPage() {
                 {/* Monthly Summary Toggle */}
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <Label className="text-base font-medium">Monthly Summary Emails</Label>
+                    <Label className="text-base font-medium">{t('settings.monthlySummaryEmails')}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Receive a monthly summary of your subscription expenses and insights
+                      {t('settings.monthlySummaryDescription')}
                     </p>
                   </div>
                   <Switch checked={false} disabled />
@@ -811,9 +810,9 @@ export default function SettingsPage() {
                   {/* Renewal Alerts Toggle */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="space-y-1">
-                      <Label className="text-base font-medium">Renewal Alert Emails</Label>
+                      <Label className="text-base font-medium">{t('settings.renewalAlertEmails')}</Label>
                       <p className="text-sm text-muted-foreground">
-                        Get notified before your subscriptions renew
+                        {t('settings.renewalAlertDescription')}
                       </p>
                     </div>
                     <Switch checked={false} disabled />
@@ -821,10 +820,10 @@ export default function SettingsPage() {
 
                   {/* Reminder Days Preview */}
                   <div className="pl-4 border-l-2 border-muted space-y-3">
-                    <Label className="text-sm font-medium text-muted-foreground">Reminder Schedule</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('settings.reminderSchedule')}</Label>
                     <div className="flex flex-wrap gap-2">
-                      <Badge variant="outline" className="opacity-50">7 days before</Badge>
-                      <Badge variant="outline" className="opacity-50">3 days before</Badge>
+                      <Badge variant="outline" className="opacity-50">{t('settings.sevenDaysBefore')}</Badge>
+                      <Badge variant="outline" className="opacity-50">{t('settings.threeDaysBefore')}</Badge>
                     </div>
                   </div>
                 </div>
@@ -833,9 +832,9 @@ export default function SettingsPage() {
               {/* Simple upgrade prompt */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="text-center bg-white dark:bg-gray-800 p-4 rounded-lg border border-blue-200 dark:border-blue-600 shadow-sm">
-                  <p className="text-sm font-medium mb-3">Upgrade to Pro for email reminders</p>
+                  <p className="text-sm font-medium mb-3">{t('settings.upgradeForEmailReminders')}</p>
                   <Button onClick={() => router.push('/billing')} size="sm">
-                    Upgrade - $4/month
+                    {t('settings.upgradeProPrice')}
                   </Button>
                 </div>
               </div>
@@ -852,9 +851,9 @@ export default function SettingsPage() {
                   {/* Monthly Summary Toggle */}
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <Label className="text-base font-medium">Monthly Summary Emails</Label>
+                      <Label className="text-base font-medium">{t('settings.monthlySummaryEmails')}</Label>
                       <p className="text-sm text-muted-foreground">
-                        Receive a monthly summary of your subscription expenses and insights
+                        {t('settings.monthlySummaryDescription')}
                       </p>
                     </div>
                     <Switch
@@ -869,9 +868,9 @@ export default function SettingsPage() {
                     {/* Renewal Alerts Toggle */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="space-y-1">
-                        <Label className="text-base font-medium">Renewal Alert Emails</Label>
+                        <Label className="text-base font-medium">{t('settings.renewalAlertEmails')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Get notified before your subscriptions renew
+                          {t('settings.renewalAlertDescription')}
                         </p>
                       </div>
                       <Switch
@@ -885,9 +884,9 @@ export default function SettingsPage() {
                     {/* Reminder Days Selection */}
                     {(emailPreferences.renewal_alerts_enabled ?? false) && (
                       <div className="pl-4 border-l-2 border-muted space-y-3">
-                        <Label className="text-sm font-medium text-muted-foreground">Reminder Schedule</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">{t('settings.reminderSchedule')}</Label>
                         <p className="text-xs text-muted-foreground mb-3">
-                          Choose when to receive renewal reminders. Default is 7 days before renewal (you can select multiple options)
+                          {t('settings.reminderScheduleNote')}
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {[7, 3].map((day) => (
@@ -906,10 +905,12 @@ export default function SettingsPage() {
                           ))}
                         </div>
                         <p className="text-xs text-muted-foreground">
-                          Selected: {(emailPreferences.renewal_reminder_days ?? [])
-                            .sort((a, b) => b - a)
-                            .map(d => `${d} day${d !== 1 ? 's' : ''}`)
-                            .join(', ') || 'None'} before renewal
+                          {t('settings.selectedReminders', {
+                            reminders: (emailPreferences.renewal_reminder_days ?? [])
+                              .sort((a, b) => b - a)
+                              .map(d => `${d} day${d !== 1 ? 's' : ''}`)
+                              .join(', ') || t('settings.none')
+                          })}
                         </p>
                       </div>
                     )}
@@ -918,21 +919,20 @@ export default function SettingsPage() {
                   {/* Anti-spam Notice */}
                   <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
                     <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
-                      📧 <strong>Smart Delivery:</strong> We&apos;ll never spam you. Monthly summaries are sent once per month, 
-                      and renewal alerts are limited to once per day maximum to avoid overwhelming your inbox.
+                      {t('settings.smartDeliveryNotice')}
                     </AlertDescription>
                   </Alert>
                 </div>
               ) : (
                 <div className="text-center p-8 text-muted-foreground">
-                  <p>Failed to load email preferences</p>
+                  <p>{t('settings.failedToLoadEmailPrefs')}</p>
                   <Button 
                     variant="outline" 
                     size="sm" 
                     className="mt-2"
                     onClick={loadEmailPreferences}
                   >
-                    Retry
+                    {t('settings.retry')}
                   </Button>
                 </div>
               )}
@@ -974,14 +974,14 @@ export default function SettingsPage() {
       <Card className="mt-8 border-red-200 dark:border-red-800">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-red-600 dark:text-red-400">Danger Zone</CardTitle>
+            <CardTitle className="text-red-600 dark:text-red-400">{t('settings.dangerZone')}</CardTitle>
             <Button 
               variant="destructive" 
               size="sm"
               onClick={() => setIsDangerZoneOpen(!isDangerZoneOpen)}
               className="bg-red-600 hover:bg-red-700 text-white"
             >
-              {isDangerZoneOpen ? 'Close Danger Zone' : 'Open Danger Zone'}
+              {isDangerZoneOpen ? t('settings.closeDangerZone') : t('settings.openDangerZone')}
             </Button>
           </div>
         </CardHeader>
@@ -990,37 +990,36 @@ export default function SettingsPage() {
           <CardContent className="space-y-6 border-t border-red-200 dark:border-red-800">
             <div className="space-y-4 pt-6">
               <div>
-                <h4 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Delete Account</h4>
+                <h4 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">{t('settings.deleteAccount')}</h4>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Permanently delete your StackBill account and all associated data. This action cannot be undone.
+                  {t('settings.deleteAccountWarning')}
                 </p>
                 <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 mb-4">
                   <AlertDescription className="text-red-800 dark:text-red-200 text-sm">
-                    ⚠️ <strong>This will permanently delete:</strong> All your subscriptions, projects, settings, and any active Pro subscription. 
-                    We&apos;ll also cancel any ongoing billing.
+                    ⚠️ <strong>{t('settings.thisWillPermanentlyDelete')}:</strong> {t('settings.deleteAccountDetails')}
                   </AlertDescription>
                 </Alert>
                 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="sm">
-                      Delete Account
+                      {t('settings.deleteAccount')}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogTitle>{t('settings.deleteAccountConfirmTitle')}</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+                        {t('settings.deleteAccountConfirmText')}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <div className="my-4">
                       <Label htmlFor="delete-confirmation" className="text-sm">
-                        Type <strong>&quot;delete my account&quot;</strong> to confirm:
+                        {t('settings.deleteAccountConfirmPrompt')}
                       </Label>
                       <Input
                         id="delete-confirmation"
-                        placeholder="delete my account"
+                        placeholder={t('settings.deleteAccountConfirmPhrase')}
                         className="mt-2"
                         value={deleteConfirmation}
                         onChange={(e) => setDeleteConfirmation(e.target.value)}
@@ -1032,14 +1031,14 @@ export default function SettingsPage() {
                         disabled={deleteAccountLoading}
                         onClick={() => setDeleteConfirmation('')}
                       >
-                        Cancel
+                        {t('common.cancel')}
                       </AlertDialogCancel>
                       <AlertDialogAction 
                         className="bg-red-600 hover:bg-red-700"
                         disabled={deleteConfirmation !== 'delete my account' || deleteAccountLoading}
                         onClick={handleDeleteAccount}
                       >
-                        {deleteAccountLoading ? 'Deleting...' : 'Delete Account'}
+                        {deleteAccountLoading ? t('settings.deleting') : t('settings.deleteAccount')}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
