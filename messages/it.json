@@ -197,26 +197,6 @@
     "absolutelySurePrompt": "Sei assolutamente sicuro di voler procedere?",
     "yesDeleteAndDowngrade": "Sì, Elimina e Fai Downgrade"
   },
-  "settings": {
-    "title": "Impostazioni",
-    "accountSettings": "Impostazioni Account", 
-    "currentEmail": "Email Attuale",
-    "registeredOn": "Registrato il",
-    "changeEmail": "Cambia Email",
-    "changePassword": "Cambia Password",
-    "newEmail": "Nuova Email",
-    "newPassword": "Nuova Password",
-    "confirmNewPassword": "Conferma Nuova Password",
-    "changingEmail": "Cambio email in corso...",
-    "changingPassword": "Cambio password in corso...",
-    "emailChanged": "Email cambiata con successo",
-    "passwordChanged": "Password cambiata con successo",
-    "currencyPreferences": "Preferenze Valuta",
-    "preferredCurrency": "Valuta Preferita",
-    "currencyNote": "La tua valuta preferita verrà utilizzata per i totali del dashboard e i nuovi abbonamenti utilizzeranno questa valuta per default.",
-    "updatingCurrency": "Aggiornamento valuta in corso...",
-    "currencyUpdated": "Preferenza valuta aggiornata con successo"
-  },
   "landing": {
     "hero": {
       "badge": "Creato per fondatori SaaS e sviluppatori",
@@ -429,6 +409,24 @@
     "cancel": "Annulla"
   },
   "settings": {
+    "title": "Impostazioni",
+    "accountSettings": "Impostazioni Account", 
+    "currentEmail": "Email Attuale",
+    "registeredOn": "Registrato il",
+    "changeEmail": "Cambia Email",
+    "changePassword": "Cambia Password",
+    "newEmail": "Nuova Email",
+    "newPassword": "Nuova Password",
+    "confirmNewPassword": "Conferma Nuova Password",
+    "changingEmail": "Cambio email in corso...",
+    "changingPassword": "Cambio password in corso...",
+    "emailChanged": "Email cambiata con successo",
+    "passwordChanged": "Password cambiata con successo",
+    "currencyPreferences": "Preferenze Valuta",
+    "preferredCurrency": "Valuta Preferita",
+    "currencyNote": "La tua valuta preferita verrà utilizzata per i totali del dashboard e i nuovi abbonamenti utilizzeranno questa valuta per default.",
+    "updatingCurrency": "Aggiornamento valuta in corso...",
+    "currencyUpdated": "Preferenza valuta aggiornata con successo",
     "projectManagement": "Gestione Progetti",
     "projectDescription": "Crea e gestisci progetti per organizzare i tuoi abbonamenti",
     "freePlanProjectLimit": "Piano gratuito: fino a 2 progetti",
@@ -450,12 +448,13 @@
     "openDangerZone": "Apri Zona di Pericolo",
     "deleteAccount": "Elimina Account",
     "deleteAccountWarning": "Elimina permanentemente il tuo account StackBill e tutti i dati associati. Questa azione non può essere annullata.",
-    "deleteAccountDetails": "Questo eliminerà permanentemente: Tutti i tuoi abbonamenti, progetti, impostazioni, cronologia fatturazione e dati personali.",
+    "deleteAccountDetails": "tutti i tuoi abbonamenti, progetti, impostazioni, cronologia fatturazione e dati personali.",
     "deleteAccountConfirmTitle": "Sei assolutamente sicuro?",
     "deleteAccountConfirmText": "Questa azione non può essere annullata. Il tuo account e tutti i dati saranno eliminati permanentemente.",
     "deleteAccountConfirmPrompt": "Digita \"elimina il mio account\" per confermare:",
     "deleteAccountConfirmPhrase": "elimina il mio account",
     "deleting": "Eliminazione...",
+    "thisWillPermanentlyDelete": "Questo eliminerà permanentemente",
     "passwordMinLength": "La password deve avere almeno 6 caratteri",
     "validEmailRequired": "Inserisci un indirizzo email valido",
     "emailUpdateFailed": "Errore nell'aggiornamento dell'email",
@@ -482,7 +481,21 @@
     "smartDeliveryNotice": "📧 Consegna Intelligente: Non ti invieremo mai spam. I riepiloghi mensili vengono inviati una volta al mese, e gli avvisi di rinnovo sono limitati a un massimo di uno al giorno per evitare di intasare la tua casella di posta.",
     "reminderScheduleNote": "Scegli quando ricevere promemoria di rinnovo. Il default è 7 giorni prima del rinnovo (puoi selezionare opzioni multiple)",
     "selectedReminders": "Selezionato: {reminders} prima del rinnovo",
-    "none": "Nessuno"
+    "none": "Nessuno",
+    "upgradeProProjectsMsg": "Passa a Pro per fino a 10 progetti",
+    "youveReachedLimit": "Hai raggiunto il limite",
+    "upgradeToProForProjects": "Passa a Pro per più progetti", 
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "updateProject": "Aggiorna Progetto",
+    "editProject": "Modifica Progetto",
+    "deleteProject": "Elimina Progetto",
+    "deleteProjectConfirm": "Sei sicuro di voler eliminare questo progetto? Tutti gli abbonamenti in questo progetto saranno spostati in Generale.",
+    "deleteProjectButton": "Elimina Progetto",
+    "createNewProject": "Crea Nuovo Progetto", 
+    "enterProjectName": "Inserisci il nome del progetto",
+    "enterProjectDescription": "Inserisci la descrizione del progetto",
+    "createProject": "Crea Progetto"
   },
   "auth": {
     "signIn": "Accedi",
@@ -511,6 +524,32 @@
     "emailMismatch": "Gli indirizzi email non corrispondono",
     "passwordStrength": "Forza della password",
     "pleaseWait": "Per favore attendi..."
+  },
+  "plans": {
+    "free": {
+      "name": "Gratuito",
+      "description": "Perfetto per iniziare",
+      "features": {
+        "trackSubscriptions": "Traccia fino a {limit} abbonamenti",
+        "organizeProjects": "Organizza in fino a {limit} progetti",
+        "monthlyYearlyOverview": "Panoramica spese mensile e annuale",
+        "basicRenewalTracking": "Tracciamento base dei rinnovi",
+        "manualSubscriptionEntry": "Inserimento manuale abbonamenti"
+      }
+    },
+    "pro": {
+      "name": "Pro",
+      "description": "Tracciamento avanzato per utenti seri",
+      "features": {
+        "trackSubscriptions": "Traccia fino a {limit} abbonamenti",
+        "organizeProjects": "Organizza in fino a {limit} progetti",
+        "multiProjectAssignment": "Assegnazione multi-progetto degli abbonamenti",
+        "emailReminders": "Promemoria email per abbonamenti in scadenza",
+        "advancedAnalytics": "Analytics e insights avanzati",
+        "categoryBreakdown": "Ripartizione spese per categoria",
+        "prioritySupport": "Supporto prioritario"
+      }
+    }
   },
   "support": {
     "title": "Supporto",

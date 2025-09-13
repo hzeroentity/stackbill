@@ -121,13 +121,13 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
     try {
       // Validate that at least one project is selected
       if (selectedProjects.length === 0) {
-        throw new Error(t('subscriptionForm.projectAssignmentRequired'))
+        throw new Error(t('subscriptions.projectAssignmentRequired'))
       }
 
       // Validate amount is positive (allow 0 for free subscriptions)
       const amount = parseFloat(formData.amount)
       if (isNaN(amount) || amount < 0) {
-        throw new Error(t('subscriptionForm.positiveAmountRequired'))
+        throw new Error(t('subscriptions.positiveAmountRequired'))
       }
 
       // Validate renewal date is today or in the future
@@ -136,7 +136,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
       const renewalDate = new Date(formData.renewal_date)
       
       if (renewalDate < today) {
-        throw new Error(t('subscriptionForm.futureDateRequired'))
+        throw new Error(t('subscriptions.futureDateRequired'))
       }
 
       const subscriptionData: Omit<SubscriptionInsert, 'user_id'> = {
@@ -198,7 +198,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle>
-          {subscription ? t('subscriptionForm.editTitle') : t('subscriptionForm.addTitle')}
+          {subscription ? t('subscriptions.editTitle') : t('subscriptions.addTitle')}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -207,7 +207,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
             <Label htmlFor="name">{t('subscriptions.service')}</Label>
             <Input
               id="name"
-              placeholder={t('subscriptionForm.servicePlaceholder')}
+              placeholder={t('subscriptions.servicePlaceholder')}
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
               required
@@ -216,7 +216,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="amount">{t('subscriptionForm.amount')}</Label>
+              <Label htmlFor="amount">{t('subscriptions.amount')}</Label>
               <Input
                 id="amount"
                 type="number"
@@ -230,7 +230,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="currency">{t('subscriptionForm.currency')}</Label>
+              <Label htmlFor="currency">{t('subscriptions.currency')}</Label>
               <Select 
                 value={formData.currency} 
                 onValueChange={(value) => handleInputChange('currency', value)}
@@ -260,13 +260,13 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
               htmlFor="free-subscription" 
               className="text-sm font-medium cursor-pointer"
             >
-              {t('subscriptionForm.freeSubscription')}
+              {t('subscriptions.freeSubscription')}
             </Label>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="billing_period">{t('subscriptionForm.billingPeriod')}</Label>
+              <Label htmlFor="billing_period">{t('subscriptions.billingPeriod')}</Label>
               <Select 
                 value={formData.billing_period} 
                 onValueChange={(value) => handleInputChange('billing_period', value)}
@@ -275,15 +275,15 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="weekly">{t('subscriptionForm.weekly')}</SelectItem>
-                  <SelectItem value="monthly">{t('subscriptionForm.monthly')}</SelectItem>
-                  <SelectItem value="quarterly">{t('subscriptionForm.quarterly')}</SelectItem>
-                  <SelectItem value="yearly">{t('subscriptionForm.yearly')}</SelectItem>
+                  <SelectItem value="weekly">{t('subscriptions.weekly')}</SelectItem>
+                  <SelectItem value="monthly">{t('subscriptions.monthly')}</SelectItem>
+                  <SelectItem value="quarterly">{t('subscriptions.quarterly')}</SelectItem>
+                  <SelectItem value="yearly">{t('subscriptions.yearly')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="renewal_date">{t('subscriptionForm.nextRenewalDate')}</Label>
+              <Label htmlFor="renewal_date">{t('subscriptions.nextRenewalDate')}</Label>
               <Input
                 id="renewal_date"
                 type="date"
@@ -297,7 +297,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category">{t('subscriptionForm.category')}</Label>
+            <Label htmlFor="category">{t('subscriptions.category')}</Label>
             <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -328,7 +328,7 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
 
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <Button type="submit" disabled={isLoading} className="flex-1">
-              {isLoading ? t('subscriptionForm.saving') : subscription ? t('subscriptionForm.update') : t('subscriptionForm.add')} {t('subscriptionForm.subscription')}
+              {isLoading ? t('subscriptions.saving') : subscription ? t('subscriptions.update') : t('subscriptions.add')} {t('subscriptions.subscription')}
             </Button>
             {onCancel && (
               <Button type="button" variant="outline" onClick={onCancel} className="sm:w-auto">

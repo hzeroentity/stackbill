@@ -478,7 +478,21 @@
     "smartDeliveryNotice": "📧 Entrega Inteligente: Nunca te haremos spam. Los resúmenes mensuales se envían una vez por mes, y las alertas de renovación están limitadas a un máximo de una por día para evitar saturar tu bandeja de entrada.",
     "reminderScheduleNote": "Elige cuándo recibir recordatorios de renovación. Por defecto es 7 días antes de la renovación (puedes seleccionar múltiples opciones)",
     "selectedReminders": "Seleccionado: {reminders} antes de la renovación",
-    "none": "Ninguno"
+    "none": "Ninguno",
+    "upgradeProProjectsMsg": "Actualiza a Pro para hasta 10 proyectos",
+    "youveReachedLimit": "Has alcanzado el límite",
+    "upgradeToProForProjects": "Actualiza a Pro para más proyectos",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "updateProject": "Actualizar Proyecto",
+    "editProject": "Editar Proyecto", 
+    "deleteProject": "Eliminar Proyecto",
+    "deleteProjectConfirm": "¿Estás seguro de que quieres eliminar este proyecto? Todos los abbonamentos en este proyecto se moverán a General.",
+    "deleteProjectButton": "Eliminar Proyecto",
+    "createNewProject": "Crear Nuevo Proyecto",
+    "enterProjectName": "Ingresa el nombre del proyecto",
+    "enterProjectDescription": "Ingresa la descripción del proyecto",
+    "createProject": "Crear Proyecto"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -507,6 +521,32 @@
     "emailMismatch": "Las direcciones de email no coinciden",
     "passwordStrength": "Fuerza de la contraseña",
     "pleaseWait": "Por favor espera..."
+  },
+  "plans": {
+    "free": {
+      "name": "Gratuito",
+      "description": "Perfecto para empezar",
+      "features": {
+        "trackSubscriptions": "Rastrea hasta {limit} suscripciones",
+        "organizeProjects": "Organiza en hasta {limit} proyectos",
+        "monthlyYearlyOverview": "Resumen de gastos mensual y anual",
+        "basicRenewalTracking": "Seguimiento básico de renovaciones",
+        "manualSubscriptionEntry": "Entrada manual de suscripciones"
+      }
+    },
+    "pro": {
+      "name": "Pro",
+      "description": "Seguimiento avanzado para usuarios serios",
+      "features": {
+        "trackSubscriptions": "Rastrea hasta {limit} suscripciones",
+        "organizeProjects": "Organiza en hasta {limit} proyectos",
+        "multiProjectAssignment": "Asignación multi-proyecto de suscripciones",
+        "emailReminders": "Recordatorios por email para suscripciones que expiran",
+        "advancedAnalytics": "Análisis avanzados e información",
+        "categoryBreakdown": "Desglose de gastos por categoría",
+        "prioritySupport": "Soporte prioritario"
+      }
+    }
   },
   "support": {
     "title": "Soporte",

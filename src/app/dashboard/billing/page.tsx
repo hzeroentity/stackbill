@@ -14,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { PLANS, getPlan } from '@/lib/plans'
+import { PLANS, getPlan, getTranslatedPlans } from '@/lib/plans'
 import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
 import { Tables } from '@/lib/database.types'
@@ -327,7 +327,7 @@ export default function BillingPage() {
       <div className="mb-12">
         <h2 className="text-2xl font-bold text-center mb-8">{t('billing.choosePlan')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {PLANS.map((plan) => {
+        {getTranslatedPlans(t).map((plan) => {
           const isCurrentPlan = currentPlan === plan.id
 
           return (
