@@ -38,19 +38,20 @@ export const getTranslatedPlans = (t: (key: string, params?: Record<string, unkn
     ...planData,
     name: t(`plans.${planData.id}.name`),
     description: t(`plans.${planData.id}.description`),
-    features: [
+    features: planData.id === 'free' ? [
       t(`plans.${planData.id}.features.trackSubscriptions`, { limit: planData.subscriptionLimit }),
       t(`plans.${planData.id}.features.organizeProjects`, { limit: planData.projectLimit }),
       t(`plans.${planData.id}.features.monthlyYearlyOverview`),
       t(`plans.${planData.id}.features.basicRenewalTracking`),
-      t(`plans.${planData.id}.features.manualSubscriptionEntry`),
-      ...(planData.id === 'pro' ? [
-        t(`plans.${planData.id}.features.multiProjectAssignment`),
-        t(`plans.${planData.id}.features.emailReminders`),
-        t(`plans.${planData.id}.features.advancedAnalytics`),
-        t(`plans.${planData.id}.features.categoryBreakdown`),
-        t(`plans.${planData.id}.features.prioritySupport`)
-      ] : [])
+      t(`plans.${planData.id}.features.manualSubscriptionEntry`)
+    ] : [
+      t(`plans.${planData.id}.features.trackSubscriptions`, { limit: planData.subscriptionLimit }),
+      t(`plans.${planData.id}.features.organizeProjects`, { limit: planData.projectLimit }),
+      t(`plans.${planData.id}.features.multiProjectAssignment`),
+      t(`plans.${planData.id}.features.emailReminders`),
+      t(`plans.${planData.id}.features.advancedAnalytics`),
+      t(`plans.${planData.id}.features.categoryBreakdown`),
+      t(`plans.${planData.id}.features.prioritySupport`)
     ]
   }))
 }

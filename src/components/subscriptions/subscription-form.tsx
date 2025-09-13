@@ -196,11 +196,6 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
 
   return (
     <Card className="w-full max-w-lg mx-auto">
-      <CardHeader>
-        <CardTitle>
-          {subscription ? t('subscriptions.editTitle') : t('subscriptions.addTitle')}
-        </CardTitle>
-      </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           <div className="space-y-2">

@@ -547,14 +547,14 @@ export default function SettingsPage() {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>{t('settings.createNewProject')}</DialogTitle>
+                    <DialogTitle>{t('projects.createNewProject')}</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleCreateProject} className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="project-name">{t('projects.projectName')}</Label>
                       <Input
                         id="project-name"
-                        placeholder={t('settings.enterProjectName')}
+                        placeholder={t('projects.enterProjectName')}
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
                         disabled={projectActionLoading}
@@ -565,7 +565,7 @@ export default function SettingsPage() {
                       <Label htmlFor="project-description">{t('projects.descriptionOptional')}</Label>
                       <Input
                         id="project-description"
-                        placeholder={t('settings.enterProjectDescription')}
+                        placeholder={t('projects.enterProjectDescription')}
                         value={projectDescription}
                         onChange={(e) => setProjectDescription(e.target.value)}
                         disabled={projectActionLoading}
@@ -575,7 +575,7 @@ export default function SettingsPage() {
                       <Label htmlFor="project-color">{t('projects.color')}</Label>
                       <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('settings.selectColor')} />
+                          <SelectValue placeholder={t('projects.selectColor')} />
                         </SelectTrigger>
                         <SelectContent>
                           {(() => {
@@ -593,7 +593,7 @@ export default function SettingsPage() {
                               </SelectItem>
                             )) : (
                               <SelectItem value="no-colors" disabled>
-                                <span className="text-muted-foreground">{t('settings.allColorsInUse')}</span>
+                                <span className="text-muted-foreground">{t('projects.allColorsInUse')}</span>
                               </SelectItem>
                             )
                           })()} 
@@ -610,7 +610,7 @@ export default function SettingsPage() {
                         {t('common.cancel')}
                       </Button>
                       <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                        {projectActionLoading ? t('settings.creating') : t('settings.createProject')}
+                        {projectActionLoading ? t('projects.creating') : t('projects.createProject')}
                       </Button>
                     </div>
                   </form>
@@ -630,7 +630,7 @@ export default function SettingsPage() {
                     className="text-purple-600 dark:text-purple-400 p-0 ml-1 h-auto"
                     onClick={() => window.location.href = '/dashboard/billing'}
                   >
-                    {t('settings.upgradeToProForProjects')}
+                    {t('settings.upgradeProProjectsMsg')}
                   </Button>
                 </AlertDescription>
               </Alert>
@@ -669,20 +669,20 @@ export default function SettingsPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openEditProject(project)}>
                           <Edit className="h-4 w-4 mr-2" />
-                          {t('settings.edit')}
+                          {t('common.edit')}
                         </DropdownMenuItem>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                               <Trash2 className="h-4 w-4 mr-2" />
-                              {t('settings.delete')}
+                              {t('common.delete')}
                             </DropdownMenuItem>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>{t('settings.deleteProject')}</AlertDialogTitle>
+                              <AlertDialogTitle>{t('projects.deleteProject')}</AlertDialogTitle>
                               <AlertDialogDescription>
-                                {t('settings.deleteProjectConfirm', { name: project.name })}
+                                {t('projects.deleteProjectConfirm', { name: project.name })}
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -691,7 +691,7 @@ export default function SettingsPage() {
                                 onClick={() => handleDeleteProject(project.id)}
                                 className="bg-red-600 hover:bg-red-700"
                               >
-                                {t('settings.deleteProjectButton')}
+                                {t('projects.deleteProjectButton')}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
@@ -710,14 +710,14 @@ export default function SettingsPage() {
       <Dialog open={isEditProjectDialogOpen} onOpenChange={setIsEditProjectDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('settings.editProject')}</DialogTitle>
+            <DialogTitle>{t('projects.editProject')}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleEditProject} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="edit-project-name">{t('projects.projectName')}</Label>
               <Input
                 id="edit-project-name"
-                placeholder={t('settings.enterProjectName')}
+                placeholder={t('projects.enterProjectName')}
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 disabled={projectActionLoading}
@@ -728,7 +728,7 @@ export default function SettingsPage() {
               <Label htmlFor="edit-project-description">{t('projects.descriptionOptional')}</Label>
               <Input
                 id="edit-project-description"
-                placeholder={t('settings.enterProjectDescription')}
+                placeholder={t('projects.enterProjectDescription')}
                 value={projectDescription}
                 onChange={(e) => setProjectDescription(e.target.value)}
                 disabled={projectActionLoading}
@@ -738,7 +738,7 @@ export default function SettingsPage() {
               <Label htmlFor="edit-project-color">{t('projects.color')}</Label>
               <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
                 <SelectTrigger>
-                  <SelectValue placeholder={t('settings.selectColor')} />
+                  <SelectValue placeholder={t('projects.selectColor')} />
                 </SelectTrigger>
                 <SelectContent>
                   {(() => {
@@ -771,7 +771,7 @@ export default function SettingsPage() {
                 {t('common.cancel')}
               </Button>
               <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                {projectActionLoading ? t('settings.updating') : t('settings.updateProject')}
+                {projectActionLoading ? t('projects.updating') : t('projects.updateProject')}
               </Button>
             </div>
           </form>

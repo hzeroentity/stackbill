@@ -47,8 +47,6 @@
     "averagePerService": "Average per subscription",
     "mostExpensive": "Most expensive",
     "leastExpensive": "Least expensive",
-    "edit": "Edit",
-    "delete": "Delete",
     "proPlanService": "Pro Plan Subscription"
   },
   "subscriptions": {
@@ -111,7 +109,6 @@
   },
   "billing": {
     "title": "Billing & Plans",
-    "currentSubscription": "Current Subscription",
     "manageBilling": "Manage Billing",
     "plan": "Plan",
     "status": "Status",
@@ -220,7 +217,6 @@
     "projectManagement": "Project Management",
     "projectDescription": "Create and manage projects to organize your subscriptions",
     "freePlanProjectLimit": "Free plan: up to 2 projects",
-    "upgradePro": "Upgrade to Pro for up to 10 projects",
     "upgradeProProjectsMsg": "Upgrade to Pro for up to 10 projects",
     "addProject": "Add Project",
     "projectLimitReached": "You've reached the free plan limit (2 projects). Upgrade to Pro for up to 10 projects",
@@ -289,21 +285,7 @@
     "deleteAccountSuccess": "Account deleted successfully. Goodbye!",
     "deleteAccountFailed": "Failed to delete account",
     "deleteAccountConfirmationError": "Please type \"delete my account\" to confirm",
-    "none": "None",
-    "upgradeProProjectsMsg": "Upgrade to Pro for up to 10 projects",
-    "youveReachedLimit": "You've reached the limit",
-    "upgradeToProForProjects": "Upgrade to Pro for more projects",
-    "edit": "Edit",
-    "delete": "Delete",
-    "updateProject": "Update Project",
-    "editProject": "Edit Project",
-    "deleteProject": "Delete Project",
-    "deleteProjectConfirm": "Are you sure you want to delete this project? All subscriptions in this project will be moved to General.",
-    "deleteProjectButton": "Delete Project",
-    "createNewProject": "Create New Project",
-    "enterProjectName": "Enter project name",
-    "enterProjectDescription": "Enter project description",
-    "createProject": "Create Project"
+    "none": "None"
   },
   "landing": {
     "hero": {

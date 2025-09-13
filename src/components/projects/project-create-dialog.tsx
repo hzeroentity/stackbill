@@ -73,23 +73,23 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
     e.preventDefault()
     
     if (!projectName.trim()) {
-      setError(t('projectDialog.nameRequired'))
+      setError(t('projects.projectNameRequired'))
       return
     }
 
     if (!canAddProject(existingProjectCount, userPlan)) {
       const limit = getProjectLimit(userPlan)
-      setError(t('projectDialog.maxProjectsReached', { limit, plan: userPlan }))
+      setError(t('projects.maxProjectsReached', { limit, plan: userPlan }))
       return
     }
 
     if (availableColors.length === 0) {
-      setError(t('projectDialog.noAvailableColors'))
+      setError(t('projects.noAvailableColors'))
       return
     }
 
     if (!user?.id) {
-      setError(t('projectDialog.userNotAuthenticated'))
+      setError(t('projects.userNotAuthenticated'))
       return
     }
 
@@ -130,14 +130,14 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t('projectDialog.createTitle')}</DialogTitle>
+          <DialogTitle>{t('projects.createNewProject')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="project-name">{t('projectDialog.projectName')}</Label>
+            <Label htmlFor="project-name">{t('projects.projectName')}</Label>
             <Input
               id="project-name"
-              placeholder={t('projectDialog.enterProjectName')}
+              placeholder={t('projects.enterProjectName')}
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               disabled={loading}
@@ -146,10 +146,10 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="project-description">{t('projectDialog.descriptionOptional')}</Label>
+            <Label htmlFor="project-description">{t('projects.descriptionOptional')}</Label>
             <Input
               id="project-description"
-              placeholder={t('projectDialog.enterProjectDescription')}
+              placeholder={t('projects.enterProjectDescription')}
               value={projectDescription}
               onChange={(e) => setProjectDescription(e.target.value)}
               disabled={loading}
@@ -157,10 +157,10 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="project-color">{t('projectDialog.color')}</Label>
+            <Label htmlFor="project-color">{t('projects.color')}</Label>
             <Select value={projectColor} onValueChange={setProjectColor} disabled={loading}>
               <SelectTrigger>
-                <SelectValue placeholder={t('projectDialog.selectColor')} />
+                <SelectValue placeholder={t('projects.selectColor')} />
               </SelectTrigger>
               <SelectContent>
                 {availableColors.length > 0 ? availableColors.map((color) => (
@@ -175,7 +175,7 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
                   </SelectItem>
                 )) : (
                   <SelectItem value="no-colors" disabled>
-                    <span className="text-muted-foreground">{t('projectDialog.allColorsInUse')}</span>
+                    <span className="text-muted-foreground">{t('projects.allColorsInUse')}</span>
                   </SelectItem>
                 )}
               </SelectContent>
@@ -198,7 +198,7 @@ export function ProjectCreateDialog({ open, onOpenChange, onProjectCreated, exis
               {t('common.cancel')}
             </Button>
             <Button type="submit" disabled={loading || !projectName.trim()}>
-              {loading ? t('projectDialog.creating') : t('projectDialog.createProject')}
+              {loading ? t('projects.creating') : t('projects.createProject')}
             </Button>
           </div>
         </form>

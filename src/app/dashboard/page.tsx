@@ -745,7 +745,7 @@ export default function DashboardPage() {
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add New Subscription</DialogTitle>
+                  <DialogTitle>{t('subscriptions.addNewSubscription')}</DialogTitle>
                 </DialogHeader>
                 <SubscriptionForm 
                   onSuccess={handleAddSuccess}
@@ -1138,7 +1138,7 @@ export default function DashboardPage() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Subscription</DialogTitle>
+            <DialogTitle>{t('subscriptions.editSubscription')}</DialogTitle>
           </DialogHeader>
           {editingSubscription && (
             <SubscriptionForm 

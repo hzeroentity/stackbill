@@ -8,6 +8,7 @@ import { X, HelpCircle } from 'lucide-react'
 import { Tables } from '@/lib/database.types'
 import { ProjectsService, GENERAL_PROJECT_ID } from '@/lib/projects'
 import { useAuth } from '@/contexts/auth-context'
+import { useLanguage } from '@/contexts/language-context'
 
 interface ProjectMultiSelectorProps {
   value: string[]
@@ -20,6 +21,7 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
   const [loading, setLoading] = useState(true)
   const [selectValue, setSelectValue] = useState<string>('') // Control the select state
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (!user?.id) return
@@ -60,12 +62,12 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-1">
-        <label className="text-sm font-medium">Projects</label>
+        <label className="text-sm font-medium">{t('projects.projects')}</label>
         <div className="group relative">
           <HelpCircle className="w-3 h-3 text-muted-foreground cursor-help" />
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-            Create new projects in the dashboard using the &quot;+ Project&quot; button
-            <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900"></div>
+          <div className="absolute bottom-full left-0 mb-1 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+            {t('projects.createProjectTooltip')}
+            <div className="absolute top-full left-4 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900"></div>
           </div>
         </div>
       </div>
@@ -77,7 +79,7 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
           {isGeneralSelected && (
             <Badge key={GENERAL_PROJECT_ID} variant="secondary" className="flex items-center gap-1">
               <div className="w-2 h-2 rounded-full bg-gray-500" />
-              General
+              {t('projects.general')}
               <Button
                 variant="ghost"
                 size="sm"
@@ -119,7 +121,7 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
         disabled={disabled || loading}
       >
         <SelectTrigger className="w-fit min-w-[140px]">
-          <SelectValue placeholder="Add a project..." />
+          <SelectValue placeholder={t('projects.addProject')} />
         </SelectTrigger>
         <SelectContent>
           {/* Show General if available */}
@@ -127,7 +129,7 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
             <SelectItem key={GENERAL_PROJECT_ID} value={GENERAL_PROJECT_ID}>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-gray-500" />
-                General
+                {t('projects.general')}
               </div>
             </SelectItem>
           )}
@@ -147,7 +149,7 @@ export function ProjectMultiSelector({ value, onChange, disabled }: ProjectMulti
           {availableProjects.length === 0 && !isGeneralAvailable && (
             <SelectItem value="no-projects" disabled>
               <span className="text-muted-foreground">
-                All projects selected
+                {t('projects.allProjectsSelected')}
               </span>
             </SelectItem>
           )}
