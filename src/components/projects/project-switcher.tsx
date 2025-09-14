@@ -79,51 +79,36 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
   const showCreateButton = isPro || canCreateMoreProjects
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 justify-end max-w-full overflow-hidden">
       <Select
         value={selectedProject}
         onValueChange={onProjectChange}
         disabled={loading}
       >
-        <SelectTrigger className="min-w-fit max-w-48">
+        <SelectTrigger className="min-w-0 w-auto max-w-[200px]">
           <SelectValue placeholder={t('projects.selectProject')} />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={ALL_PROJECTS_ID}>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
-                {t('projects.allProjects')}
-              </div>
-              <span className="text-xs text-muted-foreground ml-2">
-                {getProjectCount(ALL_PROJECTS_ID)} {t('projects.subs')}
-              </span>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
+              {t('projects.allProjects')}
             </div>
           </SelectItem>
           <SelectItem value={GENERAL_PROJECT_ID}>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-gray-500" />
-                {t('projects.general')}
-              </div>
-              <span className="text-xs text-muted-foreground ml-2">
-                {getProjectCount(GENERAL_PROJECT_ID)} {t('projects.subs')}
-              </span>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gray-500" />
+              {t('projects.general')}
             </div>
           </SelectItem>
           {projects.map((project) => (
             <SelectItem key={project.id} value={project.id}>
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-full" 
-                    style={{ backgroundColor: project.color || '#3B82F6' }}
-                  />
-                  {project.name}
-                </div>
-                <span className="text-xs text-muted-foreground ml-2">
-                  {getProjectCount(project.id)} {t('projects.subs')}
-                </span>
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: project.color || '#3B82F6' }}
+                />
+                {project.name}
               </div>
             </SelectItem>
           ))}
@@ -136,16 +121,18 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
             variant="outline"
             size="sm"
             onClick={() => setIsCreateDialogOpen(true)}
-            className="h-9 px-2"
+            className="h-9 px-3 flex-shrink-0"
+            title={t('projects.project')}
           >
-            <Plus className="w-4 h-4 mr-1" />
-            <span className="hidden sm:inline">{t('projects.project')}</span>
+            <Plus className="w-4 h-4 lg:mr-1" />
+            <span className="hidden lg:inline text-sm">{t('projects.project')}</span>
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => router.push('/dashboard/settings#projects')}
-            className="h-9 px-2"
+            className="h-9 px-3 flex-shrink-0"
+            title="Settings"
           >
             <Settings className="w-4 h-4" />
           </Button>
@@ -155,10 +142,11 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
           variant="outline"
           size="sm"
           onClick={handleUpgradeClick}
-          className="h-9 px-2"
+          className="h-9 px-3 flex-shrink-0 max-w-[140px]"
+          title={t('projects.upgradeForMoreProjects')}
         >
-          <Lock className="w-4 h-4 mr-1" />
-          <span className="hidden sm:inline">{t('projects.upgradeForMoreProjects')}</span>
+          <Lock className="w-4 h-4 lg:mr-1" />
+          <span className="hidden lg:inline text-sm truncate">{t('projects.upgradeForMoreProjects')}</span>
         </Button>
       )}
       

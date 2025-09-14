@@ -12,6 +12,7 @@ import { LandingHeaderButtons } from "@/components/landing-header-buttons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useLanguage } from "@/contexts/language-context"
 
 function NotifyMeButton() {
   const [showEmailInput, setShowEmailInput] = useState(false)
@@ -111,6 +112,7 @@ function NotifyMeButton() {
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { t } = useLanguage()
 
   const closeMenu = () => {
     setIsMenuOpen(false)
@@ -150,22 +152,22 @@ export default function Home() {
                     <div className="space-y-2">
                       <a href="#how-it-works" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          How It Works
+                          {t('landing.hero.howItWorks')}
                         </Button>
                       </a>
                       <a href="#features" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          Features
+                          {t('landing.features.title')}
                         </Button>
                       </a>
                       <a href="#pricing" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          Pricing
+                          {t('landing.pricing.title')}
                         </Button>
                       </a>
                       <a href="#testimonials" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          Testimonials
+                          {t('landing.testimonials.title')}
                         </Button>
                       </a>
                     </div>
@@ -177,12 +179,12 @@ export default function Home() {
                     <div className="space-y-3">
                       <Link href="/login" onClick={closeMenu} className="block">
                         <Button variant="outline" className="w-full justify-center">
-                          Log In
+                          {t('auth.signIn')}
                         </Button>
                       </Link>
                       <Link href="/login?mode=signup" onClick={closeMenu} className="block">
                         <Button className="w-full justify-center">
-                          Start Free
+                          {t('landing.hero.cta')}
                         </Button>
                       </Link>
                     </div>
@@ -216,27 +218,29 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-6 text-center">
           <div className="mb-6">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800">
-              <span className="text-blue-700 dark:text-blue-300 text-sm font-medium">
-                ✨ Just Launched - Early Access
-              </span>
-            </div>
+            <a href="#pricing" className="inline-block">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-pointer">
+                <span className="text-blue-700 dark:text-blue-300 text-sm font-medium">
+                  ✨ Just Launched - Early Access
+                </span>
+              </div>
+            </a>
           </div>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
 Stop surprise charges. <br /><span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Track your stack in seconds.</span>
           </h1>
           <p className="text-xl lg:text-2xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto">
-Track every subscription in one clean dashboard with reminders, reports, and real-time currency conversion.
+            {t('landing.hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="/login?mode=signup">
               <Button size="lg" className="text-lg px-8 py-4">
-Start Free
+                {t('landing.hero.cta')}
               </Button>
             </Link>
             <Link href="#how-it-works">
               <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-See How It Works
+                {t('landing.hero.howItWorks')}
               </Button>
             </Link>
           </div>
@@ -306,10 +310,10 @@ See How It Works
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              How It Works
+              {t('landing.howItWorks.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
-              Simple, visual tracking in 3 steps
+              {t('landing.howItWorks.subtitle')}
             </p>
           </div>
           
@@ -398,10 +402,10 @@ Group subscriptions per project for granular cost tracking and team insights.
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              Spreadsheets don&apos;t send reminders.
+              {t('landing.problems.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
-              StackBill gives you clarity, control, and reminders in one clean dashboard.
+              {t('landing.problems.subtitle')}
             </p>
           </div>
           
@@ -409,7 +413,7 @@ Group subscriptions per project for granular cost tracking and team insights.
             {/* Problems Column */}
             <div>
               <h3 className="text-2xl font-bold mb-8 text-slate-900 dark:text-white text-center">
-                Without StackBill
+                {t('landing.problems.withoutStackbill')}
               </h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
@@ -418,10 +422,10 @@ Group subscriptions per project for granular cost tracking and team insights.
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Surprise charges
+                      {t('landing.problems.surpriseCharges.title')}
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Surprise charges when a $39 tool renews you forgot about.
+                      {t('landing.problems.surpriseCharges.description')}
                     </p>
                   </div>
                 </div>
@@ -432,10 +436,10 @@ Group subscriptions per project for granular cost tracking and team insights.
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Double payments
+                      {t('landing.problems.doublePayments.title')}
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Double payments because two tools overlap.
+                      {t('landing.problems.doublePayments.description')}
                     </p>
                   </div>
                 </div>
@@ -446,10 +450,10 @@ Group subscriptions per project for granular cost tracking and team insights.
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      No spending visibility
+                      {t('landing.problems.noVisibility.title')}
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      No idea how much you&apos;re actually spending.
+                      {t('landing.problems.noVisibility.description')}
                     </p>
                   </div>
                 </div>
@@ -459,7 +463,7 @@ Group subscriptions per project for granular cost tracking and team insights.
             {/* Solutions Column */}
             <div>
               <h3 className="text-2xl font-bold mb-8 text-slate-900 dark:text-white text-center">
-                With StackBill
+                {t('landing.problems.withStackbill')}
               </h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
@@ -468,10 +472,10 @@ Group subscriptions per project for granular cost tracking and team insights.
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Email alerts before every renewal
+                      {t('landing.problems.neverMiss.title')}
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Email alerts before every renewal.
+                      {t('landing.problems.neverMiss.description')}
                     </p>
                   </div>
                 </div>
@@ -482,10 +486,10 @@ Group subscriptions per project for granular cost tracking and team insights.
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Monthly + yearly spending at a glance
+                      {t('landing.problems.completeOverview.title')}
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Monthly + yearly spending at a glance.
+                      {t('landing.problems.completeOverview.description')}
                     </p>
                   </div>
                 </div>
@@ -496,10 +500,10 @@ Group subscriptions per project for granular cost tracking and team insights.
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                      Clear project-level insights and category breakdowns
+                      {t('landing.problems.clearInsights.title')}
                     </h4>
                     <p className="text-slate-600 dark:text-slate-400">
-                      Clear project-level insights and category breakdowns.
+                      {t('landing.problems.clearInsights.description')}
                     </p>
                   </div>
                 </div>
@@ -514,7 +518,7 @@ Group subscriptions per project for granular cost tracking and team insights.
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              Everything you need. Nothing you don&apos;t.
+              {t('landing.features.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
               Complete subscription management with all the features you actually need.
@@ -527,11 +531,11 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
                   <CreditCard className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Track monthly & yearly spend</CardTitle>
+                <CardTitle className="text-xl dark:text-white">{t('landing.features.monthlyYearly.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Know exactly how much your stack costs over time.
+                  {t('landing.features.monthlyYearly.description')}
                 </p>
               </CardContent>
             </Card>
@@ -541,11 +545,11 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
                   <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Auto currency conversion</CardTitle>
+                <CardTitle className="text-xl dark:text-white">{t('landing.features.currencyConversion.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  10+ currencies supported with live FX rates.
+                  {t('landing.features.currencyConversion.description')}
                 </p>
               </CardContent>
             </Card>
@@ -556,11 +560,11 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
                   <Mail className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Email renewal reminders</CardTitle>
+                <CardTitle className="text-xl dark:text-white">{t('landing.features.emailReminders.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Never get surprised by a charge again.
+                  {t('landing.features.emailReminders.description')}
                 </p>
               </CardContent>
             </Card>
@@ -571,11 +575,11 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-4">
                   <Calendar className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Monthly spending reports</CardTitle>
+                <CardTitle className="text-xl dark:text-white">{t('landing.features.monthlyReports.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Recap your costs + trends, every month.
+                  {t('landing.features.monthlyReports.description')}
                 </p>
               </CardContent>
             </Card>
@@ -585,11 +589,11 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-4">
                   <Folder className="w-6 h-6 text-red-600 dark:text-red-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Smart categorization</CardTitle>
+                <CardTitle className="text-xl dark:text-white">{t('landing.features.categories.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Group tools by type: infra, analytics, AI, etc.
+                  {t('landing.features.categories.description')}
                 </p>
               </CardContent>
             </Card>
@@ -617,10 +621,10 @@ Group subscriptions per project for granular cost tracking and team insights.
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              Simple, transparent pricing
+              {t('landing.pricing.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
-              Start free, upgrade when you&apos;re ready
+              {t('landing.pricing.subtitle')}
             </p>
             <div className="mt-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg px-4 py-2 inline-block">
               <p className="text-blue-700 dark:text-blue-300 text-sm font-medium">
@@ -633,22 +637,22 @@ Group subscriptions per project for granular cost tracking and team insights.
             {/* Free Plan */}
             <Card className="border-2 shadow-lg dark:bg-gray-800 dark:border-gray-700">
               <CardHeader className="text-center pb-8">
-                <CardTitle className="text-2xl mb-2 dark:text-white">Free</CardTitle>
+                <CardTitle className="text-2xl mb-2 dark:text-white">{t('plans.free.name')}</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">$0</div>
-                <p className="text-slate-600 dark:text-slate-300">Perfect to start</p>
+                <p className="text-slate-600 dark:text-slate-300">{t('plans.free.description')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Track up to 5 subscriptions</span>
+                  <span className="dark:text-slate-300">{t('plans.free.features.trackSubscriptions', { limit: 5 })}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Monthly spending report</span>
+                  <span className="dark:text-slate-300">{t('plans.free.features.monthlyYearlyOverview')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Renewal date tracking</span>
+                  <span className="dark:text-slate-300">{t('plans.free.features.basicRenewalTracking')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -656,7 +660,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">2 projects for organization</span>
+                  <span className="dark:text-slate-300">{t('plans.free.features.organizeProjects', { limit: 2 })}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -669,7 +673,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="pt-6">
                   <Link href="/login?mode=signup" className="w-full block">
                     <Button variant="outline" className="w-full dark:border-slate-600 dark:text-white dark:hover:bg-slate-700">
-                      Get Started Free
+                      {t('billing.getStartedFree')}
                     </Button>
                   </Link>
                 </div>
@@ -682,7 +686,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <Badge className="bg-blue-600 text-white px-4 py-1 hover:bg-blue-600">Limited Time</Badge>
               </div>
               <CardHeader className="text-center pb-8">
-                <CardTitle className="text-2xl mb-2 dark:text-white">Pro</CardTitle>
+                <CardTitle className="text-2xl mb-2 dark:text-white">{t('plans.pro.name')}</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">
                   <span className="text-2xl line-through text-slate-400 mr-2">$6</span>$4
                 </div>
@@ -695,15 +699,15 @@ Group subscriptions per project for granular cost tracking and team insights.
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Track up to 30 subscriptions</span>
+                  <span className="dark:text-slate-300">{t('plans.pro.features.trackSubscriptions', { limit: 30 })}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">10 projects for organization</span>
+                  <span className="dark:text-slate-300">{t('plans.pro.features.organizeProjects', { limit: 10 })}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Email renewal reminders (7 day alerts)</span>
+                  <span className="dark:text-slate-300">{t('plans.pro.features.emailReminders')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -711,7 +715,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Priority support</span>
+                  <span className="dark:text-slate-300">{t('plans.pro.features.prioritySupport')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -733,22 +737,22 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <Badge className="bg-purple-600 text-white px-4 py-1 hover:bg-purple-600">Coming Soon</Badge>
               </div>
               <CardHeader className="text-center pb-8">
-                <CardTitle className="text-2xl mb-2 dark:text-white">Team</CardTitle>
+                <CardTitle className="text-2xl mb-2 dark:text-white">{t('billing.teamPlan')}</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">$10</div>
-                <p className="text-slate-600 dark:text-slate-300">per month • Scale with your team</p>
+                <p className="text-slate-600 dark:text-slate-300">per month • {t('billing.teamPlanDescription')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">All Pro plan features included</span>
+                  <span className="dark:text-slate-300">{t('billing.allProFeaturesIncluded')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Up to 5 team members</span>
+                  <span className="dark:text-slate-300">{t('billing.upToTeamMembers')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Unlimited subscriptions & projects</span>
+                  <span className="dark:text-slate-300">{t('billing.unlimitedSubscriptions')} & {t('billing.unlimitedProjects')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -760,11 +764,11 @@ Group subscriptions per project for granular cost tracking and team insights.
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Advanced reporting & analytics</span>
+                  <span className="dark:text-slate-300">{t('billing.advancedAnalytics')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Priority team support</span>
+                  <span className="dark:text-slate-300">{t('billing.prioritySupport')}</span>
                 </div>
                 <div className="pt-6" id="team-plan-notify">
                   <NotifyMeButton />
@@ -807,15 +811,15 @@ Group subscriptions per project for granular cost tracking and team insights.
               {/* Testimonial 1 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Way better than my messy Notion table. Love the reminders.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.0.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                     M
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@michaelchen</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">Full-stack Developer</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.0.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.0.role')}</div>
                   </div>
                 </div>
               </div>
@@ -823,15 +827,15 @@ Group subscriptions per project for granular cost tracking and team insights.
               {/* Testimonial 2 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Finally stopped getting surprise $99 charges. Totally worth it.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.1.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
                     S
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@sarah_kim</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">SaaS Founder</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.1.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.1.role')}</div>
                   </div>
                 </div>
               </div>
@@ -839,15 +843,15 @@ Group subscriptions per project for granular cost tracking and team insights.
               {/* Testimonial 3 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Simple, clean interface. Exactly what I needed to track my dev tools.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.2.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
                     A
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@alex_rodriguez</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">Indie Hacker</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.2.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.2.role')}</div>
                   </div>
                 </div>
               </div>
@@ -855,15 +859,15 @@ Group subscriptions per project for granular cost tracking and team insights.
               {/* Testimonial 4 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;The FX conversion is perfect for my international stack.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.3.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
                     L
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@lucas_weber</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">Tech Lead</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.3.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.3.role')}</div>
                   </div>
                 </div>
               </div>
@@ -871,15 +875,15 @@ Group subscriptions per project for granular cost tracking and team insights.
               {/* Testimonial 5 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Saved me $200+ this month by catching unused subscriptions!&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.4.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
                     R
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@rachel_tech</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">Frontend Developer</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.4.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.4.role')}</div>
                   </div>
                 </div>
               </div>
@@ -887,15 +891,15 @@ Group subscriptions per project for granular cost tracking and team insights.
               {/* Testimonial 6 */}
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Clean design, no bloat. Just tracks what I need to know.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.5.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
                     J
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@jake_martinez</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">DevOps Engineer</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.5.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.5.role')}</div>
                   </div>
                 </div>
               </div>
@@ -933,60 +937,60 @@ Group subscriptions per project for granular cost tracking and team insights.
 
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Simple, clean interface. Exactly what I needed to track my dev tools.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.2.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
                     A
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@alex_rodriguez</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">Indie Hacker</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.2.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.2.role')}</div>
                   </div>
                 </div>
               </div>
 
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;The FX conversion is perfect for my international stack.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.3.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
                     L
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@lucas_weber</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">Tech Lead</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.3.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.3.role')}</div>
                   </div>
                 </div>
               </div>
 
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Saved me $200+ this month by catching unused subscriptions!&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.4.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
                     R
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@rachel_tech</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">Frontend Developer</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.4.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.4.role')}</div>
                   </div>
                 </div>
               </div>
 
               <div className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
                 <blockquote className="text-lg text-slate-700 dark:text-slate-300 mb-4 italic">
-                  &ldquo;Clean design, no bloat. Just tracks what I need to know.&rdquo;
+                  &ldquo;{t('landing.testimonials.reviews.5.quote')}&rdquo;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
                     J
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-slate-900 dark:text-white text-sm">@jake_martinez</div>
-                    <div className="text-slate-500 dark:text-slate-400 text-xs">DevOps Engineer</div>
+                    <div className="font-semibold text-slate-900 dark:text-white text-sm">{t('landing.testimonials.reviews.5.author')}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs">{t('landing.testimonials.reviews.5.role')}</div>
                   </div>
                 </div>
               </div>
@@ -999,14 +1003,14 @@ Group subscriptions per project for granular cost tracking and team insights.
       <section className="py-20 bg-blue-600 dark:bg-blue-700">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-            Stop paying for tools you forgot about.
+            {t('landing.finalCta.title')}
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Start tracking your stack in 60 seconds.
+            {t('landing.finalCta.subtitle')}
           </p>
           <Link href="/login?mode=signup">
             <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
-              Start Free
+              {t('landing.finalCta.button')}
             </Button>
           </Link>
         </div>
@@ -1026,18 +1030,18 @@ Group subscriptions per project for granular cost tracking and team insights.
               />
               <span className="text-xl font-bold text-white">StackBill</span>
             </div>
-            <p className="mb-6">Built by developers, for developers. Simple SaaS cost tracking made right.</p>
+            <p className="mb-6">{t('landing.footer.tagline')}</p>
             <div className="flex justify-center space-x-6 text-sm">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Support</a>
+              <a href="#" className="hover:text-white transition-colors">{t('landing.footer.privacy')}</a>
+              <a href="#" className="hover:text-white transition-colors">{t('landing.footer.terms')}</a>
+              <a href="#" className="hover:text-white transition-colors">{t('landing.footer.support')}</a>
             </div>
             <div className="mt-6 flex justify-center">
               <LanguageSwitcher />
             </div>
             <div className="mt-6 pt-6 border-t border-slate-800">
               <p className="text-sm text-slate-500">
-                © {new Date().getFullYear()} StackBill. All rights reserved.
+                {t('landing.footer.copyright', { year: new Date().getFullYear() })}
               </p>
             </div>
           </div>

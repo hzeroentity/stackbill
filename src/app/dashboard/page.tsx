@@ -505,15 +505,15 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto p-4 sm:p-6 pt-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 flex-wrap">
           <h1 className="text-2xl sm:text-3xl font-bold">{t('dashboard.title')}</h1>
           {userSubscription && (
-            <Badge 
+            <Badge
               variant={userSubscription.plan_type === 'pro' ? 'default' : 'secondary'}
               className={
-                userSubscription.plan_type === 'pro' 
-                  ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+                userSubscription.plan_type === 'pro'
+                  ? 'bg-purple-600 hover:bg-purple-700 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
               }
             >
@@ -527,16 +527,18 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-        
+
         {/* Project Switcher */}
-        <ProjectSwitcher
-          selectedProject={selectedProject}
-          onProjectChange={handleProjectChange}
-          isPro={userSubscription?.plan_type === 'pro'}
-          subscriptionCounts={subscriptionCounts}
-          totalActiveSubscriptions={totalActiveSubscriptions.length}
-          userPlan={(userSubscription?.plan_type || 'free') as 'free' | 'pro'}
-        />
+        <div className="flex-shrink min-w-0 max-w-full overflow-hidden">
+          <ProjectSwitcher
+            selectedProject={selectedProject}
+            onProjectChange={handleProjectChange}
+            isPro={userSubscription?.plan_type === 'pro'}
+            subscriptionCounts={subscriptionCounts}
+            totalActiveSubscriptions={totalActiveSubscriptions.length}
+            userPlan={(userSubscription?.plan_type || 'free') as 'free' | 'pro'}
+          />
+        </div>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
