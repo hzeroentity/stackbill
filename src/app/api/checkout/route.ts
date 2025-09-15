@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       try {
         customer = await stripe.customers.retrieve(existingSubscription.stripe_customer_id)
       } catch (customerError) {
-        console.warn('Checkout API - Customer not found, creating new one:', customerError.message)
+        console.warn('Checkout API - Customer not found, creating new one:', customerError instanceof Error ? customerError.message : String(customerError))
         customer = await stripe.customers.create({
           metadata: {
             userId: userId
