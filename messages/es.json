@@ -414,7 +414,7 @@
     "newEmail": "Nuevo Correo",
     "newPassword": "Nueva Contraseña",
     "confirmNewPassword": "Confirmar Nueva Contraseña",
-    "changingEmail": "Cambiando correo...",
+    "changingEmail": "Cambiando correo..",
     "changingPassword": "Cambiando contraseña...",
     "emailChanged": "Correo cambiado exitosamente",
     "passwordChanged": "Contraseña cambiada exitosamente",
