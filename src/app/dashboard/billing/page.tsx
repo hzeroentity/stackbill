@@ -19,6 +19,8 @@ import { getStripe } from '@/lib/stripe'
 import { useAuth } from '@/contexts/auth-context'
 import { Tables } from '@/lib/database.types'
 import { useLanguage } from '@/contexts/language-context'
+import { getDefaultCurrency, getCurrencySymbol, Currency } from '@/lib/currency-preferences'
+import { ExchangeRateService } from '@/lib/exchange-rates'
 
 export default function BillingPage() {
   const [userSubscription, setUserSubscription] = useState<Tables<'user_subscriptions'> | null>(null)
@@ -28,6 +30,12 @@ export default function BillingPage() {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isTeamNotifyModalOpen, setIsTeamNotifyModalOpen] = useState(false)
   const [openingPortal, setOpeningPortal] = useState(false)
+  const [userCurrency, setUserCurrency] = useState<Currency>('USD')
+  const [convertedPrices, setConvertedPrices] = useState<{ free: string; pro: string; team: string }>({
+    free: '$0',
+    pro: '$4',
+    team: '$12'
+  })
   const { user } = useAuth()
   const { t } = useLanguage()
 
@@ -67,6 +75,51 @@ export default function BillingPage() {
       loadUserSubscription()
     }
   }, [user])
+
+  useEffect(() => {
+    const loadCurrencyAndPrices = async () => {
+      const currency = getDefaultCurrency()
+      setUserCurrency(currency)
+      
+      if (currency === 'USD') {
+        setConvertedPrices({
+          free: '$0',
+          pro: '$4',
+          team: '$12'
+        })
+        return
+      }
+
+      try {
+        // Convert prices with smart rounding
+        const proConverted = await ExchangeRateService.convertAmount(4, 'USD', currency)
+        const teamConverted = await ExchangeRateService.convertAmount(12, 'USD', currency)
+        
+        const symbol = getCurrencySymbol(currency)
+        
+        // Smart rounding: round up to next 0.50 increment
+        const roundToFifty = (amount: number) => {
+          return Math.ceil(amount * 2) / 2
+        }
+        
+        setConvertedPrices({
+          free: `${symbol}0`,
+          pro: `${symbol}${roundToFifty(proConverted).toFixed(2)}`,
+          team: `${symbol}${roundToFifty(teamConverted).toFixed(2)}`
+        })
+      } catch (error) {
+        console.error('Error converting currency:', error)
+        // Fallback to USD
+        setConvertedPrices({
+          free: '$0',
+          pro: '$4',
+          team: '$12'
+        })
+      }
+    }
+
+    loadCurrencyAndPrices()
+  }, [])
 
   const handleUpgrade = async (planId: 'free' | 'pro') => {
     if (planId === 'free') return
@@ -168,7 +221,7 @@ export default function BillingPage() {
       {/* Current Plan Status */}
       {currentPlan === 'pro' && (
         <Card className="mb-8 bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800">
-          <CardContent className="pt-6">
+          <CardContent className="py-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-semibold text-green-800 dark:text-green-200">
@@ -237,11 +290,9 @@ export default function BillingPage() {
                 <CardDescription>{plan.description}</CardDescription>
                 <div className="py-4">
                   <span className="text-4xl font-bold">
-                    {plan.id === 'free' ? t('billing.getStartedFree') : `€${plan.price}`}
+                    {plan.id === 'free' ? convertedPrices.free : plan.id === 'pro' ? convertedPrices.pro : convertedPrices.team}
                   </span>
-                  {plan.id !== 'free' && (
-                    <span className="text-muted-foreground">{t('billing.perMonth')}</span>
-                  )}
+                  <span className="text-muted-foreground">{t('billing.perMonth')}</span>
                 </div>
               </CardHeader>
 
@@ -263,15 +314,17 @@ export default function BillingPage() {
                   }`}
                   variant={isCurrentPlan ? "secondary" : plan.id === 'pro' && !isCurrentPlan ? "default" : "outline"}
                   disabled={isCurrentPlan || upgrading}
-                  onClick={() => handleUpgrade(plan.id)}
+                  onClick={plan.id === 'free' && currentPlan === 'pro' ? handleBillingPortal : () => handleUpgrade(plan.id)}
                 >
                   {isCurrentPlan 
                     ? t('billing.currentPlan') 
                     : upgrading 
                       ? t('dashboard.processing') 
-                      : plan.id === 'free' 
-                        ? t('billing.getStartedFree') 
-                        : t('billing.upgradeToProCta')
+                      : plan.id === 'free' && currentPlan === 'pro'
+                        ? t('billing.downgrade')
+                        : plan.id === 'free' 
+                          ? t('billing.getStartedFree') 
+                          : t('billing.upgradeToProCta')
                   }
                 </Button>
               </CardContent>
@@ -291,7 +344,7 @@ export default function BillingPage() {
             <CardTitle className="text-2xl">{t('billing.teamPlan')}</CardTitle>
             <CardDescription>{t('billing.teamPlanDescription')}</CardDescription>
             <div className="py-4">
-              <span className="text-4xl font-bold">€12</span>
+              <span className="text-4xl font-bold">{convertedPrices.team}</span>
               <span className="text-muted-foreground">{t('billing.perMonth')}</span>
             </div>
           </CardHeader>
