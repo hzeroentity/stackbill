@@ -547,7 +547,7 @@ export default function SettingsPage() {
                         {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
                       </Button>
                     </DialogTrigger>
-                <DialogContent>
+                    <DialogContent>
                   <DialogHeader>
                     <DialogTitle>{t('projects.createNewProject')}</DialogTitle>
                   </DialogHeader>
@@ -621,91 +621,21 @@ export default function SettingsPage() {
               </div>
               {/* Button on mobile - separate row */}
               <div className="sm:hidden">
-                <Dialog open={isCreateProjectDialogOpen} onOpenChange={setIsCreateProjectDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      size="sm" 
-                      onClick={resetProjectForm}
-                      disabled={!isPro && projects.length >= 2}
-                      className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      {t('settings.addMobile')}
-                      {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>{t('projects.createNewProject')}</DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={handleCreateProject} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="project-name-mobile">{t('projects.projectName')}</Label>
-                        <Input
-                          id="project-name-mobile"
-                          placeholder={t('projects.enterProjectName')}
-                          value={projectName}
-                          onChange={(e) => setProjectName(e.target.value)}
-                          disabled={projectActionLoading}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="project-description-mobile">{t('projects.descriptionOptional')}</Label>
-                        <Input
-                          id="project-description-mobile"
-                          placeholder={t('projects.enterProjectDescription')}
-                          value={projectDescription}
-                          onChange={(e) => setProjectDescription(e.target.value)}
-                          disabled={projectActionLoading}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="project-color-mobile">{t('projects.color')}</Label>
-                        <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t('projects.selectColor')} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {(() => {
-                              const usedColors = projects.map(p => p.color)
-                              const availableColors = PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
-                              return availableColors.length > 0 ? availableColors.map((color) => (
-                                <SelectItem key={color.value} value={color.value}>
-                                  <div className="flex items-center gap-3">
-                                    <div 
-                                      className="w-4 h-4 rounded-full border border-gray-300"
-                                      style={{ backgroundColor: color.value }}
-                                    />
-                                    <span>{t(`colors.${color.nameKey}`)}</span>
-                                  </div>
-                                </SelectItem>
-                              )) : (
-                                <SelectItem value="no-colors" disabled>
-                                  <span className="text-muted-foreground">{t('projects.allColorsInUse')}</span>
-                                </SelectItem>
-                              )
-                            })()} 
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="flex justify-end space-x-2">
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          onClick={() => setIsCreateProjectDialogOpen(false)}
-                          disabled={projectActionLoading}
-                        >
-                          {t('common.cancel')}
-                        </Button>
-                        <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                          {projectActionLoading ? t('projects.creating') : t('projects.createProject')}
-                        </Button>
-                      </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                <Button 
+                  size="sm" 
+                  onClick={() => {
+                    resetProjectForm()
+                    setIsCreateProjectDialogOpen(true)
+                  }}
+                  disabled={!isPro && projects.length >= 2}
+                  className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  {t('settings.addMobile')}
+                  {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
+                </Button>
               </div>
+            </div>
             </div>
 
             {/* Upgrade prompt for free users at limit */}
@@ -796,78 +726,6 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Edit Project Dialog */}
-      <Dialog open={isEditProjectDialogOpen} onOpenChange={setIsEditProjectDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('projects.editProject')}</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleEditProject} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-project-name">{t('projects.projectName')}</Label>
-              <Input
-                id="edit-project-name"
-                placeholder={t('projects.enterProjectName')}
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                disabled={projectActionLoading}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-project-description">{t('projects.descriptionOptional')}</Label>
-              <Input
-                id="edit-project-description"
-                placeholder={t('projects.enterProjectDescription')}
-                value={projectDescription}
-                onChange={(e) => setProjectDescription(e.target.value)}
-                disabled={projectActionLoading}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-project-color">{t('projects.color')}</Label>
-              <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t('projects.selectColor')} />
-                </SelectTrigger>
-                <SelectContent>
-                  {(() => {
-                    const usedColors = projects.filter(p => p.id !== editingProject?.id).map(p => p.color)
-                    const availableColors = PREDEFINED_COLORS.filter(color => 
-                      !usedColors.includes(color.value) || color.value === projectColor
-                    )
-                    return availableColors.map((color) => (
-                      <SelectItem key={color.value} value={color.value}>
-                        <div className="flex items-center gap-3">
-                          <div 
-                            className="w-4 h-4 rounded-full border border-gray-300"
-                            style={{ backgroundColor: color.value }}
-                          />
-                          <span>{t(`colors.${color.nameKey}`)}</span>
-                        </div>
-                      </SelectItem>
-                    ))
-                  })()} 
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex justify-end space-x-2">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => setIsEditProjectDialogOpen(false)}
-                disabled={projectActionLoading}
-              >
-                {t('common.cancel')}
-              </Button>
-              <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                {projectActionLoading ? t('projects.updating') : t('projects.updateProject')}
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-
       {/* Email Preferences Card (All users) */}
       <Card className="mb-6">
         <CardHeader>
@@ -878,7 +736,7 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           {!isPro ? (
-            /* Free user - show upgrade prompt */
+            <>
             <div className="relative">
               {/* Overlay for disabled state */}
               <div className="absolute inset-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-[1px] z-10 rounded-lg"></div>
@@ -929,8 +787,8 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
+            </>
           ) : (
-            /* Pro user - show working email preferences */
             <>
               {emailPreferencesLoading ? (
                 <div className="flex items-center justify-center p-8">
@@ -1138,6 +996,78 @@ export default function SettingsPage() {
           </CardContent>
         )}
       </Card>
+
+      {/* Edit Project Dialog */}
+      <Dialog open={isEditProjectDialogOpen} onOpenChange={setIsEditProjectDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('projects.editProject')}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleEditProject} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-project-name">{t('projects.projectName')}</Label>
+              <Input
+                id="edit-project-name"
+                placeholder={t('projects.enterProjectName')}
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                disabled={projectActionLoading}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-project-description">{t('projects.descriptionOptional')}</Label>
+              <Input
+                id="edit-project-description"
+                placeholder={t('projects.enterProjectDescription')}
+                value={projectDescription}
+                onChange={(e) => setProjectDescription(e.target.value)}
+                disabled={projectActionLoading}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-project-color">{t('projects.color')}</Label>
+              <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t('projects.selectColor')} />
+                </SelectTrigger>
+                <SelectContent>
+                  {(() => {
+                    const usedColors = projects.filter(p => p.id !== editingProject?.id).map(p => p.color)
+                    const availableColors = PREDEFINED_COLORS.filter(color => 
+                      !usedColors.includes(color.value) || color.value === projectColor
+                    )
+                    return availableColors.map((color) => (
+                      <SelectItem key={color.value} value={color.value}>
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-4 h-4 rounded-full border border-gray-300"
+                            style={{ backgroundColor: color.value }}
+                          />
+                          <span>{t(`colors.${color.nameKey}`)}</span>
+                        </div>
+                      </SelectItem>
+                    ))
+                  })()} 
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => setIsEditProjectDialogOpen(false)}
+                disabled={projectActionLoading}
+              >
+                {t('common.cancel')}
+              </Button>
+              <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
+                {projectActionLoading ? t('projects.updating') : t('projects.updateProject')}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
