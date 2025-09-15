@@ -28,11 +28,13 @@ export async function POST(request: NextRequest) {
         );
         
         // Update database to reflect cancellation pending at period end
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const sub = canceledSubscription as any // Stripe types don't include all fields
         await userSubscriptionService.updateUserSubscription(userId, {
           status: 'canceled',
           canceled_at: new Date().toISOString(),
           // Keep current period end so user retains access
-          current_period_end: new Date(canceledSubscription.current_period_end * 1000).toISOString()
+          current_period_end: new Date(sub.current_period_end * 1000).toISOString()
         });
         
       } catch (stripeError) {
