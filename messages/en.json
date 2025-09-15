@@ -47,9 +47,12 @@
     "averagePerService": "Average per subscription",
     "mostExpensive": "Most expensive",
     "leastExpensive": "Least expensive",
-    "proPlanService": "Pro Plan Subscription"
+    "proPlanService": "Pro Plan Subscription",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "subscriptions": {
+    "subscription": "Subscription",
     "service": "Subscription Name",
     "amount": "Amount",
     "billingPeriod": "Billing Period",
@@ -169,6 +172,10 @@
     "advancedAnalytics": "Advanced analytics & reporting",
     "prioritySupport": "Priority support",
     "notifyWhenAvailable": "🚀 Notify Me When Available",
+    "enterEmailForNotification": "Enter your email to be notified when the Team plan becomes available:",
+    "emailRegisteredSuccess": "Thank you! We'll notify you when the Team plan is ready.",
+    "emailRegistrationError": "Something went wrong. Please try again later.",
+    "invalidEmailError": "Please enter a valid email address.",
     "flexibleBilling": "💳 Flexible Billing",
     "cancelAnytime": "✅ Cancel anytime - No long-term commitments or hidden fees",
     "instantUpgrades": "✅ Instant upgrades - Access new features immediately after upgrading",

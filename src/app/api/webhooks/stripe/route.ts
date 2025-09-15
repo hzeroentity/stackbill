@@ -140,6 +140,8 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   try {
+    console.log('Webhook - handleSubscriptionUpdated called for subscription:', subscription.id)
+    
     const customer = await stripe.customers.retrieve(subscription.customer as string)
     
     if (!('metadata' in customer) || !customer.metadata?.userId) {
@@ -148,25 +150,73 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     }
     
     const userId = customer.metadata.userId
+    console.log('Webhook - Processing subscription update for userId:', userId)
+    
+    // Check if user exists in our database
+    try {
+      const existingSubscription = await userSubscriptionService.getUserSubscription(userId)
+      if (!existingSubscription) {
+        console.error('Webhook - User subscription not found in database for userId:', userId)
+        // Create a basic subscription record if it doesn't exist
+        await userSubscriptionService.ensureUserSubscription(userId)
+      }
+    } catch (userCheckError) {
+      console.error('Webhook - Error checking user subscription:', userCheckError)
+      return
+    }
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sub = subscription as any // Stripe types don't include all fields
     
-    console.log('Updating subscription for user:', userId, 'status:', sub.status)
+    console.log('Updating subscription for user:', userId, 'status:', sub.status, 'cancel_at_period_end:', sub.cancel_at_period_end)
     
-    const updateData = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateData: any = {
       status: sub.status === 'active' ? 'active' : 
              sub.status === 'past_due' ? 'past_due' :
-             sub.status === 'canceled' ? 'canceled' : 'incomplete',
-      current_period_start: new Date(sub.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(sub.current_period_end * 1000).toISOString()
+             sub.status === 'canceled' ? 'canceled' : 'incomplete'
     }
     
-    // If subscription is being set to cancel at period end, don't change plan_type yet
+    // Safely handle period dates
+    if (sub.current_period_start && typeof sub.current_period_start === 'number') {
+      try {
+        updateData.current_period_start = new Date(sub.current_period_start * 1000).toISOString()
+      } catch (error) {
+        console.warn('Invalid current_period_start in webhook:', sub.current_period_start)
+      }
+    }
+    
+    if (sub.current_period_end && typeof sub.current_period_end === 'number') {
+      try {
+        updateData.current_period_end = new Date(sub.current_period_end * 1000).toISOString()
+      } catch (error) {
+        console.warn('Invalid current_period_end in webhook:', sub.current_period_end)
+      }
+    }
+    
+    // If subscription is being set to cancel at period end, mark as canceled but keep Pro access
     if (sub.cancel_at_period_end && sub.status === 'active') {
       updateData.status = 'canceled'
+      // Add canceled_at timestamp if it exists
+      if (sub.canceled_at && typeof sub.canceled_at === 'number') {
+        try {
+          updateData.canceled_at = new Date(sub.canceled_at * 1000).toISOString()
+        } catch (error) {
+          console.warn('Invalid canceled_at in webhook:', sub.canceled_at)
+        }
+      }
     }
     
-    await userSubscriptionService.updateUserSubscription(userId, updateData)
+    console.log('Webhook - Updating user subscription with data:', updateData)
+    
+    try {
+      const result = await userSubscriptionService.updateUserSubscription(userId, updateData)
+      console.log('Webhook - Successfully updated user subscription:', result.id)
+    } catch (updateError) {
+      console.error('Webhook - Database update failed:', updateError)
+      console.error('Webhook - Update data that failed:', updateData)
+      throw updateError
+    }
     
   } catch (error) {
     console.error('Error in handleSubscriptionUpdated:', error)
