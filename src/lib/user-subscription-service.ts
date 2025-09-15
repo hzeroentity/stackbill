@@ -71,6 +71,22 @@ export class UserSubscriptionService {
 
   async getUserPlan(userId: string): Promise<PlanType> {
     const userSub = await this.ensureUserSubscription(userId)
+    
+    // If subscription is canceled but still within the paid period, treat as active pro
+    if (userSub.plan_type === 'pro' && 
+        userSub.status === 'canceled' && 
+        userSub.current_period_end && 
+        new Date(userSub.current_period_end) > new Date()) {
+      return 'pro'
+    }
+    
+    // If subscription is canceled and past the period end, treat as free
+    if (userSub.status === 'canceled' && 
+        userSub.current_period_end && 
+        new Date(userSub.current_period_end) <= new Date()) {
+      return 'free'
+    }
+    
     return userSub.plan_type as PlanType
   }
 

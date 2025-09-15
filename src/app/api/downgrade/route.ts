@@ -17,18 +17,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User is not on Pro plan' }, { status: 400 });
     }
 
-    // Cancel the Stripe subscription if it exists
+    // Cancel the Stripe subscription at period end (customer keeps access until then)
     if (userSubscription.stripe_subscription_id) {
       try {
-        await stripe.subscriptions.cancel(userSubscription.stripe_subscription_id);
+        const canceledSubscription = await stripe.subscriptions.update(
+          userSubscription.stripe_subscription_id,
+          {
+            cancel_at_period_end: true
+          }
+        );
+        
+        // Update database to reflect cancellation pending at period end
+        await userSubscriptionService.updateUserSubscription(userId, {
+          status: 'canceled',
+          canceled_at: new Date().toISOString(),
+          // Keep current period end so user retains access
+          current_period_end: new Date(canceledSubscription.current_period_end * 1000).toISOString()
+        });
+        
       } catch (stripeError) {
         console.error('Error canceling Stripe subscription:', stripeError);
-        // Continue with downgrade even if Stripe cancel fails
+        throw stripeError; // Don't continue if Stripe cancel fails
       }
+    } else {
+      // No Stripe subscription, just update database
+      await userSubscriptionService.cancelUserSubscription(userId);
     }
-
-    // Update user subscription to free plan
-    await userSubscriptionService.cancelUserSubscription(userId);
 
     return NextResponse.json({ success: true });
 
