@@ -320,14 +320,11 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-16 max-w-6xl mx-auto">
             {/* Step 1 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mx-auto mb-6">
+                <Plus className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center justify-center gap-3 flex-wrap">
-                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <span>{t('landing.howItWorks.step1.title')}</span>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
+                {t('landing.howItWorks.step1.title')}
               </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
                 <video 
@@ -348,14 +345,11 @@ export default function Home() {
             
             {/* Step 2 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-6">
+                <Bell className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center justify-center gap-3 flex-wrap">
-                <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Bell className="w-5 h-5 text-green-600 dark:text-green-400" />
-                </div>
-                <span>{t('landing.howItWorks.step2.title')}</span>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
+                {t('landing.howItWorks.step2.title')}
               </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto">
@@ -369,14 +363,11 @@ export default function Home() {
             
             {/* Step 3 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto mb-6">
+                <FolderTree className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center justify-center gap-3 flex-wrap">
-                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <FolderTree className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                </div>
-                <span>{t('landing.howItWorks.step3.title')}</span>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
+                {t('landing.howItWorks.step3.title')}
               </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
                 <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mx-auto">
