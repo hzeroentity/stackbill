@@ -192,9 +192,9 @@ export function AuthForm() {
           <span className="text-2xl font-bold">StackBill</span>
         </div>
         <p className="text-center text-sm text-muted-foreground">
-          {isSignUp 
-            ? 'Start tracking your SaaS costs for free' 
-            : 'Sign in to your dashboard'
+          {isSignUp
+            ? t('auth.signupTagline')
+            : t('auth.signinTagline')
           }
         </p>
       </CardHeader>
@@ -204,13 +204,13 @@ export function AuthForm() {
           /* Success State */
           <div className="text-center space-y-4 py-8">
             <div className="flex justify-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-gray-900">Check Your Email!</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Check Your Email!</h3>
+              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                 We&apos;ve sent a confirmation link to <strong>{email}</strong>.
                 <br />Click the link in your email to complete your account setup.
               </p>
@@ -252,13 +252,8 @@ export function AuthForm() {
           <span className="ml-2">{t('auth.withGithub')}</span>
         </Button>
 
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-3 text-muted-foreground">Or continue with email</span>
-          </div>
+        <div className="text-center">
+          <span className="text-xs uppercase text-muted-foreground">{t('auth.orContinueWithEmail')}</span>
         </div>
 
         {/* Email/Password Form */}
@@ -304,7 +299,7 @@ export function AuthForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
               >
                 {showPassword ? (
                   <EyeOff className="w-4 h-4" />
@@ -315,10 +310,10 @@ export function AuthForm() {
             </div>
             
             {isSignUp && password && (
-              <div className="space-y-2 p-3 bg-gray-50 rounded-md">
+              <div className="space-y-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Password strength</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-sm font-medium dark:text-gray-200">Password strength</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     {passwordValidation.strength === 100 ? 'Strong' : 
                      passwordValidation.strength >= 75 ? 'Good' :
                      passwordValidation.strength >= 50 ? 'Fair' : 'Weak'}
@@ -336,7 +331,7 @@ export function AuthForm() {
                       ) : (
                         <X className="w-3 h-3 text-red-500" />
                       )}
-                      <span className={check.valid ? 'text-green-600' : 'text-red-600'}>
+                      <span className={check.valid ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
                         {check.label}
                       </span>
                     </div>

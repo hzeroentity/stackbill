@@ -124,7 +124,6 @@ export function ProjectSwitcher({ selectedProject, onProjectChange, isPro, subsc
             className="h-9 px-3 flex-shrink-0"
             title={t('projects.project')}
           >
-            <Plus className="w-4 h-4 lg:mr-1" />
             <span className="hidden lg:inline text-sm">{t('projects.project')}</span>
           </Button>
           <Button

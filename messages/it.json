@@ -196,17 +196,44 @@
   },
   "landing": {
     "hero": {
-      "badge": "Creato per fondatori SaaS e sviluppatori",
-      "title": "Monitora i costi del tuo stack SaaS",
-      "subtitle": "Tracciamento semplice degli abbonamenti per team che costruiscono. Monitora il tuo burn rate mensile e mantieni sotto controllo i costi di sviluppo.",
+      "badge": "✨ Early Access di lancio",
+      "mainTitle": "Basta addebiti a sorpresa.",
+      "highlightTitle": "Traccia le tue spese ora.",
+      "subtitle": "Tracciamento preciso delle subscriptions per la tua app con promemoria e riepiloghi intelligenti, così non riceverai mai più addebiti a sorpresa.",
       "cta": "Inizia Gratis",
       "howItWorks": "Come funziona",
       "signIn": "Accedi",
       "dashboardPreview": "📊 Screenshot della dashboard",
       "dashboardSubtext": "(Riepilogo spese + anteprima email)"
     },
+    "mobileMenu": {
+      "howItWorks": "Come funziona",
+      "features": "Funzionalità",
+      "pricing": "Prezzi",
+      "testimonials": "Recensioni"
+    },
+    "costCrisis": {
+      "title": "La Crisi dei Costi Nascosti",
+      "subtitle": "La maggior parte degli sviluppatori e fondatori SaaS sta perdendo denaro senza rendersene conto",
+      "stat1": {
+        "number": "62%",
+        "text": "degli sviluppatori riceve addebiti a sorpresa"
+      },
+      "stat2": {
+        "number": "$180",
+        "text": "spesa media mensile SaaS per fondatore"
+      },
+      "stat3": {
+        "number": "73%",
+        "text": "paga per strumenti che usa raramente"
+      },
+      "conclusion": "Questo significa potenzialmente",
+      "conclusionAmount": "$1,000+ all'anno",
+      "conclusionEnd": "buttati via"
+    },
     "features": {
-      "title": "Tutto quello che ti serve per tracciare gli abbonamenti SaaS",
+      "title": "Tutto quello che ti serve. Niente che non ti serve.",
+      "subtitle": "Gestione completa degli abbonamenti con tutte le funzionalità di cui hai realmente bisogno.",
       "smartDashboard": {
         "title": "Dashboard Intelligente", 
         "description": "Ottieni visibilità immediata sui costi mensili e annuali con belle analytics."
@@ -230,6 +257,30 @@
       "simplePricing": {
         "title": "Prezzi Semplici",
         "description": "Inizia gratis con 3 abbonamenti. Aggiorna a Pro per tracciamento illimitato a $4/mese."
+      },
+      "monthlyYearly": {
+        "title": "Traccia spese mensili e annuali",
+        "description": "Vedi i tuoi costi totali a colpo d'occhio con ripartizioni intelligenti per categoria e informazioni sulle spese."
+      },
+      "currencyConversion": {
+        "title": "Conversione automatica valute (10+ supportate)",
+        "description": "Traccia abbonamenti in più valute con tassi di conversione in tempo reale."
+      },
+      "emailReminders": {
+        "title": "Promemoria email per rinnovi",
+        "description": "Ricevi notifiche prima dei rinnovi degli abbonamenti così non avrai mai più addebiti a sorpresa."
+      },
+      "monthlyReports": {
+        "title": "Report mensili delle spese",
+        "description": "Ricevi riepiloghi mensili delle spese con informazioni e previsioni sui rinnovi."
+      },
+      "categories": {
+        "title": "Raggruppa strumenti per categoria",
+        "description": "Organizza abbonamenti con categorie predefinite per migliori informazioni sulle spese."
+      },
+      "multiProjectManagement": {
+        "title": "Gestione multi-progetto",
+        "description": "Separa progetti clienti o prodotti in un posto solo."
       }
     },
     "pricing": {
@@ -238,12 +289,12 @@
     },
     "problems": {
       "title": "I fogli di calcolo non inviano promemoria.",
-      "subtitle": "StackBill ti offre chiarezza, controllo e promemoria — in una dashboard pulita.",
+      "subtitle": "StackBill ti offre chiarezza, controllo e promemoria, in una dashboard semplice e chiara.",
       "withoutStackbill": "Senza StackBill",
       "withStackbill": "Con StackBill",
       "surpriseCharges": {
         "title": "Addebiti a sorpresa",
-        "description": "Hai dimenticato che uno strumento da $29 si stava ancora rinnovando e hai ricevuto addebiti inaspettati"
+        "description": "Hai dimenticato che un tool da €25 si stava ancora rinnovando e hai ricevuto addebiti inaspettati"
       },
       "doublePayments": {
         "title": "Pagamenti doppi",
@@ -251,73 +302,71 @@
       },
       "noVisibility": {
         "title": "Nessuna visibilità sulle spese",
-        "description": "Nessuna idea di quanto spendi ogni mese per i tuoi strumenti di sviluppo"
+        "description": "Non hai idea di quanto spendi ogni mese per i per tool della tua app"
       },
       "neverMiss": {
         "title": "Non perdere mai un rinnovo",
-        "description": "Ricevi promemoria email prima dei rinnovi così puoi disdire o prepararti per gli addebiti"
+        "description": "Ricevi promemoria via email prima dei rinnovi, così puoi disdire per tempo e tenerne traccia"
       },
       "completeOverview": {
         "title": "Panoramica completa",
-        "description": "Vedi tutti i tuoi abbonamenti in un posto, organizzati e facili da gestire"
+        "description": "Visualizza tutti i tuoi abbonamenti in una dashboard, organizzati e facili da gestire"
       },
       "clearInsights": {
         "title": "Informazioni chiare sulle spese",
-        "description": "Sappi esattamente quanto spendi mensilmente e annualmente con analisi intelligenti"
+        "description": "Sai esattamente quanto spendi mensilmente e annualmente con analisi intelligenti"
       }
     },
     "howItWorks": {
       "title": "Come Funziona",
-      "subtitle": "Tracciamento semplice e visivo in 3 passaggi",
+      "subtitle": "Tracciamento semplice e chiaro in 3 passaggi",
       "step1": {
-        "title": "Aggiungi i tuoi abbonamenti manualmente",
-        "description": "Modulo rapido per aggiungere nome abbonamento, costo e data di rinnovo"
+        "title": "Aggiungi i tuoi abbonamenti",
+        "description": "Modulo rapido per nome, costo, valuta, periodo di fatturazione, data di rinnovo, categoria e progetto."
       },
       "step2": {
-        "title": "Imposta date di rinnovo e valuta",
-        "description": "Scegli tra più di 10 valute con conversione automatica",
-        "placeholder": "💰 Screenshot selettore valuta"
+        "title": "Ricevi promemoria + report",
+        "description": "Avvisi email prima dei rinnovi + riepiloghi mensili delle spese direttamente nella tua casella di posta."
       },
       "step3": {
-        "title": "Ricevi notifiche prima dei rinnovi",
-        "description": "Promemoria email così non sarai mai più sorpreso",
-        "placeholder": "📧 Anteprima email di esempio"
+        "title": "Organizza per progetti",
+        "description": "Raggruppa abbonamenti per progetto per tracciamento granulare dei costi e insights del team."
       },
-      "optionalStep": "Passo opzionale 4: Passa a Pro per tracciare più strumenti e ricevere riepiloghi mensili."
+      "optionalStep": "Passo opzionale 4: Passa a Pro per promemoria email, report mensili e abbonamenti illimitati."
     },
     "testimonials": {
-      "title": "Cosa dicono gli sviluppatori",
-      "subtitle": "Unisciti ai beta tester che stanno ottenendo un miglior controllo dei loro costi SaaS",
+      "title": "I primi users stanno già risparmiando",
+      "subtitle": "Fai parte della prima ondata di sviluppatori che prendono controllo dei costi delle loro app e SaaS",
       "reviews": [
         {
           "quote": "Molto meglio della mia pagina Notion disordinata. Adoro i promemoria.",
-          "author": "@mikeDeveloper",
-          "role": "Sviluppatore Full-stack"
+          "author": "Michael K.",
+          "role": "Vibe coder"
         },
         {
           "quote": "Finalmente ho smesso di ricevere addebiti sorpresa da $99 per strumenti che avevo dimenticato.",
-          "author": "@sarahCodes",
-          "role": "Fondatrice SaaS"
+          "author": "Sarah L.",
+          "role": "Founder"
         },
         {
           "quote": "Interfaccia semplice e pulita. Esattamente quello che mi serviva per tracciare i miei strumenti dev.",
-          "author": "@alexBuilds",
-          "role": "Indie Hacker"
+          "author": "Alex R.",
+          "role": "Solopreneur"
         },
         {
           "quote": "La funzione di conversione valuta è perfetta per i miei abbonamenti internazionali.",
-          "author": "@lucasDev",
-          "role": "Tech Lead"
+          "author": "Lucas M.",
+          "role": "Full stack dev"
         },
         {
           "quote": "Mi ha fatto risparmiare più di $200 questo mese individuando abbonamenti inutilizzati!",
-          "author": "@rachelTech",
-          "role": "Sviluppatrice Frontend"
+          "author": "Rachel T.",
+          "role": "Frontend dev"
         },
         {
           "quote": "Design pulito, niente bloatware. Traccia solo quello che ho bisogno di sapere.",
-          "author": "@jakeCode",
-          "role": "Ingegnere DevOps"
+          "author": "Jake D.",
+          "role": "Founder"
         }
       ]
     },
@@ -327,12 +376,12 @@
       "button": "Inizia Gratis"
     },
     "cta": {
-      "title": "Pronto a prendere controllo dei tuoi costi SaaS?",
-      "subtitle": "Unisciti ai fondatori SaaS e team di sviluppo che si affidano a StackBill per tracciare le loro spese di abbonamento.",
+      "title": "Pronto a prendere controllo dei tuoi costi?",
+      "subtitle": "Unisciti a sviluppatori e founders che si affidano a StackBill per tracciare le loro spese di abbonamento.",
       "button": "Inizia Gratis Oggi"
     },
     "footer": {
-      "tagline": "Tracciamento semplice dei costi SaaS per fondatori e team di sviluppo.",
+      "tagline": "Tracciamento semplice dei costi di abbonamenti per la tua app.",
       "privacy": "Politica sulla Privacy",
       "terms": "Termini di Servizio",
       "support": "Supporto",
@@ -374,7 +423,7 @@
     "projects": "Progetti",
     "allProjects": "Tutti i Progetti",
     "general": "Generale",
-    "project": "Progetto",
+    "project": "+ Progetto",
     "subs": "sub",
     "selectProject": "Seleziona progetto...",
     "createNewProject": "Crea Nuovo Progetto",
@@ -429,8 +478,8 @@
     "freePlanProjectLimit": "Piano gratuito: fino a 2 progetti",
     "upgradeProProjectsMsg": "Passa ora a PRO",
     "upgradePro": "Passa a Pro per fino a 10 progetti",
-    "addProject": "Aggiungi Progetto",
-    "addMobile": "Aggiungi",
+    "addProject": "+ Aggiungi Progetto",
+    "addMobile": "+ Aggiungi",
     "projectLimitReached": "Hai raggiunto il limite del piano gratuito (2 progetti). Passa a Pro per fino a 10 progetti",
     "noProjectsYet": "Nessun progetto ancora. Crea il tuo primo progetto per organizzare gli abbonamenti!",
     "emailPreferences": "Preferenze Email",
@@ -511,6 +560,7 @@
     "pleaseWait": "Per favore attendi..."
   },
   "plans": {
+    "perMonth": "al mese",
     "free": {
       "name": "Gratuito",
       "description": "Perfetto per iniziare",

@@ -741,7 +741,7 @@ export default function DashboardPage() {
                     handleAddSubscription()
                   }}
                 >
-                  <span className="sm:hidden">+ Add</span>
+                  <span className="sm:hidden">{t('settings.addMobile')}</span>
                   <span className="hidden sm:inline">{t('dashboard.addSubscription')}</span>
                 </Button>
               </DialogTrigger>

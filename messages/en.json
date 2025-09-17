@@ -225,7 +225,7 @@
     "projectDescription": "Create and manage projects to organize your subscriptions",
     "freePlanProjectLimit": "Free plan: up to 2 projects",
     "upgradeProProjectsMsg": "Upgrade to Pro for up to 10 projects",
-    "addProject": "Add Project",
+    "addProject": "+ Add Project",
     "addMobile": "+ Add",
     "projectLimitReached": "You've reached the free plan limit (2 projects). Upgrade to Pro for up to 10 projects",
     "noProjectsYet": "No projects yet. Create your first project to organize subscriptions!",
@@ -297,14 +297,40 @@
   },
   "landing": {
     "hero": {
-      "badge": "Built for SaaS founders & developers",
-      "title": "Track your costs",
-      "subtitle": "Manual SaaS tracking with reminders and smart summaries — so you don't get surprise charges ever again.",
+      "badge": "✨ Just Launched - Early Access",
+      "mainTitle": "Stop surprise charges.",
+      "highlightTitle": "Track your stack in seconds.",
+      "subtitle": "Simple subscriptions tracking with reminders and smart summaries, so you don't get surprise charges ever again.",
       "cta": "Start Free",
       "howItWorks": "How it works",
       "signIn": "Log In",
       "dashboardPreview": "📊 Dashboard Screenshot Placeholder",
       "dashboardSubtext": "(Spending summary + email preview)"
+    },
+    "mobileMenu": {
+      "howItWorks": "How it works",
+      "features": "Features",
+      "pricing": "Pricing",
+      "testimonials": "Reviews"
+    },
+    "costCrisis": {
+      "title": "The Hidden Cost Crisis",
+      "subtitle": "Most developers and SaaS founders are hemorrhaging money without realizing it",
+      "stat1": {
+        "number": "62%",
+        "text": "of developers get surprise charges"
+      },
+      "stat2": {
+        "number": "$180",
+        "text": "average monthly SaaS spend per founder"
+      },
+      "stat3": {
+        "number": "73%",
+        "text": "pay for tools they rarely use"
+      },
+      "conclusion": "That's potentially",
+      "conclusionAmount": "$1,000+ per year",
+      "conclusionEnd": "down the drain"
     },
     "problems": {
       "title": "Spreadsheets don't send reminders.",
@@ -340,23 +366,22 @@
       "title": "How It Works",
       "subtitle": "Simple, visual tracking in 3 steps",
       "step1": {
-        "title": "Add your subscriptions manually",
-        "description": "Quick form to add subscription name, cost, and renewal date"
+        "title": "Add your subscriptions",
+        "description": "Quick form for name, cost, currency, billing period, renewal date, category, and project."
       },
       "step2": {
-        "title": "Set renewal dates & currency", 
-        "description": "Choose from 10+ currencies with automatic conversion",
-        "placeholder": "💰 Currency selector screenshot"
+        "title": "Get reminders + reports",
+        "description": "Email alerts before renewals + monthly spending summaries straight to your inbox."
       },
       "step3": {
-        "title": "Get notified before renewals",
-        "description": "Email reminders so you never get surprised again", 
-        "placeholder": "📧 Example email preview"
+        "title": "Organize by projects",
+        "description": "Group subscriptions per project for granular cost tracking and team insights."
       },
-      "optionalStep": "Optional 4th step: Upgrade to Pro to track more tools and get monthly summaries."
+      "optionalStep": "Optional 4th step: Upgrade to Pro for email reminders, monthly reports, and unlimited subscriptions."
     },
     "features": {
       "title": "Everything you need. Nothing you don't.",
+      "subtitle": "Complete subscription management with all the features you actually need.",
       "monthlyYearly": {
         "title": "Track monthly & yearly spend",
         "description": "See your total costs at a glance with smart category breakdowns and spending insights."
@@ -377,6 +402,10 @@
         "title": "Group tools by category",
         "description": "Organize subscriptions with predefined categories for better spending insights."
       },
+      "multiProjectManagement": {
+        "title": "Multi-project management",
+        "description": "Separate client projects or products in one place."
+      },
       "darkMode": {
         "title": "Dark mode + multi-language",
         "description": "Beautiful dark theme and support for English, Spanish, and Italian."
@@ -387,38 +416,38 @@
       "subtitle": "Start free, upgrade when you're ready"
     },
     "testimonials": {
-      "title": "What developers are saying",
-      "subtitle": "Join early testers getting better control of their SaaS costs",
+      "title": "Early adopters are already saving money",
+      "subtitle": "Be part of the first wave of developers taking control of their SaaS costs",
       "reviews": [
         {
           "quote": "Way better than my janky Notion page. Love the reminders.",
-          "author": "@mikeDeveloper",
-          "role": "Full-stack Developer"
+          "author": "Michael K.",
+          "role": "Vibe coder"
         },
         {
           "quote": "Finally stopped getting surprise $99 charges from tools I forgot about.",
-          "author": "@sarahCodes", 
-          "role": "SaaS Founder"
+          "author": "Sarah L.",
+          "role": "Founder"
         },
         {
           "quote": "Simple, clean interface. Exactly what I needed to track my dev tools.",
-          "author": "@alexBuilds",
-          "role": "Indie Hacker"
+          "author": "Alex R.",
+          "role": "Solopreneur"
         },
         {
           "quote": "The currency conversion feature is perfect for my international subscriptions.",
-          "author": "@lucasDev",
-          "role": "Tech Lead"
+          "author": "Lucas M.",
+          "role": "Full stack dev"
         },
         {
           "quote": "Saved me $200+ this month by catching unused subscriptions!",
-          "author": "@rachelTech",
-          "role": "Frontend Developer"
+          "author": "Rachel T.",
+          "role": "Frontend dev"
         },
         {
           "quote": "Clean design, no bloat. Just tracks what I need to know.",
-          "author": "@jakeCode",
-          "role": "DevOps Engineer"
+          "author": "Jake D.",
+          "role": "Founder"
         }
       ]
     },
@@ -470,7 +499,7 @@
     "projects": "Projects",
     "allProjects": "All Projects", 
     "general": "General",
-    "project": "Project",
+    "project": "+ Project",
     "subs": "subs",
     "selectProject": "Select project...",
     "createNewProject": "Create New Project", 
@@ -528,6 +557,7 @@
     "pleaseWait": "Please wait..."
   },
   "plans": {
+    "perMonth": "per month",
     "free": {
       "name": "Free",
       "description": "Perfect for getting started",

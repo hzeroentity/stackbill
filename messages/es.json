@@ -195,17 +195,44 @@
   },
   "landing": {
     "hero": {
-      "badge": "Construido para fundadores SaaS y desarrolladores",
-      "title": "Rastrea los costos de tu stack SaaS",
-      "subtitle": "Seguimiento simple de suscripciones para equipos que construyen. Monitorea tu tasa de quema mensual y mantén los costos de desarrollo bajo control.",
+      "badge": "✨ Recién Lanzado - Acceso Temprano",
+      "mainTitle": "Detiene cargos sorpresa.",
+      "highlightTitle": "Rastrea tu stack en segundos.",
+      "subtitle": "Seguimiento manual de SaaS con recordatorios y resúmenes inteligentes — para que nunca vuelvas a tener cargos sorpresa.",
       "cta": "Comenzar Gratis",
       "howItWorks": "Cómo funciona",
       "signIn": "Iniciar Sesión",
       "dashboardPreview": "📊 Captura de pantalla del panel de control",
       "dashboardSubtext": "(Resumen de gastos + vista previa del email)"
     },
+    "mobileMenu": {
+      "howItWorks": "Cómo funciona",
+      "features": "Funciones",
+      "pricing": "Precios",
+      "testimonials": "Reseñas"
+    },
+    "costCrisis": {
+      "title": "La Crisis de Costos Ocultos",
+      "subtitle": "La mayoría de desarrolladores y fundadores SaaS están perdiendo dinero sin darse cuenta",
+      "stat1": {
+        "number": "62%",
+        "text": "de desarrolladores reciben cargos sorpresa"
+      },
+      "stat2": {
+        "number": "$180",
+        "text": "gasto mensual promedio en SaaS por fundador"
+      },
+      "stat3": {
+        "number": "73%",
+        "text": "pagan por herramientas que rara vez usan"
+      },
+      "conclusion": "Eso es potencialmente",
+      "conclusionAmount": "$1,000+ por año",
+      "conclusionEnd": "tirados a la basura"
+    },
     "features": {
-      "title": "Todo lo que necesitas para rastrear suscripciones SaaS",
+      "title": "Todo lo que necesitas. Nada que no necesites.",
+      "subtitle": "Gestión completa de suscripciones con todas las funciones que realmente necesitas.",
       "smartDashboard": {
         "title": "Panel Inteligente", 
         "description": "Obtén visibilidad instantánea de costos mensuales y anuales con hermosas analíticas."
@@ -229,6 +256,30 @@
       "simplePricing": {
         "title": "Precios Simples",
         "description": "Comienza gratis con 3 suscripciones. Actualiza a Pro para seguimiento ilimitado a $4/mes."
+      },
+      "monthlyYearly": {
+        "title": "Rastrea gastos mensuales y anuales",
+        "description": "Ve tus costos totales de un vistazo con desgloses inteligentes por categoría e información de gastos."
+      },
+      "currencyConversion": {
+        "title": "Conversión automática de monedas (10+ soportadas)",
+        "description": "Rastrea suscripciones en múltiples monedas con tasas de conversión en tiempo real."
+      },
+      "emailReminders": {
+        "title": "Recordatorios de renovación por email",
+        "description": "Recibe notificaciones antes de las renovaciones de suscripciones para que nunca vuelvas a tener cargos sorpresa."
+      },
+      "monthlyReports": {
+        "title": "Reportes mensuales de gastos",
+        "description": "Recibe resúmenes mensuales de gastos con información y pronósticos de renovación."
+      },
+      "categories": {
+        "title": "Agrupa herramientas por categoría",
+        "description": "Organiza suscripciones con categorías predefinidas para mejores información de gastos."
+      },
+      "multiProjectManagement": {
+        "title": "Gestión multi-proyecto",
+        "description": "Separa proyectos de clientes o productos en un solo lugar."
       }
     },
     "pricing": {
@@ -269,54 +320,52 @@
       "title": "Cómo Funciona",
       "subtitle": "Seguimiento simple y visual en 3 pasos",
       "step1": {
-        "title": "Añade tus suscripciones manualmente",
-        "description": "Formulario rápido para añadir nombre de suscripción, costo y fecha de renovación"
+        "title": "Añade tus suscripciones",
+        "description": "Formulario rápido para nombre, costo, moneda, período de facturación, fecha de renovación, categoría y proyecto."
       },
       "step2": {
-        "title": "Configura fechas de renovación y moneda",
-        "description": "Elige entre más de 10 monedas con conversión automática",
-        "placeholder": "💰 Captura de pantalla del selector de moneda"
+        "title": "Recibe recordatorios + reportes",
+        "description": "Alertas por email antes de renovaciones + resúmenes mensuales de gastos directo a tu bandeja de entrada."
       },
       "step3": {
-        "title": "Recibe notificaciones antes de las renovaciones",
-        "description": "Recordatorios por email para que nunca vuelvas a ser sorprendido",
-        "placeholder": "📧 Vista previa del email de ejemplo"
+        "title": "Organiza por proyectos",
+        "description": "Agrupa suscripciones por proyecto para seguimiento granular de costos e insights del equipo."
       },
-      "optionalStep": "Paso opcional 4: Actualiza a Pro para rastrear más herramientas y recibir resúmenes mensuales."
+      "optionalStep": "Paso opcional 4: Actualiza a Pro para recordatorios por email, reportes mensuales y suscripciones ilimitadas."
     },
     "testimonials": {
-      "title": "Lo que dicen los desarrolladores",
-      "subtitle": "Únete a los probadores tempranos que obtienen mejor control de sus costos SaaS",
+      "title": "Los primeros usuarios ya están ahorrando dinero",
+      "subtitle": "Sé parte de la primera ola de desarrolladores tomando control de sus costos SaaS",
       "reviews": [
         {
           "quote": "Mucho mejor que mi página desordenada de Notion. Me encantan los recordatorios.",
-          "author": "@mikeDeveloper",
-          "role": "Desarrollador Full-stack"
+          "author": "Michael K.",
+          "role": "Vibe coder"
         },
         {
           "quote": "Finalmente dejé de recibir cargos sorpresa de $99 de herramientas que olvidé.",
-          "author": "@sarahCodes",
-          "role": "Fundadora SaaS"
+          "author": "Sarah L.",
+          "role": "Founder"
         },
         {
           "quote": "Interfaz simple y limpia. Exactamente lo que necesitaba para rastrear mis herramientas dev.",
-          "author": "@alexBuilds",
-          "role": "Indie Hacker"
+          "author": "Alex R.",
+          "role": "Solopreneur"
         },
         {
           "quote": "La función de conversión de moneda es perfecta para mis suscripciones internacionales.",
-          "author": "@lucasDev",
-          "role": "Tech Lead"
+          "author": "Lucas M.",
+          "role": "Full stack dev"
         },
         {
           "quote": "¡Me ahorró más de $200 este mes detectando suscripciones sin usar!",
-          "author": "@rachelTech",
-          "role": "Desarrolladora Frontend"
+          "author": "Rachel T.",
+          "role": "Frontend dev"
         },
         {
           "quote": "Diseño limpio, sin bloatware. Solo rastrea lo que necesito saber.",
-          "author": "@jakeCode",
-          "role": "Ingeniero DevOps"
+          "author": "Jake D.",
+          "role": "Founder"
         }
       ]
     },
@@ -373,7 +422,7 @@
     "projects": "Proyectos",
     "allProjects": "Todos los Proyectos",
     "general": "General",
-    "project": "Proyecto",
+    "project": "+ Proyecto",
     "subs": "subs",
     "selectProject": "Seleccionar proyecto...",
     "createNewProject": "Crear Nuevo Proyecto",
@@ -427,8 +476,8 @@
     "projectDescription": "Crea y gestiona proyectos para organizar tus suscripciones",
     "freePlanProjectLimit": "Plan gratuito: hasta 2 proyectos",
     "upgradePro": "Actualiza a Pro para hasta 10 proyectos",
-    "addProject": "Añadir Proyecto",
-    "addMobile": "Añadir",
+    "addProject": "+ Añadir Proyecto",
+    "addMobile": "+ Añadir",
     "projectLimitReached": "Has alcanzado el límite del plan gratuito (2 proyectos). Actualiza a Pro para hasta 10 proyectos",
     "noProjectsYet": "Aún no hay proyectos. ¡Crea tu primer proyecto para organizar las suscripciones!",
     "emailPreferences": "Preferencias de Email",

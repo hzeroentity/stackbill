@@ -152,22 +152,22 @@ export default function Home() {
                     <div className="space-y-2">
                       <a href="#how-it-works" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          {t('landing.hero.howItWorks')}
+                          {t('landing.mobileMenu.howItWorks')}
                         </Button>
                       </a>
                       <a href="#features" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          {t('landing.features.title')}
+                          {t('landing.mobileMenu.features')}
                         </Button>
                       </a>
                       <a href="#pricing" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          {t('landing.pricing.title')}
+                          {t('landing.mobileMenu.pricing')}
                         </Button>
                       </a>
                       <a href="#testimonials" onClick={closeMenu}>
                         <Button variant="ghost" className="w-full justify-start">
-                          {t('landing.testimonials.title')}
+                          {t('landing.mobileMenu.testimonials')}
                         </Button>
                       </a>
                     </div>
@@ -221,13 +221,13 @@ export default function Home() {
             <a href="#pricing" className="inline-block">
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-pointer">
                 <span className="text-blue-700 dark:text-blue-300 text-sm font-medium">
-                  ✨ Just Launched - Early Access
+                  {t('landing.hero.badge')}
                 </span>
               </div>
             </a>
           </div>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-Stop surprise charges. <br /><span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">Track your stack in seconds.</span>
+{t('landing.hero.mainTitle')} <br /><span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">{t('landing.hero.highlightTitle')}</span>
           </h1>
           <p className="text-xl lg:text-2xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto">
             {t('landing.hero.subtitle')}
@@ -266,8 +266,8 @@ Stop surprise charges. <br /><span className="bg-gradient-to-r from-blue-600 to-
         <div className="container mx-auto px-6">
           <div className="text-center max-w-6xl mx-auto">
             <div className="mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">The Hidden Cost Crisis</h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300">Most developers and SaaS founders are hemorrhaging money without realizing it</p>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">{t('landing.costCrisis.title')}</h2>
+              <p className="text-xl text-slate-600 dark:text-slate-300">{t('landing.costCrisis.subtitle')}</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -275,30 +275,30 @@ Stop surprise charges. <br /><span className="bg-gradient-to-r from-blue-600 to-
                 <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Zap className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
-                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">62%</div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium">of developers get surprise charges</p>
+                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('landing.costCrisis.stat1.number')}</div>
+                <p className="text-slate-600 dark:text-slate-300 font-medium">{t('landing.costCrisis.stat1.text')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
-                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">$180</div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium">average monthly SaaS spend per founder</p>
+                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('landing.costCrisis.stat2.number')}</div>
+                <p className="text-slate-600 dark:text-slate-300 font-medium">{t('landing.costCrisis.stat2.text')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
                 </div>
-                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">73%</div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium">pay for tools they rarely use</p>
+                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('landing.costCrisis.stat3.number')}</div>
+                <p className="text-slate-600 dark:text-slate-300 font-medium">{t('landing.costCrisis.stat3.text')}</p>
               </div>
             </div>
             
             <div className="mt-12">
               <p className="text-xl text-slate-600 dark:text-slate-300 font-semibold">
-                That&apos;s potentially <span className="text-slate-900 dark:text-white font-bold">$1,000+ per year</span> down the drain
+                {t('landing.costCrisis.conclusion')} <span className="text-slate-900 dark:text-white font-bold">{t('landing.costCrisis.conclusionAmount')}</span> {t('landing.costCrisis.conclusionEnd')}
               </p>
             </div>
           </div>
@@ -327,7 +327,7 @@ Stop surprise charges. <br /><span className="bg-gradient-to-r from-blue-600 to-
                 <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
-                <span>Add your subscriptions</span>
+                <span>{t('landing.howItWorks.step1.title')}</span>
               </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
                 <video 
@@ -342,7 +342,7 @@ Stop surprise charges. <br /><span className="bg-gradient-to-r from-blue-600 to-
                 </video>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-Quick form for name, cost, currency, billing period, renewal date, category, and project.
+{t('landing.howItWorks.step1.description')}
               </p>
             </div>
             
@@ -355,7 +355,7 @@ Quick form for name, cost, currency, billing period, renewal date, category, and
                 <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Bell className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </div>
-                <span>Get reminders + reports</span>
+                <span>{t('landing.howItWorks.step2.title')}</span>
               </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto">
@@ -363,7 +363,7 @@ Quick form for name, cost, currency, billing period, renewal date, category, and
                 </div>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-Email alerts before renewals + monthly spending summaries straight to your inbox.
+{t('landing.howItWorks.step2.description')}
               </p>
             </div>
             
@@ -376,7 +376,7 @@ Email alerts before renewals + monthly spending summaries straight to your inbox
                 <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                   <FolderTree className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                <span>Organize by projects</span>
+                <span>{t('landing.howItWorks.step3.title')}</span>
               </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
                 <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mx-auto">
@@ -384,14 +384,14 @@ Email alerts before renewals + monthly spending summaries straight to your inbox
                 </div>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
-Group subscriptions per project for granular cost tracking and team insights.
+{t('landing.howItWorks.step3.description')}
               </p>
             </div>
           </div>
           
           <div className="text-center mt-12">
             <p className="text-lg text-slate-600 dark:text-slate-300 mb-6">
-              <strong>Optional 4th step:</strong> Upgrade to Pro for email reminders, monthly reports, and unlimited subscriptions.
+              <strong>{t('landing.howItWorks.optionalStep')}</strong>
             </p>
           </div>
         </div>
@@ -521,7 +521,7 @@ Group subscriptions per project for granular cost tracking and team insights.
               {t('landing.features.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
-              Complete subscription management with all the features you actually need.
+              {t('landing.features.subtitle')}
             </p>
           </div>
           
@@ -604,11 +604,11 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mb-4">
                   <FolderTree className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                 </div>
-                <CardTitle className="text-xl dark:text-white">Multi-project management</CardTitle>
+                <CardTitle className="text-xl dark:text-white">{t('landing.features.multiProjectManagement.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Separate client projects or products in one place.
+                  {t('landing.features.multiProjectManagement.description')}
                 </p>
               </CardContent>
             </Card>
@@ -656,7 +656,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="dark:text-slate-300">Category organization</span>
+                  <span className="dark:text-slate-300">{t('landing.features.categories.title')}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Check className="w-5 h-5 text-green-600" />
@@ -690,7 +690,7 @@ Group subscriptions per project for granular cost tracking and team insights.
                 <div className="text-4xl font-bold mb-2 dark:text-white">
                   <span className="text-2xl line-through text-slate-400 mr-2">$6</span>$4
                 </div>
-                <p className="text-slate-600 dark:text-slate-300">per month • <span className="text-blue-700 dark:text-blue-300 font-semibold">Early access</span></p>
+                <p className="text-slate-600 dark:text-slate-300">{t('plans.perMonth')} • <span className="text-blue-700 dark:text-blue-300 font-semibold">Early access</span></p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -739,7 +739,7 @@ Group subscriptions per project for granular cost tracking and team insights.
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl mb-2 dark:text-white">{t('billing.teamPlan')}</CardTitle>
                 <div className="text-4xl font-bold mb-2 dark:text-white">$10</div>
-                <p className="text-slate-600 dark:text-slate-300">per month • {t('billing.teamPlanDescription')}</p>
+                <p className="text-slate-600 dark:text-slate-300">{t('plans.perMonth')} • {t('billing.teamPlanDescription')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -784,10 +784,10 @@ Group subscriptions per project for granular cost tracking and team insights.
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              Early adopters are already saving money
+              {t('landing.testimonials.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300">
-              Be part of the first wave of developers taking control of their SaaS costs
+              {t('landing.testimonials.subtitle')}
             </p>
           </div>
           

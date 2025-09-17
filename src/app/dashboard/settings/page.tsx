@@ -542,7 +542,6 @@ export default function SettingsPage() {
                         disabled={!isPro && projects.length >= 2}
                         className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
                       >
-                        <Plus className="h-4 w-4 mr-2" />
                         {t('settings.addProject')}
                         {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
                       </Button>
@@ -630,7 +629,6 @@ export default function SettingsPage() {
                   disabled={!isPro && projects.length >= 2}
                   className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
                 >
-                  <Plus className="h-4 w-4 mr-2" />
                   {t('settings.addMobile')}
                   {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
                 </Button>
