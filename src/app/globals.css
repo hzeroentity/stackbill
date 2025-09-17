@@ -78,3 +78,22 @@
     }
   }
 }
+
+/* Mobile Safari date input fixes */
+@layer base {
+  /* Fix date input appearance on mobile Safari */
+  @media (max-width: 640px) {
+    input[type="date"] {
+      font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    input[type="date"]::-webkit-date-and-time-value {
+      text-align: left;
+    }
+
+    /* Ensure date picker indicator is visible */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      opacity: 1;
+    }
+  }
+}

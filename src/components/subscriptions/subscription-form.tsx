@@ -284,8 +284,11 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
                 type="date"
                 value={formData.renewal_date}
                 onChange={(e) => handleInputChange('renewal_date', e.target.value)}
-                className="w-full min-h-[40px]"
-                placeholder="YYYY-MM-DD"
+                className="w-full h-10 px-3 py-2 text-base sm:text-sm [&::-webkit-date-and-time-value]:text-left [&::-webkit-date-and-time-value]:min-h-[1.5rem]"
+                style={{
+                  minWidth: '100%',
+                  width: '100%'
+                }}
                 required
               />
             </div>

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
-import { CreditCard, DollarSign, Zap, MoreHorizontal, Edit, Trash2, X, RotateCcw, Search } from 'lucide-react'
+import { CreditCard, DollarSign, Zap, MoreHorizontal, Edit, Trash2, X, RotateCcw, Search, Plus } from 'lucide-react'
 import { SubscriptionForm } from '@/components/subscriptions/subscription-form'
 import { SubscriptionsService } from '@/lib/subscriptions'
 import { Tables } from '@/lib/database.types'
@@ -734,15 +734,16 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
-                <Button 
+                <Button
                   size="sm"
                   onClick={(e) => {
                     e.preventDefault()
                     handleAddSubscription()
                   }}
                 >
-                  <span className="sm:hidden">{t('settings.addMobile')}</span>
+                  <Plus className="w-4 h-4 sm:mr-1" />
                   <span className="hidden sm:inline">{t('dashboard.addSubscription')}</span>
+                  <span className="sm:hidden">{t('settings.addMobile')}</span>
                 </Button>
               </DialogTrigger>
               <DialogContent>

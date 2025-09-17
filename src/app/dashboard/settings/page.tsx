@@ -508,132 +508,119 @@ export default function SettingsPage() {
       {/* Project Management Card */}
       <Card className="mb-6" id="projects">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {t('settings.projectManagement')}
-            <span className="text-sm font-normal text-muted-foreground">({projects.length}/{isPro ? '10' : '2'})</span>
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              {t('settings.projectManagement')}
+              <span className="text-sm font-normal text-muted-foreground">({projects.length}/{isPro ? '10' : '2'})</span>
+            </CardTitle>
+            {/* Add Project Button in Header */}
+            <Dialog open={isCreateProjectDialogOpen} onOpenChange={setIsCreateProjectDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  size="sm"
+                  onClick={resetProjectForm}
+                  disabled={!isPro && projects.length >= 2}
+                  className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
+                >
+                  {!isPro && projects.length >= 2 ? (
+                    <>
+                      {t('settings.addProject')}
+                      <Lock className="h-4 w-4 ml-2" />
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4 mr-1" />
+                      {t('settings.addProject')}
+                    </>
+                  )}
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t('projects.createNewProject')}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleCreateProject} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="project-name">{t('projects.projectName')}</Label>
+                    <Input
+                      id="project-name"
+                      placeholder={t('projects.enterProjectName')}
+                      value={projectName}
+                      onChange={(e) => setProjectName(e.target.value)}
+                      disabled={projectActionLoading}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="project-description">{t('projects.descriptionOptional')}</Label>
+                    <Input
+                      id="project-description"
+                      placeholder={t('projects.enterProjectDescription')}
+                      value={projectDescription}
+                      onChange={(e) => setProjectDescription(e.target.value)}
+                      disabled={projectActionLoading}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="project-color">{t('projects.color')}</Label>
+                    <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('projects.selectColor')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(() => {
+                          const usedColors = projects.map(p => p.color)
+                          const availableColors = PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
+                          return availableColors.length > 0 ? availableColors.map((color) => (
+                            <SelectItem key={color.value} value={color.value}>
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className="w-4 h-4 rounded-full border border-gray-300"
+                                  style={{ backgroundColor: color.value }}
+                                />
+                                <span>{t(`colors.${color.nameKey}`)}</span>
+                              </div>
+                            </SelectItem>
+                          )) : (
+                            <SelectItem value="no-colors" disabled>
+                              <span className="text-muted-foreground">{t('projects.allColorsInUse')}</span>
+                            </SelectItem>
+                          )
+                        })()}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button type="button" variant="outline" onClick={() => setIsCreateProjectDialogOpen(false)}>
+                      {t('common.cancel')}
+                    </Button>
+                    <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
+                      {projectActionLoading ? t('projects.creating') : t('projects.createProject')}
+                    </Button>
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="space-y-3">
-              <div className="flex items-center justify-between sm:justify-start">
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">
-                    {t('settings.projectDescription')}
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  {t('settings.projectDescription')}
+                </p>
+                {!isPro && (
+                  <p className="text-xs text-muted-foreground">
+                    {t('settings.freePlanProjectLimit')} • <button
+                      onClick={() => window.location.href = '/dashboard/billing'}
+                      className="text-purple-600 hover:text-purple-700 underline"
+                    >
+                      {t('settings.upgradeProProjectsMsg')}
+                    </button>
                   </p>
-                  {!isPro && (
-                    <p className="text-xs text-muted-foreground">
-                      {t('settings.freePlanProjectLimit')} • <button 
-                        onClick={() => window.location.href = '/dashboard/billing'}
-                        className="text-purple-600 hover:text-purple-700 underline"
-                      >
-                        {t('settings.upgradeProProjectsMsg')}
-                      </button>
-                    </p>
-                  )}
-                </div>
-                {/* Button on desktop - inline with description */}
-                <div className="hidden sm:block">
-                  <Dialog open={isCreateProjectDialogOpen} onOpenChange={setIsCreateProjectDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button 
-                        size="sm" 
-                        onClick={resetProjectForm}
-                        disabled={!isPro && projects.length >= 2}
-                        className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
-                      >
-                        {t('settings.addProject')}
-                        {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>{t('projects.createNewProject')}</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleCreateProject} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="project-name">{t('projects.projectName')}</Label>
-                      <Input
-                        id="project-name"
-                        placeholder={t('projects.enterProjectName')}
-                        value={projectName}
-                        onChange={(e) => setProjectName(e.target.value)}
-                        disabled={projectActionLoading}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="project-description">{t('projects.descriptionOptional')}</Label>
-                      <Input
-                        id="project-description"
-                        placeholder={t('projects.enterProjectDescription')}
-                        value={projectDescription}
-                        onChange={(e) => setProjectDescription(e.target.value)}
-                        disabled={projectActionLoading}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="project-color">{t('projects.color')}</Label>
-                      <Select value={projectColor} onValueChange={setProjectColor} disabled={projectActionLoading}>
-                        <SelectTrigger>
-                          <SelectValue placeholder={t('projects.selectColor')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {(() => {
-                            const usedColors = projects.map(p => p.color)
-                            const availableColors = PREDEFINED_COLORS.filter(color => !usedColors.includes(color.value))
-                            return availableColors.length > 0 ? availableColors.map((color) => (
-                              <SelectItem key={color.value} value={color.value}>
-                                <div className="flex items-center gap-3">
-                                  <div 
-                                    className="w-4 h-4 rounded-full border border-gray-300"
-                                    style={{ backgroundColor: color.value }}
-                                  />
-                                  <span>{t(`colors.${color.nameKey}`)}</span>
-                                </div>
-                              </SelectItem>
-                            )) : (
-                              <SelectItem value="no-colors" disabled>
-                                <span className="text-muted-foreground">{t('projects.allColorsInUse')}</span>
-                              </SelectItem>
-                            )
-                          })()} 
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex justify-end space-x-2">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        onClick={() => setIsCreateProjectDialogOpen(false)}
-                        disabled={projectActionLoading}
-                      >
-                        {t('common.cancel')}
-                      </Button>
-                      <Button type="submit" disabled={projectActionLoading || !projectName.trim()}>
-                        {projectActionLoading ? t('projects.creating') : t('projects.createProject')}
-                      </Button>
-                    </div>
-                  </form>
-                </DialogContent>
-              </Dialog>
+                )}
               </div>
-              {/* Button on mobile - separate row */}
-              <div className="sm:hidden">
-                <Button 
-                  size="sm" 
-                  onClick={() => {
-                    resetProjectForm()
-                    setIsCreateProjectDialogOpen(true)
-                  }}
-                  disabled={!isPro && projects.length >= 2}
-                  className={!isPro && projects.length >= 2 ? 'opacity-50 cursor-not-allowed' : ''}
-                >
-                  {t('settings.addMobile')}
-                  {!isPro && projects.length >= 2 && <Lock className="h-4 w-4 ml-2" />}
-                </Button>
-              </div>
-            </div>
             </div>
 
             {/* Upgrade prompt for free users at limit */}
