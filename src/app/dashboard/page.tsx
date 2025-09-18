@@ -40,6 +40,8 @@ import { useLanguage } from '@/contexts/language-context'
 import { ProjectSwitcher } from '@/components/projects/project-switcher'
 import { ProjectsService, ALL_PROJECTS_ID, GENERAL_PROJECT_ID } from '@/lib/projects'
 import { ProjectCreateDialog } from '@/components/projects/project-create-dialog'
+import { TutorialDialog } from '@/components/tutorial/tutorial-dialog'
+import { TutorialPreferences } from '@/lib/tutorial'
 
 export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<SubscriptionWithProjects[]>([])
@@ -62,6 +64,8 @@ export default function DashboardPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isCreateProjectDialogOpen, setIsCreateProjectDialogOpen] = useState(false)
+  // Tutorial state
+  const [showTutorial, setShowTutorial] = useState(false)
   // Currency conversion state
   const [monthlyTotal, setMonthlyTotal] = useState(0)
   const [yearlyTotal, setYearlyTotal] = useState(0)
@@ -243,6 +247,17 @@ export default function DashboardPage() {
       fetchSubscriptions()
     }
   }, [userId, fetchSubscriptions])
+
+  // Tutorial effect - show tutorial on first login if not dismissed
+  useEffect(() => {
+    if (userId && !loading && !TutorialPreferences.isDismissed()) {
+      // Small delay to ensure dashboard is fully loaded
+      const timer = setTimeout(() => {
+        setShowTutorial(true)
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [userId, loading])
 
   // Separate effect for filtering subscriptions when allSubscriptions or selectedProject changes
   useEffect(() => {
@@ -1237,6 +1252,13 @@ export default function DashboardPage() {
         existingProjectCount={projects.length}
         userPlan={(userSubscription?.plan_type || 'free') as 'free' | 'pro'}
         existingProjects={projects.map(p => ({ id: p.id, color: p.color || '#3B82F6' }))}
+      />
+
+      {/* Tutorial Dialog */}
+      <TutorialDialog
+        open={showTutorial}
+        onOpenChange={setShowTutorial}
+        onComplete={() => setShowTutorial(false)}
       />
     </div>
   )

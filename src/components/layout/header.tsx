@@ -11,6 +11,7 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { useLanguage } from "@/contexts/language-context"
 import { useState } from "react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { TutorialHelpButton } from "@/components/tutorial/tutorial-dialog"
 
 export function Header() {
   const { signOut, user } = useAuth()
@@ -50,8 +51,9 @@ export function Header() {
             </Link>
           </div>
           
-          {/* Right: Theme Toggle + Burger Menu */}
+          {/* Right: Help + Theme Toggle + Burger Menu */}
           <div className="flex items-center space-x-2">
+            <TutorialHelpButton />
             <ModeToggle />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
@@ -153,7 +155,7 @@ export function Header() {
             </Link>
           </div>
           
-          {/* Right: Navigation + Theme Toggle + User Dropdown */}
+          {/* Right: Navigation + Help + Theme Toggle + User Dropdown */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Link href="/dashboard">
@@ -169,7 +171,8 @@ export function Header() {
                 <Button variant="ghost">{t('navigation.support')}</Button>
               </Link>
             </div>
-            
+
+            <TutorialHelpButton />
             <ModeToggle />
             
             <DropdownMenu>
