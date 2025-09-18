@@ -27,25 +27,21 @@ export async function POST(request: NextRequest) {
       .eq('user_id', userId)
       .single()
 
-    // Get user's profile for email and name using auth.users
-    const { data: profile } = await supabaseUntyped.auth.admin.getUserById(userId)
+    // For testing, use fallback email and name for non-UUID test users
+    let userEmail = 'filippoaggio@gmail.com' // Test email for recording
+    let userName = 'Filippo'
 
-    // For testing, use a fallback email if profile email not found
-    let userEmail = profile?.user?.email || 'test@example.com' // Hardcoded for testing
-    let userName = profile?.user?.user_metadata?.name || profile?.user?.user_metadata?.full_name
-    
-    // Only try auth lookup if userId looks like a UUID and email isn't hardcoded
-    if (!userEmail || (userEmail === 'test@example.com' && userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))) {
+    // Only try to get user profile if userId is a valid UUID
+    if (userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
       try {
-        const { data: authUser } = await supabase.auth.admin.getUserById(userId)
-        if (authUser.user?.email) {
-          userEmail = authUser.user.email
-          userName = authUser.user?.user_metadata?.name || authUser.user?.user_metadata?.full_name
-        }
-      } catch {
-        // Ignore UUID validation errors for test data
+        const { data: profile } = await supabaseUntyped.auth.admin.getUserById(userId)
+        userEmail = profile?.user?.email || userEmail
+        userName = profile?.user?.user_metadata?.name || profile?.user?.user_metadata?.full_name || userName
+      } catch (error) {
+        console.log('Failed to get user profile, using fallback:', error)
       }
     }
+    
 
     // Get user's subscriptions (skip for test users)
     let subscriptions = null
@@ -74,27 +70,13 @@ export async function POST(request: NextRequest) {
       const mockRenewals = [
         {
           id: 'test-1',
-          name: 'Netflix',
-          category: 'Media & Content',
-          amount: 15.99,
+          name: 'Supabase Pro',
+          category: 'Cloud & Hosting',
+          amount: 25.00,
           currency: 'USD',
           billing_period: 'monthly',
-          renewal_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days from now
-          daysUntilRenewal: 2,
-          is_active: true,
-          user_id: userId,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          id: 'test-2',
-          name: 'ChatGPT Plus',
-          category: 'AI Tools & LLMs',
-          amount: 20.00,
-          currency: 'USD',
-          billing_period: 'monthly',
-          renewal_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-          daysUntilRenewal: 7,
+          renewal_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
+          daysUntilRenewal: 3,
           is_active: true,
           user_id: userId,
           created_at: new Date().toISOString(),

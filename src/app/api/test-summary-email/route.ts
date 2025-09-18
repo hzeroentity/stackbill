@@ -28,22 +28,16 @@ export async function POST(request: NextRequest) {
       .eq('user_id', userId)
       .single()
 
-    // Get user's profile for email and name using auth.users
-    const { data: profile } = await supabaseUntyped.auth.admin.getUserById(userId)
+    // For testing, use fallback email for non-UUID test users
+    let userEmail = 'filippoaggio@gmail.com' // Test email for recording
 
-    // For testing, use a fallback email if profile email not found
-    let userEmail = profile?.user?.email || 'test@example.com' // Hardcoded for testing
-    
-    // Only try auth lookup if userId looks like a UUID and email isn't hardcoded
-    if (!userEmail || (userEmail === 'test@example.com' && userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))) {
+    // Only try to get user profile if userId is a valid UUID
+    if (userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
       try {
-        const { data: authUser } = await supabaseUntyped.auth.admin.getUserById(userId)
-        if (authUser.user?.email) {
-          userEmail = authUser.user.email
-        }
-      } catch {
-        // Ignore UUID validation errors for test data
-        console.log('Skipping auth lookup for test userId:', userId)
+        const { data: profile } = await supabaseUntyped.auth.admin.getUserById(userId)
+        userEmail = profile?.user?.email || userEmail
+      } catch (error) {
+        console.log('Failed to get user profile, using fallback:', error)
       }
     }
 
@@ -76,25 +70,30 @@ export async function POST(request: NextRequest) {
 
     // Force mock data for test users or if no subscriptions
     if (!subscriptions || subscriptions.length === 0 || userId === 'test123') {
-      // Create mock summary data for testing
+      // Create mock summary data for testing with realistic dev subscriptions
       const mockSummaryData = {
-        monthlyTotal: 127.45,
-        yearlyTotal: 1529.40,
+        monthlyTotal: 155.94,
+        yearlyTotal: 1871.28,
         currency: 'USD' as const,
-        subscriptionCount: 8,
+        subscriptionCount: 9,
         categoryBreakdown: {
-          'Developer Tools': 45.00,
-          'Media & Content': 25.98,
+          'Cloud & Hosting': 65.00,
+          'Developer Tools': 30.00,
           'AI Tools & LLMs': 20.00,
-          'Cloud & Hosting': 19.99,
-          'Productivity': 16.48
+          'Analytics & Monitoring': 15.00,
+          'Email & Communication': 10.00,
+          'Design & Assets': 15.94
         },
         topSubscriptions: [
-          { name: 'GitHub Copilot', monthlyAmount: 20.00, currency: 'USD' },
           { name: 'Vercel Pro', monthlyAmount: 20.00, currency: 'USD' },
+          { name: 'Supabase Pro', monthlyAmount: 25.00, currency: 'USD' },
           { name: 'ChatGPT Plus', monthlyAmount: 20.00, currency: 'USD' },
-          { name: 'Netflix', monthlyAmount: 15.99, currency: 'USD' },
-          { name: 'Spotify Premium', monthlyAmount: 9.99, currency: 'USD' }
+          { name: 'Vercel Bandwidth', monthlyAmount: 20.00, currency: 'USD' },
+          { name: 'PostHog Cloud', monthlyAmount: 15.00, currency: 'USD' },
+          { name: 'Resend Pro', monthlyAmount: 10.00, currency: 'USD' },
+          { name: 'Figma Professional', monthlyAmount: 15.00, currency: 'USD' },
+          { name: 'GitHub Copilot', monthlyAmount: 10.00, currency: 'USD' },
+          { name: 'LinearB', monthlyAmount: 19.94, currency: 'USD' }
         ],
         month: currentMonth,
         year: currentYear

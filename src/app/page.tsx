@@ -327,14 +327,14 @@ export default function Home() {
                 {t('landing.howItWorks.step1.title')}
               </h3>
               <div className="bg-slate-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
-                <video 
-                  autoPlay 
-                  loop 
-                  muted 
+                <video
+                  autoPlay
+                  loop
+                  muted
                   playsInline
                   className="w-full h-auto"
                 >
-                  <source src="/add-subscriptions.mp4" type="video/mp4" />
+                  <source src="/stackbill_videorec_subs.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -369,10 +369,17 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
                 {t('landing.howItWorks.step3.title')}
               </h3>
-              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
-                <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mx-auto">
-                  <PieChart className="w-6 h-6 text-teal-600 dark:text-teal-400" />
-                </div>
+              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-auto"
+                >
+                  <source src="/stackbill_videorec_proj.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
               <p className="text-slate-600 dark:text-slate-300">
 {t('landing.howItWorks.step3.description')}
