@@ -120,6 +120,9 @@
     "ok": "OK",
     "keepPro": "Keep Pro",
     "getStartedFree": "Get Started Free",
+    "getStartedPro": "Get Started with Pro",
+    "getStartedTeam": "Notify Me",
+    "goToDashboard": "Go to Dashboard",
     "choosePlan": "Choose Your Plan",
     "freeFeatures": [
       "Up to 3 subscriptions",
@@ -377,7 +380,7 @@
         "title": "Organize by projects",
         "description": "Group subscriptions per project for granular cost tracking and team insights."
       },
-      "optionalStep": "Optional 4th step: Upgrade to Pro for email reminders, monthly reports, and unlimited subscriptions."
+      "optionalStep": "Optional 4th step: Upgrade to Pro for email reminders, monthly reports, and many more subscriptions."
     },
     "features": {
       "title": "Everything you need. Nothing you don't.",

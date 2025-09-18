@@ -15,6 +15,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useLanguage } from "@/contexts/language-context"
 
 function NotifyMeButton() {
+  const { t } = useLanguage()
   const [showEmailInput, setShowEmailInput] = useState(false)
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -105,7 +106,7 @@ function NotifyMeButton() {
       variant="outline" 
       className="w-full dark:border-slate-600 dark:text-white dark:hover:bg-slate-700"
     >
-      Notify Me
+      {t('billing.getStartedTeam')}
     </Button>
   )
 }
@@ -735,7 +736,7 @@ export default function Home() {
                 <div className="pt-6">
                   <Link href="/login?mode=signup" className="w-full block">
                     <Button className="w-full">
-                      Start with Pro
+                    {t('billing.getStartedPro')}
                     </Button>
                   </Link>
                 </div>

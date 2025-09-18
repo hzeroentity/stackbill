@@ -115,6 +115,9 @@
     "ok": "OK",
     "keepPro": "Mantener Pro",
     "getStartedFree": "Comenzar Gratis",
+    "getStartedPro": "Comenzar con Pro",
+    "getStartedTeam": "Notificame",
+    "goToDashboard": "Ir al Panel",
     "choosePlan": "Elige Tu Plan",
     "freeFeatures": [
       "Hasta 3 suscripciones",
@@ -331,7 +334,7 @@
         "title": "Organiza por proyectos",
         "description": "Agrupa suscripciones por proyecto para seguimiento granular de costos e insights del equipo."
       },
-      "optionalStep": "Paso opcional 4: Actualiza a Pro para recordatorios por email, reportes mensuales y suscripciones ilimitadas."
+      "optionalStep": "Paso opcional 4: Actualiza a Pro para recordatorios por email, reportes mensuales y muchas más suscripciones."
     },
     "testimonials": {
       "title": "Los primeros usuarios ya están ahorrando dinero",

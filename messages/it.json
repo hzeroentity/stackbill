@@ -116,6 +116,9 @@
     "ok": "OK",
     "keepPro": "Mantieni Pro",
     "getStartedFree": "Inizia Gratis",
+    "getStartedPro": "Inizia con Pro",
+    "getStartedTeam": "Notificami",
+    "goToDashboard": "Vai alla Dashboard",
     "choosePlan": "Scegli il Tuo Piano",
     "freeFeatures": [
       "Fino a 3 abbonamenti",
@@ -332,7 +335,7 @@
         "title": "Organizza per progetti",
         "description": "Raggruppa abbonamenti per progetto per tracciamento granulare dei costi e insights del team."
       },
-      "optionalStep": "Passo opzionale 4: Passa a Pro per promemoria email, report mensili e abbonamenti illimitati."
+      "optionalStep": "Passo opzionale 4: Passa a Pro per promemoria email, report mensili e molti più abbonamenti."
     },
     "testimonials": {
       "title": "I primi users stanno già risparmiando",
