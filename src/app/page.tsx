@@ -276,43 +276,93 @@ export default function Home() {
       </section>
 
       {/* Problem Statement Section */}
-      <section className="py-20 bg-white dark:bg-gray-800">
-        <div className="container mx-auto px-6">
-          <div className="text-center max-w-6xl mx-auto">
-            <div className="mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">{t('landing.costCrisis.title')}</h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300">{t('landing.costCrisis.subtitle')}</p>
+      <section className="py-20 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 dark:from-red-950/20 dark:via-orange-950/20 dark:to-yellow-950/20 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-red-200/20 dark:bg-red-600/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-10 right-10 w-48 h-48 bg-orange-200/20 dark:bg-orange-600/10 rounded-full blur-xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-200/20 dark:bg-yellow-600/10 rounded-full blur-2xl"></div>
+        </div>
+
+        <div className="container mx-auto px-6 relative">
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 mb-6">
+              <span className="text-red-700 dark:text-red-300 text-sm font-medium">⚠️ Reality Check</span>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">{t('landing.costCrisis.title')}</h2>
+            <p className="text-xl text-slate-600 dark:text-slate-300">{t('landing.costCrisis.subtitle')}</p>
+          </div>
+
+          {/* Enhanced asymmetrical layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-6xl mx-auto">
+            {/* Left side - Large featured stat */}
+            <div className="text-left">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 lg:p-8 shadow-xl border border-red-100 dark:border-red-900/30 relative overflow-hidden h-full flex flex-col justify-center">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full"></div>
+                <div className="relative">
+                  {/* Mobile: horizontal layout, Desktop: vertical layout */}
+                  <div className="flex items-center space-x-4 lg:block lg:space-x-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center shadow-lg flex-shrink-0 lg:mb-4">
+                      <DollarSign className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="lg:pl-0">
+                      <div className="text-4xl lg:text-5xl font-bold text-red-600 dark:text-red-400 mb-2">
+                        {t('landing.costCrisis.stat2.number')}
+                      </div>
+                      <p className="text-slate-600 dark:text-slate-300 font-medium">
+                        {t('landing.costCrisis.stat2.text')}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('landing.costCrisis.stat1.number')}</div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium">{t('landing.costCrisis.stat1.text')}</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
-                </div>
-                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('landing.costCrisis.stat2.number')}</div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium">{t('landing.costCrisis.stat2.text')}</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
-                </div>
-                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('landing.costCrisis.stat3.number')}</div>
-                <p className="text-slate-600 dark:text-slate-300 font-medium">{t('landing.costCrisis.stat3.text')}</p>
               </div>
             </div>
-            
-            <div className="mt-12">
-              <p className="text-xl text-slate-600 dark:text-slate-300 font-semibold">
-                {t('landing.costCrisis.conclusion')} <span className="text-slate-900 dark:text-white font-bold">{t('landing.costCrisis.conclusionAmount')}</span> {t('landing.costCrisis.conclusionEnd')}
+
+            {/* Right side - Two smaller stats stacked */}
+            <div className="flex flex-col h-full space-y-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-yellow-100 dark:border-yellow-900/30 hover:shadow-xl transition-shadow flex-1">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
+                      {t('landing.costCrisis.stat1.number')}
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-300 font-medium">
+                      {t('landing.costCrisis.stat1.text')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-orange-100 dark:border-orange-900/30 hover:shadow-xl transition-shadow flex-1">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                    <Trash2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2">
+                      {t('landing.costCrisis.stat3.number')}
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-300 font-medium">
+                      {t('landing.costCrisis.stat3.text')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Enhanced conclusion */}
+          <div className="mt-16 text-center">
+            <div className="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 rounded-2xl p-8 shadow-2xl max-w-4xl mx-auto">
+              <p className="text-xl text-slate-100 font-semibold">
+                {t('landing.costCrisis.conclusion')}
+                <span className="text-red-400 font-bold mx-2">
+                  {t('landing.costCrisis.conclusionAmount')}
+                </span>
+                {t('landing.costCrisis.conclusionEnd')}
               </p>
             </div>
           </div>
@@ -610,8 +660,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow relative dark:bg-gray-800">
-              <Badge className="absolute top-4 right-4 bg-purple-600 text-white text-xs">Pro</Badge>
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-800">
               <CardHeader>
                 <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mb-4">
                   <FolderTree className="w-6 h-6 text-teal-600 dark:text-teal-400" />
