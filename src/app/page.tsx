@@ -247,14 +247,27 @@ export default function Home() {
           
           {/* Dashboard Preview Video */}
           <div className="max-w-6xl mx-auto mt-16 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-            <video 
-              autoPlay 
-              loop 
-              muted 
+            {/* Desktop Video */}
+            <video
+              autoPlay
+              loop
+              muted
               playsInline
-              className="w-full h-auto"
+              className="w-full h-auto hidden sm:block"
             >
-              <source src="/hero-preview.mp4" type="video/mp4" />
+              <source src="/stackbill_videorec_main_desktop.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+
+            {/* Mobile Video */}
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-auto block sm:hidden"
+            >
+              <source src="/stackbill_videorec_main_mobile.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
