@@ -9,7 +9,8 @@
     "close": "Cerrar",
     "confirm": "Confirmar",
     "email": "Correo electrónico",
-    "password": "Contraseña"
+    "password": "Contraseña",
+    "next": "Siguiente"
   },
   "navigation": {
     "dashboard": "Panel",
@@ -27,6 +28,7 @@
     "activeSubscriptions": "Suscripciones Activas",
     "spendingBreakdown": "Desglose de Gastos",
     "spendingOverview": "Resumen de Gastos",
+    "topCategoriesMonthly": "Principales Categorías (Mensual)",
     "minimum": "Mínimo",
     "maximum": "Máximo",
     "average": "Promedio",
@@ -49,7 +51,14 @@
     "leastExpensive": "Menos costoso",
     "proPlanService": "Suscripción Plan Pro",
     "edit": "Editar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "reactivate": "Reactivar",
+    "canceled": "Cancelado",
+    "canceledSubscriptions": "Suscripciones Canceladas",
+    "deleteSubscription": "Eliminar Suscripción",
+    "deleteSubscriptionConfirm": "¿Estás seguro de que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
+    "deleting": "Eliminando..."
   },
   "subscriptions": {
     "service": "Nombre de Suscripción",
@@ -386,7 +395,7 @@
       "tagline": "Seguimiento simple de costos SaaS para fundadores y equipos de desarrollo.",
       "privacy": "Política de Privacidad",
       "terms": "Términos de Servicio",
-      "support": "Soporte",
+      "cookies": "Preferencias de Cookies",
       "copyright": "© {year} StackBill. Todos los derechos reservados."
     }
   },
@@ -475,6 +484,8 @@
     "currencyNote": "Tu moneda preferida se usará para los totales del panel y las nuevas suscripciones utilizarán esta moneda por defecto.",
     "updatingCurrency": "Actualizando moneda...",
     "currencyUpdated": "Preferencia de moneda actualizada exitosamente",
+    "sevenDaysBefore": "7 días antes",
+    "threeDaysBefore": "3 días antes",
     "projectManagement": "Gestión de Proyectos",
     "projectDescription": "Crea y gestiona proyectos para organizar tus suscripciones",
     "freePlanProjectLimit": "Plan gratuito: hasta 2 proyectos",
@@ -670,5 +681,42 @@
     "stillNeedHelp": "¿Aún necesitas ayuda?",
     "cantFind": "¿No puedes encontrar lo que buscas? Estamos aquí para ayudar.",
     "manageAccount": "Gestionar Cuenta"
+  },
+  "tutorial": {
+    "title": "Guía Rápida",
+    "stepCounter": "Paso {current} de {total}",
+    "welcome": {
+      "title": "¡Bienvenido a StackBill!",
+      "description": "Rastrea todas tus suscripciones y nunca te pierdas una renovación. Comencemos en unos pocos pasos.",
+      "button": "Empezar"
+    },
+    "projects": {
+      "title": "Organizar con Proyectos",
+      "description": "Agrupa tus suscripciones por proyectos o clientes. Cambia entre ellos usando el selector de proyectos en la parte superior.",
+      "button": "Entendido"
+    },
+    "subscriptions": {
+      "title": "Agrega tu Primera Suscripción",
+      "description": "Haz clic en el botón \"Agregar Suscripción\" para comenzar a rastrear tus servicios. Incluye costos, ciclos de facturación y fechas de renovación.",
+      "button": "Comprendido"
+    },
+    "dashboard": {
+      "title": "Monitorea tu Gasto",
+      "description": "Tu panel muestra totales mensuales/anuales, gastos por categoría y próximas renovaciones. Todas las cantidades se convierten a tu moneda preferida.",
+      "button": "Perfecto"
+    },
+    "ready": {
+      "title": "¡Ya estás listo!",
+      "description": "Comienza agregando tus suscripciones, organízalas en proyectos y toma control de tus gastos recurrentes.",
+      "button": "Comenzar a Rastrear"
+    },
+    "skip": "Saltar guía",
+    "back": "Atrás",
+    "dontShowAgain": "No mostrar de nuevo"
+  },
+  "legal": {
+    "comingSoon": {
+      "message": "Estamos trabajando en esta página y la tendremos lista pronto. ¡Gracias por tu paciencia!"
+    }
   }
 }

@@ -621,7 +621,7 @@ export const EmailTemplates = {
               </div>
               
               <div class="text-center">
-                <a href="https://forms.gle/stackbill-feedback" class="button">Share Quick Feedback</a>
+                <a href="mailto:hello@stackbill.dev?subject=StackBill%20Feedback%20-%20Account%20Deletion&body=Hi%20StackBill%20Team%2C%0A%0AI%20recently%20deleted%20my%20account%20and%20wanted%20to%20share%20some%20feedback%3A%0A%0A%5BPlease%20share%20your%20thoughts%20here%5D%0A%0AThanks%21" class="button">Share Quick Feedback</a>
               </div>
               
               <p style="font-size: 16px; line-height: 1.7; color: #4b5563; text-align: center;">If you ever want to come back, you can create a new account anytime at <a href="https://stackbill.dev" style="color: #2563eb; text-decoration: none;">stackbill.dev</a>. We'll be here!</p>

@@ -320,7 +320,7 @@ export default function SettingsPage() {
   }
 
   const handleDeleteAccount = async () => {
-    if (deleteConfirmation !== 'delete my account') {
+    if (deleteConfirmation !== t('settings.deleteAccountConfirmPhrase')) {
       toast.error(t('settings.deleteAccountConfirmationError'))
       return
     }
@@ -328,16 +328,34 @@ export default function SettingsPage() {
     if (!user) return
 
     setDeleteAccountLoading(true)
-    
+
     try {
+      // Get the current session for both cookies and token
+      const { data: { session } } = await supabase.auth.getSession()
+
+      console.log('Client auth state:', {
+        hasSession: !!session,
+        hasUser: !!session?.user,
+        hasToken: !!session?.access_token
+      })
+
+      // Prepare headers - include token if available but rely on cookies primarily
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+
+      // Add token if available as fallback
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`
+      }
+
       const response = await fetch('/api/delete-account', {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify({
           userId: user.id,
         }),
+        credentials: 'include', // This ensures cookies are sent
       })
 
       const result = await response.json()
@@ -968,7 +986,7 @@ export default function SettingsPage() {
                       </AlertDialogCancel>
                       <AlertDialogAction 
                         className="bg-red-600 hover:bg-red-700"
-                        disabled={deleteConfirmation !== 'delete my account' || deleteAccountLoading}
+                        disabled={deleteConfirmation !== t('settings.deleteAccountConfirmPhrase') || deleteAccountLoading}
                         onClick={handleDeleteAccount}
                       >
                         {deleteAccountLoading ? t('settings.deleting') : t('settings.deleteAccount')}

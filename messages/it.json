@@ -9,7 +9,8 @@
     "close": "Chiudi",
     "confirm": "Conferma",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "next": "Avanti"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -27,6 +28,7 @@
     "activeSubscriptions": "Abbonamenti Attivi",
     "spendingBreakdown": "Ripartizione Spese",
     "spendingOverview": "Panoramica Spese",
+    "topCategoriesMonthly": "Categorie Principali (Mensile)",
     "minimum": "Minimo",
     "maximum": "Massimo",
     "average": "Media",
@@ -47,7 +49,16 @@
     "averagePerService": "Media per abbonamento",
     "mostExpensive": "Più costoso",
     "leastExpensive": "Meno costoso",
-    "proPlanService": "Abbonamento Piano Pro"
+    "proPlanService": "Abbonamento Piano Pro",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "cancel": "Cancella",
+    "reactivate": "Riattiva",
+    "canceled": "Annullato",
+    "canceledSubscriptions": "Abbonamenti Annullati",
+    "deleteSubscription": "Elimina Abbonamento",
+    "deleteSubscriptionConfirm": "Sei sicuro di voler eliminare \"{name}\"? Questa azione non può essere annullata.",
+    "deleting": "Eliminazione..."
   },
   "subscriptions": {
     "service": "Nome Abbonamento",
@@ -92,7 +103,7 @@
   "categories": {
     "cloud": "Cloud e Hosting",
     "analytics": "Analytics e Monitoraggio",
-    "ai": "Strumenti AI",
+    "ai": "AI e LLM",
     "database": "Database e Storage",
     "developer": "Strumenti Sviluppatore", 
     "communication": "Comunicazione",
@@ -387,7 +398,7 @@
       "tagline": "Tracciamento semplice dei costi di abbonamenti per la tua app.",
       "privacy": "Politica sulla Privacy",
       "terms": "Termini di Servizio",
-      "support": "Supporto",
+      "cookies": "Preferenze Cookie",
       "copyright": "© {year} StackBill. Tutti i diritti riservati."
     }
   },
@@ -476,6 +487,8 @@
     "currencyNote": "La tua valuta preferita verrà utilizzata per i totali del dashboard e i nuovi abbonamenti utilizzeranno questa valuta per default.",
     "updatingCurrency": "Aggiornamento valuta in corso...",
     "currencyUpdated": "Preferenza valuta aggiornata con successo",
+    "sevenDaysBefore": "7 giorni prima",
+    "threeDaysBefore": "3 giorni prima",
     "projectManagement": "Gestione Progetti",
     "projectDescription": "Crea e gestisci progetti per organizzare i tuoi abbonamenti",
     "freePlanProjectLimit": "Piano gratuito: fino a 2 progetti",
@@ -672,5 +685,42 @@
     "stillNeedHelp": "Hai ancora bisogno di aiuto?",
     "cantFind": "Non riesci a trovare quello che cerchi? Siamo qui per aiutare.",
     "manageAccount": "Gestisci Account"
+  },
+  "tutorial": {
+    "title": "Guida Rapida",
+    "stepCounter": "Passo {current} di {total}",
+    "welcome": {
+      "title": "Benvenuto in StackBill!",
+      "description": "Traccia tutte le tue subscriptions e non perdere mai un rinnovo. Iniziamo con pochi semplici passi.",
+      "button": "Inizia"
+    },
+    "projects": {
+      "title": "Organizza i tuoi Progetti",
+      "description": "Raggruppa le tue subscriptions per progetti o clienti. Passa da uno all'altro usando il selettore di progetti in alto.",
+      "button": "Capito"
+    },
+    "subscriptions": {
+      "title": "Aggiungi la tua Prima Subscription",
+      "description": "Clicca il pulsante \"Aggiungi Abbonamento\" per iniziare a tracciare i tuoi servizi. Includi costi, cicli di fatturazione e date di rinnovo.",
+      "button": "Ok chiaro"
+    },
+    "dashboard": {
+      "title": "Monitora la tua Spesa",
+      "description": "Nella dashboard ti vengono mostrati i totali mensili/annuali, spese per categoria e i prossimi rinnovi. Tutti gli importi sono convertiti nella tua valuta preferita.",
+      "button": "Perfetto"
+    },
+    "ready": {
+      "title": "Tutto Pronto!",
+      "description": "Inizia aggiungendo i tuoi abbonamenti, organizzali in progetti e prendi il controllo delle tue spese ricorrenti.",
+      "button": "Ottimo, iniziamo!"
+    },
+    "skip": "Salta guida",
+    "back": "Indietro",
+    "dontShowAgain": "Non mostrare più"
+  },
+  "legal": {
+    "comingSoon": {
+      "message": "Stiamo lavorando su questa pagina e sarà pronta presto. Grazie per la pazienza!"
+    }
   }
 }

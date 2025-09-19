@@ -9,7 +9,8 @@
     "close": "Close",
     "confirm": "Confirm",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "next": "Next"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -27,6 +28,7 @@
     "activeSubscriptions": "Active Subscriptions",
     "spendingBreakdown": "Spending Breakdown",
     "spendingOverview": "Spending Overview",
+    "topCategoriesMonthly": "Top Categories (Monthly)",
     "minimum": "Minimum",
     "maximum": "Maximum",
     "average": "Average",
@@ -49,7 +51,14 @@
     "leastExpensive": "Least expensive",
     "proPlanService": "Pro Plan Subscription",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "reactivate": "Reactivate",
+    "canceled": "Canceled",
+    "canceledSubscriptions": "Canceled Subscriptions",
+    "deleteSubscription": "Delete Subscription",
+    "deleteSubscriptionConfirm": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    "deleting": "Deleting..."
   },
   "subscriptions": {
     "subscription": "Subscription",
@@ -224,6 +233,8 @@
     "currencyNote": "Choose your preferred currency for displaying amounts. All subscription amounts will be converted to this currency.",
     "updatingCurrency": "Updating currency...",
     "currencyUpdated": "Currency updated successfully",
+    "sevenDaysBefore": "7 days before",
+    "threeDaysBefore": "3 days before",
     "projectManagement": "Project Management",
     "projectDescription": "Create and manage projects to organize your subscriptions",
     "freePlanProjectLimit": "Free plan: up to 2 projects",
@@ -260,8 +271,6 @@
     "daysBeforeRenewal": "{days} days before",
     "reminderScheduleNote": "Choose when to receive renewal reminders. Default is 7 days before renewal (you can select multiple options)",
     "selectedReminders": "Selected: {reminders} before renewal",
-    "sevenDaysBefore": "7 days before",
-    "threeDaysBefore": "3 days before",
     "smartDeliveryNotice": "📧 Smart Delivery: We'll never spam you. Monthly summaries are sent once per month, and renewal alerts are limited to once per day maximum to avoid overwhelming your inbox.",
     "failedToLoadEmailPrefs": "Failed to load email preferences",
     "dangerZone": "Danger Zone",
@@ -269,7 +278,7 @@
     "openDangerZone": "Open Danger Zone",
     "deleteAccount": "Delete Account",
     "deleteAccountWarning": "Permanently delete your StackBill account and all associated data. This action cannot be undone.",
-    "deleteAccountDetails": "This will permanently delete: All your subscriptions, projects, settings, and any active Pro subscription. We'll also cancel any ongoing billing.",
+    "deleteAccountDetails": "All your subscriptions, projects, settings, and any active Pro subscription. We'll also cancel any ongoing billing.",
     "deleteAccountConfirmTitle": "Are you absolutely sure?",
     "deleteAccountConfirmText": "This action cannot be undone. This will permanently delete your account and remove all your data from our servers.",
     "deleteAccountConfirmPrompt": "Type \"delete my account\" to confirm:",
@@ -462,8 +471,8 @@
     "footer": {
       "tagline": "Simple SaaS cost tracking for founders and development teams",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service", 
-      "support": "Support",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Preferences",
       "copyright": "© {year} StackBill. All rights reserved."
     }
   },
@@ -669,5 +678,42 @@
     "stillNeedHelp": "Still need help?",
     "cantFind": "Can't find what you're looking for? We're here to help.",
     "manageAccount": "Manage Account"
+  },
+  "tutorial": {
+    "title": "Quick Guide",
+    "stepCounter": "Step {current} of {total}",
+    "welcome": {
+      "title": "Welcome to StackBill!",
+      "description": "Track all your subscriptions and never miss a renewal. Let's get you started in just a few steps.",
+      "button": "Get Started"
+    },
+    "projects": {
+      "title": "Organize with Projects",
+      "description": "Group your subscriptions by projects or clients. Switch between them using the project selector at the top.",
+      "button": "Got it"
+    },
+    "subscriptions": {
+      "title": "Add Your First Subscription",
+      "description": "Click the \"Add Subscription\" button to start tracking your services. Include costs, billing cycles, and renewal dates.",
+      "button": "Understood"
+    },
+    "dashboard": {
+      "title": "Monitor Your Spending",
+      "description": "Your dashboard shows monthly/yearly totals, spending by category, and upcoming renewals. All amounts are converted to your preferred currency.",
+      "button": "Perfect"
+    },
+    "ready": {
+      "title": "You're All Set!",
+      "description": "Start by adding your subscriptions, organize them into projects, and take control of your recurring expenses.",
+      "button": "Start Tracking"
+    },
+    "skip": "Skip guide",
+    "back": "Back",
+    "dontShowAgain": "Don't show again"
+  },
+  "legal": {
+    "comingSoon": {
+      "message": "We're working on this page and will have it ready soon. Thank you for your patience!"
+    }
   }
 }

@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { ChevronLeft, ChevronRight, X, HelpCircle } from 'lucide-react'
-import { TUTORIAL_CONFIG, TutorialPreferences } from '@/lib/tutorial'
+import { ChevronLeft, ChevronRight, X, HelpCircle, FolderTree, CreditCard, BarChart3, Zap, Hand } from 'lucide-react'
+import { TutorialPreferences } from '@/lib/tutorial'
+import { useLanguage } from '@/contexts/language-context'
 
 interface TutorialDialogProps {
   open: boolean
@@ -14,10 +15,44 @@ interface TutorialDialogProps {
 }
 
 export function TutorialDialog({ open, onOpenChange, onComplete }: TutorialDialogProps) {
+  const { t } = useLanguage()
   const [currentStep, setCurrentStep] = useState(0)
   const [showDismissOption, setShowDismissOption] = useState(false)
 
-  const steps = TUTORIAL_CONFIG.steps
+  // Tutorial steps from translations
+  const steps = [
+    {
+      id: 'welcome',
+      title: t('tutorial.welcome.title'),
+      description: t('tutorial.welcome.description'),
+      buttonText: t('tutorial.welcome.button')
+    },
+    {
+      id: 'projects',
+      title: t('tutorial.projects.title'),
+      description: t('tutorial.projects.description'),
+      buttonText: t('tutorial.projects.button')
+    },
+    {
+      id: 'subscriptions',
+      title: t('tutorial.subscriptions.title'),
+      description: t('tutorial.subscriptions.description'),
+      buttonText: t('tutorial.subscriptions.button')
+    },
+    {
+      id: 'dashboard',
+      title: t('tutorial.dashboard.title'),
+      description: t('tutorial.dashboard.description'),
+      buttonText: t('tutorial.dashboard.button')
+    },
+    {
+      id: 'ready',
+      title: t('tutorial.ready.title'),
+      description: t('tutorial.ready.description'),
+      buttonText: t('tutorial.ready.button')
+    }
+  ]
+
   const totalSteps = steps.length
   const progress = ((currentStep + 1) / totalSteps) * 100
 
@@ -61,41 +96,37 @@ export function TutorialDialog({ open, onOpenChange, onComplete }: TutorialDialo
   const isFirstStep = currentStep === 0
   const isLastStep = currentStep === totalSteps - 1
 
+  // Icon mapping for consistent styling
+  const STEP_ICONS = {
+    welcome: Hand,
+    projects: FolderTree,
+    subscriptions: CreditCard,
+    dashboard: BarChart3,
+    ready: Zap
+  } as const
+
+  const IconComponent = STEP_ICONS[currentStepData.id as keyof typeof STEP_ICONS]
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md p-0 overflow-hidden border-0">
-        {/* Header with progress */}
-        <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 pb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onOpenChange(false)}
-            className="absolute right-2 top-2 h-8 w-8 p-0 text-white/80 hover:text-white hover:bg-white/10"
-          >
-            <X className="h-4 w-4" />
-          </Button>
+      <DialogContent className="sm:max-w-md">
+        <DialogTitle className="text-lg font-semibold text-center">{t('tutorial.title')}</DialogTitle>
 
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Quick Guide</h2>
-              <span className="text-sm text-white/80">
-                {currentStep + 1} of {totalSteps}
-              </span>
-            </div>
-            <Progress value={progress} className="h-2 bg-white/20" />
-          </div>
+        {/* Header */}
+        <div className="text-center text-sm text-muted-foreground">
+          <span>{t('tutorial.stepCounter', { current: currentStep + 1, total: totalSteps })}</span>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="space-y-6">
           {/* Step Content */}
           <div className="text-center space-y-4">
-            {currentStepData.icon && (
-              <div className="text-4xl">{currentStepData.icon}</div>
-            )}
+            <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <IconComponent className="h-8 w-8 text-primary" />
+            </div>
 
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-foreground">
+              <h3 className="text-xl font-semibold">
                 {currentStepData.title}
               </h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -109,10 +140,10 @@ export function TutorialDialog({ open, onOpenChange, onComplete }: TutorialDialo
             {/* Main Action Button */}
             <Button
               onClick={handleNext}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              className="w-full"
               size="lg"
             >
-              {isLastStep ? 'Start Tracking' : (currentStepData.buttonText || 'Next')}
+              {isLastStep ? t('tutorial.ready.button') : (currentStepData.buttonText || t('common.next') || 'Next')}
               {!isLastStep && <ChevronRight className="ml-2 h-4 w-4" />}
             </Button>
 
@@ -123,12 +154,11 @@ export function TutorialDialog({ open, onOpenChange, onComplete }: TutorialDialo
                 size="sm"
                 onClick={handlePrevious}
                 disabled={isFirstStep}
-                className="text-muted-foreground"
               >
                 {!isFirstStep && (
                   <>
                     <ChevronLeft className="mr-1 h-4 w-4" />
-                    Back
+                    {t('tutorial.back')}
                   </>
                 )}
               </Button>
@@ -138,18 +168,16 @@ export function TutorialDialog({ open, onOpenChange, onComplete }: TutorialDialo
                   variant="ghost"
                   size="sm"
                   onClick={handleSkip}
-                  className="text-muted-foreground"
                 >
-                  Skip guide
+                  {t('tutorial.skip')}
                 </Button>
               ) : (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleDismiss}
-                  className="text-muted-foreground"
                 >
-                  Don&apos;t show again
+                  {t('tutorial.dontShowAgain')}
                 </Button>
               )}
             </div>
@@ -170,6 +198,9 @@ export function TutorialDialog({ open, onOpenChange, onComplete }: TutorialDialo
               />
             ))}
           </div>
+
+          {/* Progress bar at bottom */}
+          <Progress value={progress} className="h-2" />
         </div>
       </DialogContent>
     </Dialog>

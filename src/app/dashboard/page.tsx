@@ -78,7 +78,32 @@ export default function DashboardPage() {
   const [conversionsLoading, setConversionsLoading] = useState(false)
   const { user } = useAuth()
   const { t } = useLanguage()
-  
+
+  // Category mappings for proper translation (same as in subscription form)
+  const categoryMappings = [
+    { value: 'Cloud & Hosting', key: 'cloud' },
+    { value: 'Analytics & Monitoring', key: 'analytics' },
+    { value: 'AI Tools & LLMs', key: 'ai' },
+    { value: 'Database & Storage', key: 'database' },
+    { value: 'Developer Tools', key: 'developer' },
+    { value: 'Communication', key: 'communication' },
+    { value: 'Design & Creative', key: 'design' },
+    { value: 'Marketing & SEO', key: 'marketing' },
+    { value: 'Security', key: 'security' },
+    { value: 'Media & Content', key: 'media' },
+    { value: 'Productivity', key: 'productivity' },
+    { value: 'Financial & Accounting', key: 'financial' },
+    { value: 'CRM & Sales', key: 'crm' },
+    { value: 'Legal & Compliance', key: 'legal' },
+    { value: 'Other', key: 'other' }
+  ]
+
+  // Helper function to translate category names
+  const translateCategory = (category: string) => {
+    const mapping = categoryMappings.find(m => m.value === category)
+    return mapping ? t(`categories.${mapping.key}`) : category
+  }
+
   // Use stable user ID to prevent unnecessary re-renders
   const userId = user?.id
 
@@ -640,7 +665,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader>
-              <CardTitle>Top Categories (Monthly)</CardTitle>
+              <CardTitle>{t('dashboard.topCategoriesMonthly')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -657,7 +682,7 @@ export default function DashboardPage() {
                     <div key={category} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${colors[index] || 'bg-gray-500 dark:bg-gray-400'}`}></div>
-                        <span className="font-medium">{category}</span>
+                        <span className="font-medium">{translateCategory(category)}</span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="w-24 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
@@ -802,7 +827,7 @@ export default function DashboardPage() {
                               <p className="font-medium truncate">{subscription.name}</p>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                              <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                              <p className="text-sm text-muted-foreground">{translateCategory(subscription.category)}</p>
                               {shouldShowRenewalStatus(renewalStatus) && (
                                 <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
                                   <span>{renewalStatus.icon}</span>
@@ -865,7 +890,7 @@ export default function DashboardPage() {
                                   className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
                                 >
                                   <X className="h-4 w-4" />
-                                  Cancel
+                                  {t('dashboard.cancel')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   onClick={() => handleDeleteClick(subscription)}
@@ -895,7 +920,7 @@ export default function DashboardPage() {
                             <p className="font-medium truncate">{subscription.name}</p>
                           </div>
                           <div className="flex items-center gap-2 flex-wrap mt-1">
-                            <p className="text-sm text-muted-foreground">{subscription.category}</p>
+                            <p className="text-sm text-muted-foreground">{translateCategory(subscription.category)}</p>
                             {shouldShowRenewalStatus(renewalStatus) && (
                               <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${renewalStatus.color}`}>
                                 <span>{renewalStatus.icon}</span>
@@ -947,7 +972,7 @@ export default function DashboardPage() {
                                   className="text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-2"
                                 >
                                   <X className="h-4 w-4" />
-                                  Cancel
+                                  {t('dashboard.cancel')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   onClick={() => handleDeleteClick(subscription)}
@@ -984,7 +1009,7 @@ export default function DashboardPage() {
               {sortedInactiveSubscriptions.length > 0 && (
                 <>
                   <div className="border-t border-muted-foreground/20 my-6 pt-4">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-3">Canceled Subscriptions</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-3">{t('dashboard.canceledSubscriptions')}</h3>
                   </div>
                   {sortedInactiveSubscriptions.map((subscription) => (
                     <div key={subscription.id} id={`subscription-${subscription.id}`} className="p-3 bg-muted/30 rounded-lg opacity-60">
@@ -998,10 +1023,10 @@ export default function DashboardPage() {
                                 <p className="font-medium truncate line-through text-muted-foreground">{subscription.name}</p>
                               </div>
                               <div className="flex items-center gap-2 mt-1">
-                                <p className="text-sm text-muted-foreground opacity-75">{subscription.category}</p>
+                                <p className="text-sm text-muted-foreground opacity-75">{translateCategory(subscription.category)}</p>
                                 <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
                                   <span>🚫</span>
-                                  <span>Canceled</span>
+                                  <span>{t('dashboard.canceled')}</span>
                                 </div>
                                 {/* Project badges */}
                                 {subscription.projects && subscription.projects.length > 0 && (
@@ -1055,7 +1080,7 @@ export default function DashboardPage() {
                                 className="text-green-600 dark:text-green-400 cursor-pointer flex items-center gap-2"
                               >
                                 <RotateCcw className="h-4 w-4" />
-                                Reactivate
+                                {t('dashboard.reactivate')}
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleDeleteClick(subscription)}
@@ -1123,7 +1148,7 @@ export default function DashboardPage() {
                                 className="text-green-600 dark:text-green-400 cursor-pointer flex items-center gap-2"
                               >
                                 <RotateCcw className="h-4 w-4" />
-                                Reactivate
+                                {t('dashboard.reactivate')}
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleDeleteClick(subscription)}
@@ -1175,19 +1200,19 @@ export default function DashboardPage() {
       <AlertDialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Subscription</AlertDialogTitle>
+            <AlertDialogTitle>{t('dashboard.deleteSubscription')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {subscriptionToDelete ? `Are you sure you want to delete "${subscriptionToDelete.name}"? This action cannot be undone.` : ''}
+              {subscriptionToDelete ? t('dashboard.deleteSubscriptionConfirm', { name: subscriptionToDelete.name }) : ''}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleDeleteCancel}>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               disabled={subscriptionToDelete ? deletingId === subscriptionToDelete.id : false}
             >
-              {subscriptionToDelete && deletingId === subscriptionToDelete.id ? 'Deleting...' : 'Delete'}
+              {subscriptionToDelete && deletingId === subscriptionToDelete.id ? t('dashboard.deleting') : t('dashboard.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -1203,7 +1228,7 @@ export default function DashboardPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleUpgradeCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleUpgradeCancel}>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleUpgradeConfirm} 
               disabled={upgrading}
