@@ -300,7 +300,15 @@ export function SubscriptionForm({ subscription, onSuccess, onCancel, preSelecte
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent
+                position="popper"
+                className="max-h-[200px] sm:max-h-[300px] overflow-y-auto"
+                side="bottom"
+                align="start"
+                avoidCollisions={true}
+                collisionPadding={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                sideOffset={4}
+              >
                 {categoryMappings.map((mapping) => (
                   <SelectItem key={mapping.value} value={mapping.value}>
                     {t(`categories.${mapping.key}`)}

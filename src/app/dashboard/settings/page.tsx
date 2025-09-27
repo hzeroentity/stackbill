@@ -547,8 +547,9 @@ export default function SettingsPage() {
                     </>
                   ) : (
                     <>
-                      <Plus className="w-4 h-4 mr-1" />
-                      {t('settings.addProject')}
+                      <Plus className="w-4 h-4 sm:mr-1" />
+                      <span className="hidden sm:inline">{t('settings.addProject')}</span>
+                      <span className="sm:hidden">Add</span>
                     </>
                   )}
                 </Button>
@@ -742,10 +743,10 @@ export default function SettingsPage() {
             <>
             <div className="relative">
               {/* Overlay for disabled state */}
-              <div className="absolute inset-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-[1px] z-10 rounded-lg"></div>
-              
+              <div className="absolute inset-0 z-10 rounded-lg"></div>
+
               {/* Disabled preview content */}
-              <div className="space-y-6 opacity-60 pointer-events-none">
+              <div className="space-y-6 opacity-40 pointer-events-none text-muted-foreground">
                 {/* Monthly Summary Toggle */}
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
@@ -782,7 +783,7 @@ export default function SettingsPage() {
 
               {/* Simple upgrade prompt */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
-                <div className="text-center bg-white dark:bg-gray-800 p-4 rounded-lg border border-blue-200 dark:border-blue-600 shadow-sm">
+                <div className="text-center bg-background p-4 rounded-lg border shadow-sm">
                   <p className="text-sm font-medium mb-3">{t('settings.upgradeForEmailReminders')}</p>
                   <Button onClick={() => router.push('/billing')} size="sm">
                     {t('settings.upgradeProPrice')}

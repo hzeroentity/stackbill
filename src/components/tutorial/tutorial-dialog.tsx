@@ -78,6 +78,7 @@ export function TutorialDialog({ open, onOpenChange, onComplete }: TutorialDialo
   }
 
   const handleComplete = () => {
+    TutorialPreferences.dismiss()
     onOpenChange(false)
     onComplete?.()
   }
