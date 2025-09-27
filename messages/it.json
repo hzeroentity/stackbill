@@ -151,6 +151,31 @@
     "downgrade": "Downgrade a Gratuito",
     "confirmDowngrade": "Sei sicuro di voler effettuare il downgrade al piano Gratuito? Questo cancellerà il tuo abbonamento Pro.",
     "downgradingPlan": "Downgrade del piano in corso...",
+    "cookies": {
+      "title": "Utilizziamo i cookie",
+      "description": "Utilizziamo cookie essenziali per far funzionare il nostro sito e cookie analitici per capire come utilizzi il nostro sito.",
+      "accept": "Accetta Tutti",
+      "decline": "Rifiuta",
+      "learnMore": "Scopri di più",
+      "preferencesButton": "Preferenze Cookie",
+      "savePreferences": "Salva Preferenze",
+      "preferences": {
+        "title": "Preferenze Cookie",
+        "description": "Scegli quali cookie consentire. Puoi modificare queste impostazioni in qualsiasi momento."
+      },
+      "necessary": {
+        "title": "Cookie Necessari",
+        "description": "Questi cookie sono essenziali per il corretto funzionamento del sito web."
+      },
+      "analytics": {
+        "title": "Cookie Analitici",
+        "description": "Ci aiutano a capire come utilizzi il nostro sito web per migliorare la tua esperienza."
+      },
+      "marketing": {
+        "title": "Cookie di Marketing",
+        "description": "Utilizzati per mostrarti pubblicità pertinenti basate sui tuoi interessi."
+      }
+    },
     "faq": {
       "title": "Domande Frequenti",
       "q1": "Posso fare l'upgrade o downgrade in qualsiasi momento?",

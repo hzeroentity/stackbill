@@ -153,6 +153,31 @@
     "downgrade": "Downgrade to Free",
     "confirmDowngrade": "Are you sure you want to downgrade to the Free plan? This will cancel your Pro subscription.",
     "downgradingPlan": "Downgrading plan...",
+    "cookies": {
+      "title": "We use cookies",
+      "description": "We use essential cookies to make our site work and analytics cookies to understand how you use our site.",
+      "accept": "Accept All",
+      "decline": "Decline",
+      "learnMore": "Learn more",
+      "preferencesButton": "Cookie Preferences",
+      "savePreferences": "Save Preferences",
+      "preferences": {
+        "title": "Cookie Preferences",
+        "description": "Choose which cookies you want to allow. You can change these settings at any time."
+      },
+      "necessary": {
+        "title": "Necessary Cookies",
+        "description": "These cookies are essential for the website to function properly."
+      },
+      "analytics": {
+        "title": "Analytics Cookies",
+        "description": "Help us understand how you use our website to improve your experience."
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "description": "Used to show you relevant advertisements based on your interests."
+      }
+    },
     "faq": {
       "title": "Frequently Asked Questions",
       "q1": "Can I upgrade or downgrade at any time?",

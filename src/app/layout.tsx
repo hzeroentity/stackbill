@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/auth-context'
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from '@/contexts/language-context'
 import { Toaster } from "@/components/ui/sonner"
+import { CookieConsentBanner } from "@/components/ui/cookie-consent"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,6 +85,7 @@ export default function RootLayout({
             <AuthProvider>
               {children}
               <Toaster />
+              <CookieConsentBanner />
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>

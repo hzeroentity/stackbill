@@ -148,6 +148,31 @@
     "downgrade": "Degradar a Gratuito",
     "confirmDowngrade": "¿Estás seguro de que quieres degradar al plan Gratuito? Esto cancelará tu suscripción Pro.",
     "downgradingPlan": "Degradando plan...",
+    "cookies": {
+      "title": "Usamos cookies",
+      "description": "Usamos cookies esenciales para que nuestro sitio funcione y cookies analíticas para entender cómo usas nuestro sitio.",
+      "accept": "Aceptar Todas",
+      "decline": "Rechazar",
+      "learnMore": "Saber más",
+      "preferencesButton": "Preferencias de Cookies",
+      "savePreferences": "Guardar Preferencias",
+      "preferences": {
+        "title": "Preferencias de Cookies",
+        "description": "Elige qué cookies quieres permitir. Puedes cambiar estas configuraciones en cualquier momento."
+      },
+      "necessary": {
+        "title": "Cookies Necesarias",
+        "description": "Estas cookies son esenciales para que el sitio web funcione correctamente."
+      },
+      "analytics": {
+        "title": "Cookies Analíticas",
+        "description": "Nos ayudan a entender cómo usas nuestro sitio web para mejorar tu experiencia."
+      },
+      "marketing": {
+        "title": "Cookies de Marketing",
+        "description": "Se utilizan para mostrarte anuncios relevantes basados en tus intereses."
+      }
+    },
     "faq": {
       "title": "Preguntas Frecuentes",
       "q1": "¿Puedo actualizar o degradar en cualquier momento?",
