@@ -158,6 +158,7 @@
       "description": "We use essential cookies to make our site work and analytics cookies to understand how you use our site.",
       "accept": "Accept All",
       "decline": "Decline",
+      "declineOptional": "Decline Optional",
       "learnMore": "Learn more",
       "preferencesButton": "Cookie Preferences",
       "savePreferences": "Save Preferences",
@@ -176,6 +177,20 @@
       "marketing": {
         "title": "Marketing Cookies",
         "description": "Used to show you relevant advertisements based on your interests."
+      },
+      "policy": {
+        "title": "Cookie Policy",
+        "lastUpdated": "Last updated:",
+        "managePreferences": "Manage Your Cookie Preferences",
+        "manageDescription": "You can control which cookies we use by adjusting your preferences below. Changes will be saved automatically.",
+        "currentSettings": "Your Current Cookie Settings",
+        "preferencesSaved": "✓ Your preferences have been saved",
+        "otherWaysTitle": "Other Ways to Manage Cookies",
+        "browserSettings": "Configure your browser settings to refuse cookies",
+        "deleteCookies": "Delete cookies that have already been set",
+        "browserExtensions": "Use browser extensions to manage cookie preferences",
+        "contactUs": "Contact us if you have questions about our cookie practices",
+        "essentialNote": "Please note that if you choose to refuse essential cookies, some parts of our website may not function properly."
       }
     },
     "faq": {
@@ -371,7 +386,7 @@
     },
     "problems": {
       "title": "Spreadsheets don't send reminders.",
-      "subtitle": "StackBill gives you clarity, control, and reminders — in one clean dashboard.",
+      "subtitle": "StackBill gives you clarity, control, and reminders. All in one clean dashboard.",
       "withoutStackbill": "Without StackBill",
       "withStackbill": "With StackBill",
       "surpriseCharges": {
@@ -498,6 +513,7 @@
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "cookies": "Cookie Preferences",
+      "support": "Support",
       "copyright": "© {year} StackBill. All rights reserved."
     }
   },
@@ -740,5 +756,22 @@
     "comingSoon": {
       "message": "We're working on this page and will have it ready soon. Thank you for your patience!"
     }
+  },
+  "cookies": {
+    "necessary": {
+      "title": "Necessary Cookies",
+      "description": "These cookies are essential for the website to function properly and cannot be disabled."
+    },
+    "analytics": {
+      "title": "Analytics Cookies",
+      "description": "These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously."
+    },
+    "marketing": {
+      "title": "Marketing Cookies",
+      "description": "These cookies are used to track visitors across websites to display relevant and engaging advertisements."
+    },
+    "savePreferences": "Save Preferences",
+    "accept": "Accept All",
+    "decline": "Decline All"
   }
 }

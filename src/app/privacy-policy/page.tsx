@@ -37,10 +37,16 @@ export default function PrivacyPolicyPage() {
           <CardContent className="space-y-8">
             <section>
               <h2 className="text-2xl font-semibold mb-4">Introduction</h2>
+              <p className="text-muted-foreground mb-4">
+                StackBill ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains
+                how we collect, use, disclose, and safeguard your information when you use our subscription tracking
+                service at stackbill.dev.
+              </p>
               <p className="text-muted-foreground">
-                At StackBill, we respect your privacy and are committed to protecting your personal data.
-                This privacy policy explains how we collect, use, and safeguard your information when you
-                use our subscription tracking service.
+                <strong>Contact Information:</strong><br />
+                Miral Media<br />
+                P.IVA: IT04901620262<br />
+                Email: hello@stackbill.dev
               </p>
             </section>
 
@@ -85,11 +91,28 @@ export default function PrivacyPolicyPage() {
                       We may collect analytics data to improve our service:
                     </p>
                     <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                      <li>Google Analytics data (only with your consent)</li>
                       <li>Pages visited and features used</li>
                       <li>Browser and device information</li>
-                      <li>IP address and general location</li>
+                      <li>IP address (anonymized) and general location</li>
                       <li>Session duration and interaction patterns</li>
+                      <li>Button clicks and user interactions</li>
                     </ul>
+                    <div className="mt-3 p-3 bg-orange-100 dark:bg-orange-900/30 rounded-md">
+                      <p className="text-sm text-orange-800 dark:text-orange-300">
+                        <strong>Google Analytics:</strong> We use Google Analytics to understand how you use our website.
+                        This service collects information anonymously and reports website trends without identifying
+                        individual visitors. You can opt-out by declining analytics cookies or using the{' '}
+                        <a
+                          href="https://tools.google.com/dlpage/gaoptout"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline hover:no-underline"
+                        >
+                          Google Analytics Opt-out Browser Add-on
+                        </a>.
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -115,7 +138,7 @@ export default function PrivacyPolicyPage() {
                 We do not sell, trade, or rent your personal information to third parties. We may share your data only in these circumstances:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2">
-                <li><strong>Service Providers:</strong> Stripe for payment processing, Supabase for database hosting</li>
+                <li><strong>Service Providers:</strong> Stripe for payment processing, Supabase for database hosting, Google Analytics for website analytics (with consent), Resend for email delivery</li>
                 <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
                 <li><strong>Business Transfers:</strong> In case of merger, acquisition, or sale of assets</li>
                 <li><strong>Consent:</strong> When you explicitly authorize us to share your information</li>
@@ -182,11 +205,13 @@ export default function PrivacyPolicyPage() {
               </p>
               <Card className="bg-muted/50">
                 <CardContent className="pt-6">
-                  <p className="text-muted-foreground">
-                    <strong>Email:</strong> hello@stackbill.dev<br />
-                    <strong>Website:</strong> <Link href="/" className="text-primary hover:underline">stackbill.dev</Link><br />
-                    <strong>Response Time:</strong> We respond to privacy inquiries within 72 hours
-                  </p>
+                  <div className="space-y-2 text-muted-foreground">
+                    <p><strong>Email:</strong> hello@stackbill.dev</p>
+                    <p><strong>Website:</strong> <Link href="/" className="text-primary hover:underline">stackbill.dev</Link></p>
+                    <p><strong>Company:</strong> Miral Media</p>
+                    <p><strong>P.IVA:</strong> IT04901620262</p>
+                    <p><strong>Response Time:</strong> We respond to privacy inquiries within 30 days</p>
+                  </div>
                 </CardContent>
               </Card>
             </section>

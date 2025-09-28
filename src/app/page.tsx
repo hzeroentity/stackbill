@@ -13,6 +13,7 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useLanguage } from "@/contexts/language-context"
+import { trackEvent } from "@/components/analytics/google-analytics"
 
 function NotifyMeButton() {
   const { t } = useLanguage()
@@ -48,6 +49,8 @@ function NotifyMeButton() {
 
       if (response.ok) {
         setIsSubmitted(true)
+        // Track team plan email signup
+        trackEvent('email_signup', 'team_plan', email)
       } else {
         console.error('Failed to submit email')
         // Could add error state here if needed
@@ -235,7 +238,11 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="/login?mode=signup">
-              <Button size="lg" className="text-lg px-8 py-4">
+              <Button
+                size="lg"
+                className="text-lg px-8 py-4"
+                onClick={() => trackEvent('cta_click', 'landing', 'hero_signup')}
+              >
                 {t('landing.hero.cta')}
               </Button>
             </Link>
@@ -733,7 +740,11 @@ export default function Home() {
                 </div>
                 <div className="pt-6">
                   <Link href="/login?mode=signup" className="w-full block">
-                    <Button variant="outline" className="w-full dark:border-slate-600 dark:text-white dark:hover:bg-slate-700">
+                    <Button
+                      variant="outline"
+                      className="w-full dark:border-slate-600 dark:text-white dark:hover:bg-slate-700"
+                      onClick={() => trackEvent('cta_click', 'landing', 'pricing_free')}
+                    >
                       {t('billing.getStartedFree')}
                     </Button>
                   </Link>
@@ -784,7 +795,10 @@ export default function Home() {
                 </div>
                 <div className="pt-6">
                   <Link href="/login?mode=signup" className="w-full block">
-                    <Button className="w-full">
+                    <Button
+                      className="w-full"
+                      onClick={() => trackEvent('cta_click', 'landing', 'pricing_pro')}
+                    >
                     {t('billing.getStartedPro')}
                     </Button>
                   </Link>
@@ -1070,7 +1084,12 @@ export default function Home() {
             {t('landing.finalCta.subtitle')}
           </p>
           <Link href="/login?mode=signup">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="text-lg px-8 py-4"
+              onClick={() => trackEvent('cta_click', 'landing', 'final_cta')}
+            >
               {t('landing.finalCta.button')}
             </Button>
           </Link>
@@ -1093,9 +1112,10 @@ export default function Home() {
             </div>
             <p className="mb-6">{t('landing.footer.tagline')}</p>
             <div className="flex justify-center space-x-6 text-sm">
-              <a href="#" className="hover:text-white transition-colors">{t('landing.footer.privacy')}</a>
-              <a href="#" className="hover:text-white transition-colors">{t('landing.footer.terms')}</a>
-              <a href="#" className="hover:text-white transition-colors">{t('landing.footer.support')}</a>
+              <Link href="/privacy-policy" className="hover:text-white transition-colors">{t('landing.footer.privacy')}</Link>
+              <Link href="/terms-of-service" className="hover:text-white transition-colors">{t('landing.footer.terms')}</Link>
+              <Link href="/cookie-policy" className="hover:text-white transition-colors">{t('landing.footer.cookies')}</Link>
+              <a href="mailto:hello@stackbill.dev" className="hover:text-white transition-colors">{t('landing.footer.support')}</a>
             </div>
             <div className="mt-6 flex justify-center">
               <LanguageSwitcher />
@@ -1103,6 +1123,9 @@ export default function Home() {
             <div className="mt-6 pt-6 border-t border-slate-800">
               <p className="text-sm text-slate-500">
                 {t('landing.footer.copyright', { year: new Date().getFullYear() })}
+              </p>
+              <p className="text-xs text-slate-600 mt-2">
+                Miral Media P.IVA.: IT04901620262
               </p>
             </div>
           </div>

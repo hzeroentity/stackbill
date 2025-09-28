@@ -36,10 +36,14 @@ export default function TermsOfServicePage() {
           </CardHeader>
           <CardContent className="space-y-8">
             <section>
-              <h2 className="text-2xl font-semibold mb-4">Acceptance of Terms</h2>
+              <h2 className="text-2xl font-semibold mb-4">Agreement to Terms</h2>
+              <p className="text-muted-foreground mb-4">
+                These Terms of Service ("Terms") constitute a legally binding agreement between you and Miral Media
+                (P.IVA: IT04901620262) regarding your use of the StackBill subscription tracking service ("Service").
+              </p>
               <p className="text-muted-foreground">
-                By accessing and using StackBill, you accept and agree to be bound by the terms and provision
-                of this agreement. If you do not agree to abide by the above, please do not use this service.
+                By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any
+                part of these terms, then you may not access the Service.
               </p>
             </section>
 
@@ -188,8 +192,9 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold mb-4">Governing Law</h2>
               <p className="text-muted-foreground">
-                These Terms shall be governed by and construed in accordance with the laws of the jurisdiction
-                where StackBill operates, without regard to its conflict of law provisions.
+                These Terms shall be interpreted and governed by the laws of Italy, without regard to its conflict
+                of law provisions. Any disputes arising from these Terms or your use of the Service shall be subject
+                to the exclusive jurisdiction of the courts of Italy.
               </p>
             </section>
 
@@ -209,11 +214,12 @@ export default function TermsOfServicePage() {
               </p>
               <Card className="bg-muted/50">
                 <CardContent className="pt-6">
-                  <p className="text-muted-foreground">
-                    <strong>Email:</strong> hello@stackbill.dev<br />
-                    <strong>Website:</strong> <Link href="/" className="text-primary hover:underline">stackbill.dev</Link><br />
-                    <strong>Support:</strong> Available through our help center and email support
-                  </p>
+                  <div className="space-y-2 text-muted-foreground">
+                    <p><strong>Email:</strong> hello@stackbill.dev</p>
+                    <p><strong>Website:</strong> <Link href="/" className="text-primary hover:underline">stackbill.dev</Link></p>
+                    <p><strong>Company:</strong> Miral Media</p>
+                    <p><strong>P.IVA:</strong> IT04901620262</p>
+                  </div>
                 </CardContent>
               </Card>
             </section>

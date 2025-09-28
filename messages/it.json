@@ -156,6 +156,7 @@
       "description": "Utilizziamo cookie essenziali per far funzionare il nostro sito e cookie analitici per capire come utilizzi il nostro sito.",
       "accept": "Accetta Tutti",
       "decline": "Rifiuta",
+      "declineOptional": "Rifiuta Opzionali",
       "learnMore": "Scopri di più",
       "preferencesButton": "Preferenze Cookie",
       "savePreferences": "Salva Preferenze",
@@ -174,6 +175,20 @@
       "marketing": {
         "title": "Cookie di Marketing",
         "description": "Utilizzati per mostrarti pubblicità pertinenti basate sui tuoi interessi."
+      },
+      "policy": {
+        "title": "Politica sui Cookie",
+        "lastUpdated": "Ultimo aggiornamento:",
+        "managePreferences": "Gestisci le Tue Preferenze sui Cookie",
+        "manageDescription": "Puoi controllare quali cookie utilizziamo modificando le tue preferenze qui sotto. Le modifiche verranno salvate automaticamente.",
+        "currentSettings": "Le Tue Impostazioni Cookie Attuali",
+        "preferencesSaved": "✓ Le tue preferenze sono state salvate",
+        "otherWaysTitle": "Altri Modi per Gestire i Cookie",
+        "browserSettings": "Configura le impostazioni del browser per rifiutare i cookie",
+        "deleteCookies": "Elimina i cookie che sono già stati impostati",
+        "browserExtensions": "Usa estensioni del browser per gestire le preferenze sui cookie",
+        "contactUs": "Contattaci se hai domande sulle nostre pratiche sui cookie",
+        "essentialNote": "Nota che se scegli di rifiutare i cookie essenziali, alcune parti del nostro sito web potrebbero non funzionare correttamente."
       }
     },
     "faq": {
@@ -424,6 +439,7 @@
       "privacy": "Politica sulla Privacy",
       "terms": "Termini di Servizio",
       "cookies": "Preferenze Cookie",
+      "support": "Supporto",
       "copyright": "© {year} StackBill. Tutti i diritti riservati."
     }
   },
@@ -747,5 +763,22 @@
     "comingSoon": {
       "message": "Stiamo lavorando su questa pagina e sarà pronta presto. Grazie per la pazienza!"
     }
+  },
+  "cookies": {
+    "necessary": {
+      "title": "Cookie Necessari",
+      "description": "Questi cookie sono essenziali per il corretto funzionamento del sito web e non possono essere disabilitati."
+    },
+    "analytics": {
+      "title": "Cookie Analitici",
+      "description": "Questi cookie ci aiutano a capire come i visitatori interagiscono con il nostro sito web raccogliendo e riportando informazioni in modo anonimo."
+    },
+    "marketing": {
+      "title": "Cookie di Marketing",
+      "description": "Questi cookie vengono utilizzati per tracciare i visitatori sui siti web per mostrare annunci pertinenti e coinvolgenti."
+    },
+    "savePreferences": "Salva Preferenze",
+    "accept": "Accetta Tutti",
+    "decline": "Rifiuta Tutti"
   }
 }

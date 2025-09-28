@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Eye, EyeOff, Github, Check, X, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
 import { Progress } from '@/components/ui/progress'
+import { trackSignUp, trackEvent } from '@/components/analytics/google-analytics'
 
 export function AuthForm() {
   const { t } = useLanguage()
@@ -64,6 +65,8 @@ export function AuthForm() {
         }
       })
       if (error) throw error
+      // Track GitHub auth attempt
+      trackSignUp('github')
       // OAuth will redirect, so we don't need to handle success here
     } catch (error: unknown) {
       console.error('GitHub auth error:', error)
@@ -154,6 +157,8 @@ export function AuthForm() {
         if (result.success) {
           setShowSuccessState(true)
           setMessage('Please check your email for the confirmation link to complete your account setup!')
+          // Track successful signup
+          trackSignUp('email')
         }
       } else {
         
@@ -166,6 +171,8 @@ export function AuthForm() {
         if (error) throw error
         
         if (data?.user && data?.session) {
+          // Track successful login
+          trackEvent('login', 'auth', 'email')
           // Don't redirect manually, let the auth context handle it
         }
       }
