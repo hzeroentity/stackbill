@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
             <section>
               <h2 className="text-2xl font-semibold mb-4">Introduction</h2>
               <p className="text-muted-foreground mb-4">
-                StackBill ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains
+                StackBill (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains
                 how we collect, use, disclose, and safeguard your information when you use our subscription tracking
                 service at stackbill.dev.
               </p>

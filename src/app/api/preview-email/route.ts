@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { EmailTemplates } from '@/lib/resend'
-import type { RenewalAlert } from '@/lib/resend'
+import type { Subscription } from '@/lib/database.types'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         }]
         const renewalEmail = EmailTemplates.renewalAlertEmail(
           'preview@example.com',
-          mockRenewals as RenewalAlert[],
+          mockRenewals as (Subscription & { daysUntilRenewal: number })[],
           'Preview User'
         )
         emailHtml = renewalEmail.html

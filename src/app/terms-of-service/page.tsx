@@ -38,8 +38,8 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold mb-4">Agreement to Terms</h2>
               <p className="text-muted-foreground mb-4">
-                These Terms of Service ("Terms") constitute a legally binding agreement between you and Miral Media
-                (P.IVA: IT04901620262) regarding your use of the StackBill subscription tracking service ("Service").
+                These Terms of Service (&quot;Terms&quot;) constitute a legally binding agreement between you and Miral Media
+                (P.IVA: IT04901620262) regarding your use of the StackBill subscription tracking service (&quot;Service&quot;).
               </p>
               <p className="text-muted-foreground">
                 By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any
