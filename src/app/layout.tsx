@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from '@/contexts/language-context'
 import { Toaster } from "@/components/ui/sonner"
 import { CookieConsentBanner } from "@/components/ui/cookie-consent"
-import { AnalyticsProvider } from "@/components/analytics/analytics-provider"
+import Script from 'next/script'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,8 +71,43 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {measurementId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+              strategy="beforeInteractive"
+            />
+            <Script id="google-analytics" strategy="beforeInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                // Set default consent mode (denied by default for GDPR compliance)
+                gtag('consent', 'default', {
+                  analytics_storage: 'denied',
+                  ad_storage: 'denied',
+                  ad_user_data: 'denied',
+                  ad_personalization: 'denied',
+                  functionality_storage: 'granted',
+                  security_storage: 'granted'
+                });
+
+                gtag('config', '${measurementId}', {
+                  anonymize_ip: true,
+                  allow_google_signals: false,
+                  allow_ad_personalization_signals: false,
+                });
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -87,7 +122,6 @@ export default function RootLayout({
               {children}
               <Toaster />
               <CookieConsentBanner />
-              <AnalyticsProvider />
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>

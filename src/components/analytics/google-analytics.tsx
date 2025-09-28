@@ -30,6 +30,16 @@ export function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps) {
     // Initialize with current timestamp
     gtag('js', new Date())
 
+    // Set default consent mode (denied by default for GDPR compliance)
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted'
+    })
+
     // Configure Google Analytics
     gtag('config', measurementId, {
       // Respect user privacy settings
@@ -37,13 +47,29 @@ export function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps) {
       allow_google_signals: false,
       allow_ad_personalization_signals: false,
     })
+
+    // Check if user has already consented
+    const checkInitialConsent = () => {
+      const savedConsent = localStorage.getItem('stackbill-cookie-consent')
+      if (savedConsent) {
+        const consent = JSON.parse(savedConsent)
+        if (consent.analytics === true) {
+          gtag('consent', 'update', {
+            analytics_storage: 'granted'
+          })
+        }
+      }
+    }
+
+    // Check consent after a small delay to ensure localStorage is available
+    setTimeout(checkInitialConsent, 100)
   }, [measurementId])
 
   return (
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
       />
     </>
   )

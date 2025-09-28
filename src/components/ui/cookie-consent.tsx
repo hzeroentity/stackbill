@@ -40,34 +40,12 @@ export function CookieConsentBanner() {
     }))
     setShowModal(false)
 
-    // Enable/disable tracking based on consent
-    if (consentData.analytics) {
-      // Enable Google Analytics
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('consent', 'update', {
-          analytics_storage: 'granted'
-        })
-        console.log('Google Analytics enabled')
-      }
-    } else {
-      // Disable Google Analytics
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('consent', 'update', {
-          analytics_storage: 'denied'
-        })
-        console.log('Google Analytics disabled')
-      }
+    // Update Google Analytics consent directly
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('consent', 'update', {
+        analytics_storage: consentData.analytics ? 'granted' : 'denied'
+      })
     }
-
-    if (consentData.marketing) {
-      console.log('Marketing enabled')
-      // Add marketing tracking code here when needed
-    }
-
-    // Trigger custom event for analytics consent change
-    window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
-      detail: consentData
-    }))
   }
 
   const acceptAll = () => {

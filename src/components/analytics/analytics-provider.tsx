@@ -4,27 +4,18 @@ import { useEffect, useState } from 'react'
 import { GoogleAnalytics } from './google-analytics'
 
 export function AnalyticsProvider() {
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
 
-    // Check if analytics cookies are already consented
-    const checkConsent = () => {
-      const savedConsent = localStorage.getItem('stackbill-cookie-consent')
-      if (savedConsent) {
-        const consent = JSON.parse(savedConsent)
-        setAnalyticsEnabled(consent.analytics === true)
-      }
-    }
-
-    // Check initial consent
-    checkConsent()
-
-    // Listen for consent changes
+    // Listen for consent changes and update GA consent
     const handleConsentChange = (event: CustomEvent) => {
-      setAnalyticsEnabled(event.detail.analytics === true)
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('consent', 'update', {
+          analytics_storage: event.detail.analytics ? 'granted' : 'denied'
+        })
+      }
     }
 
     window.addEventListener('cookieConsentChanged', handleConsentChange as EventListener)
@@ -34,7 +25,7 @@ export function AnalyticsProvider() {
     }
   }, [])
 
-  if (!mounted || !analyticsEnabled) return null
+  if (!mounted) return null
 
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
@@ -43,5 +34,6 @@ export function AnalyticsProvider() {
     return null
   }
 
+  // Always load GA script - consent is managed via consent mode
   return <GoogleAnalytics measurementId={measurementId} />
 }
