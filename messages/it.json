@@ -656,7 +656,7 @@
       "title": "Domande Frequenti",
       "proPlanFeatures": {
         "question": "Cosa include il piano Pro?",
-        "answer": "Il piano Pro include tutto ciò di cui hai bisogno per gestire i tuoi abbonamenti SaaS professionalmente:",
+        "answer": "Il piano Pro include tutto dal piano Gratuito, più funzionalità professionali per gestire i tuoi abbonamenti in modo più efficace. Ottieni tutte le funzionalità Gratuite (5 abbonamenti + 2 progetti) espanse con:",
         "features": [
           "Traccia fino a 30 abbonamenti (vs 5 gratuito)",
           "Organizza in 10 progetti (vs 2 gratuito)",
@@ -668,7 +668,7 @@
       },
       "billingWork": {
         "question": "Come funziona la fatturazione?",
-        "answer": "StackBill Pro viene fatturato mensilmente a €4/mese tramite Stripe. Il tuo abbonamento si rinnova automaticamente ogni mese fino alla cancellazione. Puoi fare downgrade in qualsiasi momento e mantenere l'accesso Pro fino alla fine del periodo di fatturazione corrente. Tutta la fatturazione è sicura e conforme PCI tramite Stripe."
+        "answer": "StackBill Pro viene fatturato mensilmente a $4/mese (prezzo early access, prezzo regolare $6/mese) tramite Stripe. Il tuo abbonamento si rinnova automaticamente ogni mese fino alla cancellazione. Puoi fare downgrade in qualsiasi momento e mantenere l'accesso Pro fino alla fine del periodo di fatturazione corrente. Tutta la fatturazione è sicura e conforme PCI tramite Stripe."
       },
       "cancelDowngrade": {
         "question": "Posso cancellare o fare downgrade in qualsiasi momento?",
@@ -686,7 +686,7 @@
       },
       "emailNotifications": {
         "question": "Come funzionano le notifiche email?",
-        "answer": "Gli utenti Pro ricevono notifiche email automatiche per aiutare a gestire i loro abbonamenti. Riceverai avvisi di rinnovo 7, 3 e 1 giorno prima che gli abbonamenti si rinnovino, più email riassuntive mensili con informazioni sulle spese. Tutte le email includono opzioni di annullamento iscrizione e puoi personalizzare le preferenze nelle tue impostazioni."
+        "answer": "Le notifiche email sono una funzionalità esclusiva Pro. Gli utenti Pro ricevono avvisi email automatici 7, 3 e 1 giorno prima che gli abbonamenti si rinnovino, aiutandoti a non perdere mai un pagamento. Riceverai anche email riassuntive mensili con informazioni e tendenze sulle spese. Tutte le email includono opzioni di annullamento iscrizione e puoi personalizzare le preferenze nelle tue impostazioni."
       },
       "paymentSecurity": {
         "question": "Le mie informazioni di pagamento sono sicure?",
@@ -698,7 +698,7 @@
       },
       "refunds": {
         "question": "Offrite rimborsi?",
-        "answer": "Dato che StackBill Pro è un servizio mensile a basso costo, generalmente non offriamo rimborsi. Tuttavia, se stai riscontrando problemi tecnici o hai preoccupazioni riguardo alla fatturazione, contatta il nostro team di supporto a hello@stackbill.dev e lavoreremo con te per trovare una soluzione."
+        "answer": "Offriamo rimborsi per nuovi abbonamenti Pro entro i primi 3 giorni dall'acquisto. Dopo il primo ciclo di fatturazione, non offriamo rimborsi per i rinnovi successivi. Se stai riscontrando problemi tecnici o hai preoccupazioni riguardo alla fatturazione, contatta il nostro team di supporto a hello@stackbill.dev e lavoreremo con te per trovare una soluzione."
       },
       "organizeProjects": {
         "question": "Come organizzo gli abbonamenti con i progetti?",

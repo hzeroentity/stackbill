@@ -649,7 +649,7 @@
       "title": "Frequently Asked Questions",
       "proPlanFeatures": {
         "question": "What's included in the Pro plan?",
-        "answer": "The Pro plan includes everything you need to manage your SaaS subscriptions professionally:",
+        "answer": "The Pro plan includes everything from the Free plan, plus professional features to manage your subscriptions more effectively. You get all Free features (5 subscriptions + 2 projects) expanded with:",
         "features": [
           "Track up to 30 subscriptions (vs 5 on free)",
           "Organize across 10 projects (vs 2 on free)",
@@ -661,7 +661,7 @@
       },
       "billingWork": {
         "question": "How does billing work?",
-        "answer": "StackBill Pro is billed monthly at €4/month via Stripe. Your subscription automatically renews each month until you cancel. You can downgrade anytime and keep Pro access until your current billing period ends. All billing is secure and PCI-compliant through Stripe."
+        "answer": "StackBill Pro is billed monthly at $4/month (early access price, regular $6/month) via Stripe. Your subscription automatically renews each month until you cancel. You can downgrade anytime and keep Pro access until your current billing period ends. All billing is secure and PCI-compliant through Stripe."
       },
       "cancelDowngrade": {
         "question": "Can I cancel or downgrade anytime?",
@@ -679,7 +679,7 @@
       },
       "emailNotifications": {
         "question": "How do email notifications work?",
-        "answer": "Pro users receive automatic email notifications to help manage their subscriptions. You'll get renewal alerts 7, 3, and 1 days before subscriptions renew, plus monthly summary emails with spending insights. All emails include unsubscribe options and you can customize preferences in your settings."
+        "answer": "Email notifications are a Pro-exclusive feature. Pro users receive automatic email alerts 7, 3, and 1 days before subscriptions renew, helping you never miss a payment. You'll also get monthly summary emails with spending insights and trends. All emails include unsubscribe options and you can customize preferences in your settings."
       },
       "paymentSecurity": {
         "question": "Is my payment information secure?",
@@ -691,7 +691,7 @@
       },
       "refunds": {
         "question": "Do you offer refunds?",
-        "answer": "Since StackBill Pro is a low-cost monthly service, we generally don't offer refunds. However, if you're experiencing technical issues or have concerns about your billing, please contact our support team at hello@stackbill.dev and we'll work with you to find a solution."
+        "answer": "We offer refunds for new Pro subscriptions within the first 3 days of purchase. After the first billing cycle, we don't offer refunds for subsequent renewals. If you're experiencing technical issues or have concerns about your billing, please contact our support team at hello@stackbill.dev and we'll work with you to find a solution."
       },
       "organizeProjects": {
         "question": "How do I organize subscriptions with projects?",
