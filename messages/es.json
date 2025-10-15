@@ -88,14 +88,14 @@
     "serviceExamples": "ej., Vercel, Supabase, PostHog, etc.",
     "servicePlaceholder": "ej., Vercel, Supabase, PostHog, etc.",
     "freeSubscription": "Esta suscripción es gratuita",
-    "assignToProject": "Por favor asigna esta suscripción a al menos un proyecto",
-    "positiveAmount": "La cantidad debe ser un número positivo o 0 para suscripciones gratuitas",
-    "futureRenewalDate": "La fecha de renovación debe ser hoy o en el futuro",
     "noSubscriptionsYet": "Aún no hay suscripciones",
     "addFirstSubscription": "Añade tu primera suscripción para empezar a rastrear tus gastos.",
     "renewsOn": "Se renueva el",
     "editTitle": "Editar Suscripción",
-    "addTitle": "Añadir Nueva Suscripción"
+    "addTitle": "Añadir Nueva Suscripción",
+    "projectAssignmentRequired": "Por favor asigna esta suscripción a al menos un proyecto",
+    "positiveAmountRequired": "La cantidad debe ser un número positivo o 0 para suscripciones gratuitas",
+    "futureDateRequired": "La fecha de renovación debe ser hoy o en el futuro"
   },
   "categories": {
     "cloud": "Cloud y Hosting",

@@ -86,19 +86,16 @@
     "saving": "Salvando...",
     "update": "Aggiorna",
     "add": "Aggiungi",
-    "assignToProject": "Per favore assegna questo abbonamento ad almeno un progetto",
-    "positiveAmount": "L'importo deve essere un numero positivo o 0 per abbonamenti gratuiti",
-    "futureRenewalDate": "La data di rinnovo deve essere oggi o nel futuro",
+    "projectAssignmentRequired": "Assegna questo abbonamento ad almeno un progetto",
+    "positiveAmountRequired": "L'importo deve essere un numero positivo o 0 per abbonamenti gratuiti",
+    "futureDateRequired": "La data di rinnovo deve essere oggi o nel futuro",
     "noSubscriptionsYet": "Nessun abbonamento ancora",
     "addFirstSubscription": "Aggiungi il tuo primo abbonamento per iniziare a tracciare le tue spese.",
     "renewsOn": "Si rinnova il",
     "editTitle": "Modifica Abbonamento",
     "addTitle": "Aggiungi Nuovo Abbonamento",
     "servicePlaceholder": "es., Vercel, Supabase, PostHog, ecc.",
-    "subscription": "Abbonamento",
-    "projectAssignmentRequired": "Assegna questo abbonamento ad almeno un progetto",
-    "positiveAmountRequired": "L'importo deve essere un numero positivo o 0 per abbonamenti gratuiti",
-    "futureDateRequired": "La data di rinnovo deve essere oggi o nel futuro"
+    "subscription": "Abbonamento"
   },
   "categories": {
     "cloud": "Cloud e Hosting",

@@ -88,19 +88,14 @@
     "serviceExamples": "e.g., Vercel, Supabase, PostHog, etc.",
     "servicePlaceholder": "e.g., Vercel, Supabase, PostHog, etc.",
     "freeSubscription": "This subscription is free",
-    "assignToProject": "Please assign this subscription to at least one project",
-    "positiveAmount": "Amount must be a positive number or 0 for free subscriptions",
-    "futureRenewalDate": "Renewal date must be today or in the future",
+    "projectAssignmentRequired": "Please assign this subscription to at least one project",
+    "positiveAmountRequired": "Amount must be a positive number or 0 for free subscriptions",
+    "futureDateRequired": "Renewal date must be today or in the future",
     "noSubscriptionsYet": "No subscriptions yet",
     "addFirstSubscription": "Add your first subscription to get started tracking your expenses.",
     "renewsOn": "Renews on",
     "editTitle": "Edit Subscription",
     "addTitle": "Add New Subscription"
-  },
-  "subscriptionsForm": {
-    "projectAssignmentRequired": "Please assign this subscription to at least one project",
-    "positiveAmountRequired": "Amount must be a positive number or 0 for free subscriptions",
-    "futureDateRequired": "Renewal date must be today or in the future"
   },
   "categories": {
     "cloud": "Cloud & Hosting",

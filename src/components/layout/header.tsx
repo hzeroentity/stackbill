@@ -47,7 +47,7 @@ export function Header() {
               className="w-6 h-6"
             />
             <Link href="/dashboard" className="text-xl font-bold">
-              StackBill
+              StackBill<span className="text-primary">.dev</span>
             </Link>
           </div>
           
@@ -151,7 +151,7 @@ export function Header() {
               className="w-8 h-8"
             />
             <Link href="/dashboard" className="text-xl font-bold">
-              StackBill
+              StackBill<span className="text-primary">.dev</span>
             </Link>
           </div>
           

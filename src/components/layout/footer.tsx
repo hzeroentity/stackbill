@@ -15,27 +15,29 @@ export function Footer() {
             <span className="text-xs">Miral Media P.IVA.: IT04901620262</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-            <div className="flex items-center gap-6">
+            <div className="scale-110">
+              <LanguageSwitcher />
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-center">
               <Link
                 href="/privacy-policy"
-                className="hover:text-foreground transition-colors"
+                className="hover:text-foreground transition-colors whitespace-nowrap"
               >
                 {t('landing.footer.privacy')}
               </Link>
               <Link
                 href="/terms-of-service"
-                className="hover:text-foreground transition-colors"
+                className="hover:text-foreground transition-colors whitespace-nowrap"
               >
                 {t('landing.footer.terms')}
               </Link>
               <Link
                 href="/cookie-policy"
-                className="hover:text-foreground transition-colors"
+                className="hover:text-foreground transition-colors whitespace-nowrap"
               >
                 {t('landing.footer.cookies')}
               </Link>
             </div>
-            <LanguageSwitcher />
           </div>
         </div>
       </div>
