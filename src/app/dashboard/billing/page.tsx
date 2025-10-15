@@ -91,21 +91,16 @@ export default function BillingPage() {
       }
 
       try {
-        // Convert prices with smart rounding
+        // Convert prices using actual exchange rates
         const proConverted = await ExchangeRateService.convertAmount(4, 'USD', currency)
         const teamConverted = await ExchangeRateService.convertAmount(12, 'USD', currency)
-        
+
         const symbol = getCurrencySymbol(currency)
-        
-        // Smart rounding: round up to next 0.50 increment
-        const roundToFifty = (amount: number) => {
-          return Math.ceil(amount * 2) / 2
-        }
-        
+
         setConvertedPrices({
           free: `${symbol}0`,
-          pro: `${symbol}${roundToFifty(proConverted).toFixed(2)}`,
-          team: `${symbol}${roundToFifty(teamConverted).toFixed(2)}`
+          pro: `${symbol}${proConverted.toFixed(2)}`,
+          team: `${symbol}${teamConverted.toFixed(2)}`
         })
       } catch (error) {
         console.error('Error converting currency:', error)

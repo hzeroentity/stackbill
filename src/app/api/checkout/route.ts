@@ -6,8 +6,7 @@ import { userSubscriptionService } from '@/lib/user-subscription-service'
 export async function POST(request: NextRequest) {
   try {
     const { planId, userId } = await request.json()
-    console.log('Checkout API - Received request:', { planId, userId })
-    
+
     if (!planId || planId === 'free') {
       console.error('Checkout API - Invalid plan:', planId)
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
@@ -20,21 +19,15 @@ export async function POST(request: NextRequest) {
 
     // Get plan details
     const plan = getPlan(planId)
-    console.log('Checkout API - Plan details:', { 
-      planId, 
-      priceId: plan.priceId, 
-      envVar: process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID 
-    })
-    
+
     if (!plan.priceId) {
       console.error('Checkout API - Missing price ID for plan:', planId)
-      return NextResponse.json({ 
-        error: 'Plan not available - missing price ID configuration' 
+      return NextResponse.json({
+        error: 'Plan not available - missing price ID configuration'
       }, { status: 400 })
     }
 
     // Check if user already has an active subscription
-    console.log('Checkout API - Checking user subscription for userId:', userId)
     let existingSubscription = null
     try {
       existingSubscription = await userSubscriptionService.getUserSubscription(userId)
@@ -47,10 +40,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create or retrieve Stripe customer
-    console.log('Checkout API - Creating/retrieving Stripe customer...')
     let customer
     if (existingSubscription?.stripe_customer_id) {
-      console.log('Checkout API - Retrieving existing customer:', existingSubscription.stripe_customer_id)
       try {
         customer = await stripe.customers.retrieve(existingSubscription.stripe_customer_id)
       } catch (customerError) {
@@ -60,26 +51,16 @@ export async function POST(request: NextRequest) {
             userId: userId
           }
         })
-        console.log('Checkout API - Created new customer after retrieval failed:', customer.id)
       }
     } else {
-      console.log('Checkout API - Creating new customer for userId:', userId)
       customer = await stripe.customers.create({
         metadata: {
           userId: userId
         }
       })
     }
-    console.log('Checkout API - Customer ready:', customer.id)
 
     // Create Stripe Checkout session
-    console.log('Checkout API - Creating checkout session with:', {
-      customerId: customer.id,
-      priceId: plan.priceId,
-      successUrl: `${request.nextUrl.origin}/dashboard?success=true`,
-      cancelUrl: `${request.nextUrl.origin}/dashboard?canceled=true`
-    })
-    
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: customer.id,
       payment_method_types: ['card'],
@@ -98,8 +79,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    console.log('Checkout API - Session created successfully:', checkoutSession.id)
-    return NextResponse.json({ 
+    return NextResponse.json({
       sessionId: checkoutSession.id,
       url: checkoutSession.url
     })

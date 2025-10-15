@@ -333,12 +333,6 @@ export default function SettingsPage() {
       // Get the current session for both cookies and token
       const { data: { session } } = await supabase.auth.getSession()
 
-      console.log('Client auth state:', {
-        hasSession: !!session,
-        hasUser: !!session?.user,
-        hasToken: !!session?.access_token
-      })
-
       // Prepare headers - include token if available but rely on cookies primarily
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',

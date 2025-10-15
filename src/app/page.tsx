@@ -11,7 +11,8 @@ import { Check, CreditCard, X, Calendar, Mail, BarChart3, Folder, FolderTree, Za
 import { LandingHeaderButtons } from "@/components/landing-header-buttons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { VisuallyHidden } from "@/components/ui/visually-hidden"
 import { useLanguage } from "@/contexts/language-context"
 import { trackEvent } from "@/components/analytics/google-analytics"
 
@@ -151,6 +152,9 @@ export default function Home() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent>
+                  <VisuallyHidden>
+                    <SheetTitle>Navigation Menu</SheetTitle>
+                  </VisuallyHidden>
                   <div className="mt-6 space-y-4">
                     {/* Navigation Links */}
                     <div className="space-y-2">
@@ -422,10 +426,14 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
                 {t('landing.howItWorks.step2.title')}
               </h3>
-              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-6 mb-4">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto">
-                  <Bell className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                </div>
+              <div className="bg-slate-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
+                <Image
+                  src="/email_summary.webp"
+                  alt="Email Summary Report"
+                  width={600}
+                  height={400}
+                  className="w-full h-auto"
+                />
               </div>
               <p className="text-slate-600 dark:text-slate-300">
 {t('landing.howItWorks.step2.description')}
@@ -458,11 +466,6 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="text-center mt-12">
-            <p className="text-lg text-slate-600 dark:text-slate-300 mb-6">
-              <strong>{t('landing.howItWorks.optionalStep')}</strong>
-            </p>
-          </div>
         </div>
       </section>
 

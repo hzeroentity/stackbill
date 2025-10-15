@@ -54,11 +54,9 @@ export default function CookiePolicyPage() {
 
     // Enable/disable tracking based on consent
     if (consentData.analytics) {
-      console.log('Analytics enabled')
       // Add analytics tracking code here
     }
     if (consentData.marketing) {
-      console.log('Marketing enabled')
       // Add marketing tracking code here
     }
   }

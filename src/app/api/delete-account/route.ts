@@ -13,8 +13,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function DELETE(request: NextRequest) {
   try {
-    console.log('=== DELETE ACCOUNT DEBUG START ===')
-
     // Try both auth methods - first with cookies (proper SSR way)
     const cookieStore = await cookies()
 
@@ -41,40 +39,23 @@ export async function DELETE(request: NextRequest) {
       }
     )
 
-    console.log('Trying SSR auth with cookies...')
     const { data: { user: sslUser }, error: ssrError } = await supabaseSSR.auth.getUser()
 
     let user = sslUser
     let authError = ssrError
 
-    console.log('SSR Auth result:', {
-      hasUser: !!user,
-      userId: user?.id,
-      ssrError: ssrError?.message
-    })
-
     // If SSR auth fails, try token-based auth
     if (!user) {
-      console.log('SSR auth failed, trying token-based auth...')
-
       const authHeader = request.headers.get('Authorization')
       const token = authHeader?.replace('Bearer ', '')
 
       if (token) {
-        console.log('Token found, length:', token.length)
-
         const supabaseToken = createClient<Database>(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         )
 
         const { data: { user: tokenUser }, error: tokenError } = await supabaseToken.auth.getUser(token)
-
-        console.log('Token auth result:', {
-          hasUser: !!tokenUser,
-          userId: tokenUser?.id,
-          tokenError: tokenError?.message
-        })
 
         user = tokenUser
         authError = tokenError
@@ -95,8 +76,6 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    console.log(`Starting account deletion for user: ${userId}`)
-
     // Step 1: Get user info for goodbye email
     const userEmail = user.email
 
@@ -105,9 +84,7 @@ export async function DELETE(request: NextRequest) {
       const userSubscription = await userSubscriptionService.getUserSubscription(userId)
 
       if (userSubscription?.stripe_subscription_id) {
-        console.log(`Cancelling Stripe subscription: ${userSubscription.stripe_subscription_id}`)
         await stripe.subscriptions.cancel(userSubscription.stripe_subscription_id)
-        console.log('Stripe subscription cancelled successfully')
       }
     } catch (stripeError) {
       console.error('Error cancelling Stripe subscription:', stripeError)
@@ -181,18 +158,15 @@ export async function DELETE(request: NextRequest) {
     
     if (deleteUserError) {
       console.error('Error deleting auth user:', deleteUserError)
-      return NextResponse.json({ 
-        error: 'Failed to delete user account' 
+      return NextResponse.json({
+        error: 'Failed to delete user account'
       }, { status: 500 })
     }
-
-    console.log(`Successfully deleted user account: ${userId}`)
 
     // Step 5: Send goodbye email (do this last in case it fails)
     if (userEmail) {
       try {
         await sendGoodbyeEmail(userEmail)
-        console.log('Goodbye email sent successfully')
       } catch (emailError) {
         console.error('Error sending goodbye email:', emailError)
         // Don't fail the deletion if email fails
