@@ -1129,9 +1129,6 @@ export default function Home() {
               <p className="text-sm text-slate-500">
                 {t('landing.footer.copyright', { year: new Date().getFullYear() })}
               </p>
-              <p className="text-xs text-slate-600 mt-2">
-                Miral Media P.IVA.: IT04901620262
-              </p>
             </div>
           </div>
         </div>
