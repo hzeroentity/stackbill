@@ -139,7 +139,7 @@ export default function Home() {
                 height={24}
                 className="w-6 h-6"
               />
-              <span className="text-xl font-bold">StackBill</span>
+              <span className="text-xl font-bold">StackBill.dev</span>
             </div>
             
             {/* Right: Theme Toggle + Burger Menu */}
@@ -212,7 +212,7 @@ export default function Home() {
                 height={32}
                 className="w-8 h-8"
               />
-              <span className="text-xl font-bold">StackBill</span>
+              <span className="text-xl font-bold">StackBill.dev</span>
             </div>
             <div className="flex items-center space-x-4">
               <ModeToggle />
@@ -1111,7 +1111,7 @@ export default function Home() {
                 height={32}
                 className="w-8 h-8"
               />
-              <span className="text-xl font-bold text-white">StackBill</span>
+              <span className="text-xl font-bold text-white">StackBill.dev</span>
             </div>
             <p className="mb-6">{t('landing.footer.tagline')}</p>
             <div className="flex justify-center space-x-6 text-sm">
