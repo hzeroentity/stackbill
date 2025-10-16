@@ -30,9 +30,9 @@ export function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps) {
     // Initialize with current timestamp
     gtag('js', new Date())
 
-    // Set default consent mode (denied by default for GDPR compliance)
+    // Set default consent mode (analytics granted by default, ads denied)
     gtag('consent', 'default', {
-      analytics_storage: 'denied',
+      analytics_storage: 'granted',
       ad_storage: 'denied',
       ad_user_data: 'denied',
       ad_personalization: 'denied',

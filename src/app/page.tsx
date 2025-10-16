@@ -265,6 +265,7 @@ export default function Home() {
               loop
               muted
               playsInline
+              preload="auto"
               className="w-full h-auto hidden sm:block"
             >
               <source src="/stackbill_videorec_main_desktop.mp4" type="video/mp4" />
@@ -277,6 +278,7 @@ export default function Home() {
               loop
               muted
               playsInline
+              preload="auto"
               className="w-full h-auto block sm:hidden"
             >
               <source src="/stackbill_videorec_main_mobile.mp4" type="video/mp4" />

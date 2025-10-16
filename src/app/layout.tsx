@@ -88,9 +88,23 @@ export default function RootLayout({
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
 
-                // Set default consent mode (denied by default for GDPR compliance)
+                // Check if user has previously declined analytics
+                var savedConsent = null;
+                try {
+                  savedConsent = localStorage.getItem('stackbill-cookie-consent');
+                } catch(e) {}
+
+                var analyticsConsent = 'granted'; // Default to granted
+                if (savedConsent) {
+                  try {
+                    var consentData = JSON.parse(savedConsent);
+                    analyticsConsent = consentData.analytics ? 'granted' : 'denied';
+                  } catch(e) {}
+                }
+
+                // Set consent mode based on user's previous choice or default
                 gtag('consent', 'default', {
-                  analytics_storage: 'denied',
+                  analytics_storage: analyticsConsent,
                   ad_storage: 'denied',
                   ad_user_data: 'denied',
                   ad_personalization: 'denied',
