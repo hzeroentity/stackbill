@@ -187,6 +187,50 @@ class SessionManager {
   }
 
   /**
+   * Check if user is newly created and send admin notification
+   */
+  private async checkAndNotifyNewUser(user: User): Promise<void> {
+    try {
+      // Check if user was created very recently (within last 30 seconds)
+      const createdAt = new Date(user.created_at)
+      const now = new Date()
+      const secondsSinceCreation = (now.getTime() - createdAt.getTime()) / 1000
+
+      // Only notify for brand new users (created within last 30 seconds)
+      if (secondsSinceCreation <= 30) {
+        // Determine signup method based on user metadata
+        const isGithubOAuth = user.app_metadata?.provider === 'github'
+        const isEmailAuth = user.app_metadata?.provider === 'email'
+
+        // Only send notification for GitHub OAuth (email verification is handled separately)
+        if (isGithubOAuth) {
+          // Get IP and user agent from browser
+          const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : undefined
+
+          // Send notification via internal API endpoint (non-blocking)
+          fetch('/api/admin/notify-signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: user.email,
+              userId: user.id,
+              signupMethod: 'github_oauth',
+              timestamp: createdAt.toISOString(),
+              userAgent
+            })
+          }).catch(err => {
+            // Silently fail - don't disrupt user experience
+            console.error('Failed to send admin notification:', err)
+          })
+        }
+      }
+    } catch (error) {
+      // Silently fail - don't disrupt user experience
+      console.error('Error checking new user:', error)
+    }
+  }
+
+  /**
    * Setup Supabase auth state change listener
    */
   private setupAuthListener(): void {
@@ -194,6 +238,9 @@ class SessionManager {
       if (event === 'SIGNED_IN' && session?.user) {
         this.setSession(session.user)
         this.notifyListeners(session.user)
+
+        // Check if this is a new user and send admin notification
+        this.checkAndNotifyNewUser(session.user)
       } else if (event === 'SIGNED_OUT') {
         this.clearSession()
         this.notifyListeners(null)

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { verifyToken } from '@/lib/email-verification'
+import { sendAdminNewUserNotification } from '@/lib/resend'
 
 // Server-side Supabase client with service role key for admin operations
 const supabaseAdmin = createClient(
@@ -54,6 +55,19 @@ export async function GET(request: Request) {
       console.error('Error confirming user:', confirmError)
       return NextResponse.json({ success: false, error: 'confirmation_failed' })
     }
+
+    // Send admin notification (non-blocking - don't wait for result)
+    sendAdminNewUserNotification({
+      email: tokenData.email,
+      signupMethod: 'email_verification',
+      userId: tokenData.userId,
+      timestamp: new Date().toISOString(),
+      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
+      userAgent: request.headers.get('user-agent') || undefined
+    }).catch(err => {
+      // Log error but don't fail the verification process
+      console.error('Failed to send admin notification:', err)
+    })
 
     return NextResponse.json({ success: true })
 

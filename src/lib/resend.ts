@@ -558,13 +558,13 @@ export const EmailTemplates = {
             .features-list ul { margin: 0; padding-left: 20px; color: #0c4a6e; }
             .features-list li { margin: 8px 0; }
             .feedback-section { background: #fffbeb; padding: 20px; border-radius: 8px; border: 1px solid #fed7aa; margin: 24px 0; }
-            .button { 
-              display: inline-block; 
-              padding: 14px 28px; 
+            .button {
+              display: inline-block;
+              padding: 14px 28px;
               background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-              color: white; 
-              text-decoration: none; 
-              border-radius: 8px; 
+              color: white;
+              text-decoration: none;
+              border-radius: 8px;
               font-weight: 600;
               font-size: 16px;
               margin: 24px 0;
@@ -585,17 +585,17 @@ export const EmailTemplates = {
               </div>
               <div style="font-size: 16px; color: #6b7280;">Account Deletion</div>
             </div>
-            
+
             <div class="content">
               <div class="goodbye-box">
                 <h2 style="color: #92400e; margin: 0 0 10px 0;">👋 Account Successfully Deleted</h2>
                 <p style="margin: 0; color: #92400e;">Your StackBill account and all associated data have been permanently deleted.</p>
               </div>
-              
+
               <h1 style="color: #1f2937; font-size: 28px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">Sorry to see you go!</h1>
-              
+
               <p style="font-size: 16px; line-height: 1.7; color: #4b5563; text-align: center; margin-bottom: 32px;">We've successfully deleted your StackBill account as requested. Here's what happened:</p>
-              
+
               <div class="features-list">
                 <h3 style="color: #0c4a6e; margin: 0 0 16px 0; font-size: 18px;">What we've done:</h3>
                 <ul>
@@ -605,11 +605,11 @@ export const EmailTemplates = {
                   <li>✅ Disabled all email notifications</li>
                 </ul>
               </div>
-              
+
               <div class="feedback-section">
                 <h3 style="color: #92400e; margin: 0 0 16px 0; font-size: 18px;">We'd love your feedback!</h3>
                 <p style="margin: 0 0 16px 0; color: #92400e;">Your feedback is incredibly valuable to us. Could you take just 30 seconds to let us know why you decided to leave? This helps us improve StackBill for future users.</p>
-                
+
                 <p style="margin: 0 0 12px 0; color: #92400e; font-weight: 600;">What could we have done better?</p>
                 <ul style="color: #92400e; margin: 0; padding-left: 20px;">
                   <li>Missing features you needed?</li>
@@ -619,20 +619,109 @@ export const EmailTemplates = {
                   <li>Something else?</li>
                 </ul>
               </div>
-              
+
               <div class="text-center">
                 <a href="mailto:hello@stackbill.dev?subject=StackBill%20Feedback%20-%20Account%20Deletion&body=Hi%20StackBill%20Team%2C%0A%0AI%20recently%20deleted%20my%20account%20and%20wanted%20to%20share%20some%20feedback%3A%0A%0A%5BPlease%20share%20your%20thoughts%20here%5D%0A%0AThanks%21" class="button">Share Quick Feedback</a>
               </div>
-              
+
               <p style="font-size: 16px; line-height: 1.7; color: #4b5563; text-align: center;">If you ever want to come back, you can create a new account anytime at <a href="https://stackbill.dev" style="color: #2563eb; text-decoration: none;">stackbill.dev</a>. We'll be here!</p>
             </div>
-            
+
             <div class="footer">
               <p style="margin: 0 0 16px 0;">Thank you for giving StackBill a try. We hope it helped you get better visibility into your subscription costs.</p>
               <p style="margin: 0 0 16px 0;">If you have any questions about your account deletion, reply to this email - we're happy to help.</p>
               <p style="margin: 0 0 20px 0;">Wishing you all the best!</p>
               <p style="margin: 0;"><strong>- The StackBill Team</strong><br>
               <a href="mailto:hello@stackbill.dev" style="color: #2563eb; text-decoration: none;">hello@stackbill.dev</a></p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `
+  }),
+
+  // Admin notification for new user signups
+  adminNewUserNotification: (userData: {
+    email: string
+    signupMethod: 'email_verification' | 'github_oauth'
+    userId: string
+    timestamp: string
+    ipAddress?: string
+    userAgent?: string
+  }) => ({
+    from: 'StackBill <hello@stackbill.dev>',
+    to: 'filippo@miralmedia.it',
+    subject: '🎉 New StackBill User Signup',
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>New User Signup - StackBill</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f8fafc; }
+            .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+            .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-align: center; padding: 30px 20px; }
+            .content { padding: 30px; }
+            .info-box { background-color: #f0fdf4; border: 2px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; }
+            .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #d1fae5; }
+            .info-row:last-child { border-bottom: none; }
+            .info-label { font-weight: 600; color: #065f46; }
+            .info-value { color: #1f2937; font-family: monospace; }
+            .badge { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+            .badge-email { background-color: #dbeafe; color: #1e40af; }
+            .badge-github { background-color: #f3e8ff; color: #6b21a8; }
+            .footer { padding: 20px; background-color: #f8fafc; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">🎉 New User Signup!</h1>
+              <p style="margin: 8px 0 0 0; opacity: 0.9;">A new user just signed up to StackBill</p>
+            </div>
+
+            <div class="content">
+              <div class="info-box">
+                <div class="info-row">
+                  <span class="info-label">Email:</span>
+                  <span class="info-value">${userData.email}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Signup Method:</span>
+                  <span class="badge ${userData.signupMethod === 'github_oauth' ? 'badge-github' : 'badge-email'}">
+                    ${userData.signupMethod === 'github_oauth' ? 'GitHub OAuth' : 'Email Verification'}
+                  </span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">User ID:</span>
+                  <span class="info-value">${userData.userId}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Timestamp:</span>
+                  <span class="info-value">${userData.timestamp}</span>
+                </div>
+                ${userData.ipAddress ? `
+                <div class="info-row">
+                  <span class="info-label">IP Address:</span>
+                  <span class="info-value">${userData.ipAddress}</span>
+                </div>
+                ` : ''}
+                ${userData.userAgent ? `
+                <div class="info-row">
+                  <span class="info-label">User Agent:</span>
+                  <span class="info-value" style="font-size: 11px; word-break: break-all;">${userData.userAgent}</span>
+                </div>
+                ` : ''}
+              </div>
+
+              <p style="color: #6b7280; font-size: 14px; margin: 20px 0 0 0; text-align: center;">
+                This is an automated notification from your StackBill admin system.
+              </p>
+            </div>
+
+            <div class="footer">
+              <p style="margin: 0;">StackBill Admin Notifications</p>
             </div>
           </div>
         </body>
@@ -714,10 +803,30 @@ export async function sendGoodbyeEmail(userEmail: string) {
   try {
     const emailData = EmailTemplates.goodbyeEmail(userEmail)
     const result = await resend.emails.send(emailData)
-    
+
     return { success: true, data: result }
   } catch (error) {
     console.error('Failed to send goodbye email:', error)
+    return { success: false, error }
+  }
+}
+
+// Utility function to send admin notification for new user signups
+export async function sendAdminNewUserNotification(userData: {
+  email: string
+  signupMethod: 'email_verification' | 'github_oauth'
+  userId: string
+  timestamp: string
+  ipAddress?: string
+  userAgent?: string
+}) {
+  try {
+    const emailData = EmailTemplates.adminNewUserNotification(userData)
+    const result = await resend.emails.send(emailData)
+
+    return { success: true, data: result }
+  } catch (error) {
+    console.error('Failed to send admin new user notification:', error)
     return { success: false, error }
   }
 }
