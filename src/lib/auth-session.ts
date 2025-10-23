@@ -34,6 +34,7 @@ class SessionManager {
 
   private listeners: SessionListeners[] = []
   private refreshInterval: NodeJS.Timeout | null = null
+  private notifiedUsers: Set<string> = new Set() // Track users we've already notified about
   private readonly STORAGE_KEY = 'stackbill_session'
   private readonly VERIFY_INTERVAL = 5 * 60 * 1000 // 5 minutes
   private readonly SESSION_TIMEOUT = 24 * 60 * 60 * 1000 // 24 hours
@@ -191,6 +192,11 @@ class SessionManager {
    */
   private async checkAndNotifyNewUser(user: User): Promise<void> {
     try {
+      // Prevent duplicate notifications for the same user
+      if (this.notifiedUsers.has(user.id)) {
+        return
+      }
+
       // Check if user was created very recently (within last 30 seconds)
       const createdAt = new Date(user.created_at)
       const now = new Date()
@@ -204,6 +210,9 @@ class SessionManager {
 
         // Only send notification for GitHub OAuth (email verification is handled separately)
         if (isGithubOAuth) {
+          // Mark this user as notified to prevent duplicates
+          this.notifiedUsers.add(user.id)
+
           // Get IP and user agent from browser
           const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : undefined
 
